@@ -1,0 +1,121 @@
+# bl *(BufferList)*
+
+[![Build Status](https://secure.travis-ci.org/rvagg/bl.png)](http://travis-ci.org/rvagg/bl)
+
+**A Node.js Buffer list collector, reader and streamer thingy.**
+
+**bl** is a storage object for collections of Node Buffers, exposing them with the main Buffer readable API. Also works as a duplex stream so you can collect buffers from a stream that emits them and emit buffers to a stream that consumes them!
+
+The original buffers are kept intact and copies are only done as necessary. Any reads that require the use of a single original buffer will return a slice of that buffer only (which references the same memory as the original buffer). Reads that span buffers perform concatenation as required and return the results transparently.
+
+```js
+const BufferList = require('bl')
+
+var bl = new BufferList()
+bl.append(new Buffer('abcd'))
+bl.append(new Buffer('efg'))
+bl.append(new Buffer('hi'))
+bl.append(new Buffer('j'))
+bl.append(new Buffer([ 0x3, 0x4 ])
+
+console.log(bl.length) // 12
+
+console.log(bl.slice(0, 10).toString('ascii')) // 'abcdefghij'
+console.log(bl.slice(3, 10).toString('ascii')) // 'defghij'
+console.log(bl.slice(3, 6).toString('ascii'))  // 'def'
+console.log(bl.slice(3, 8).toString('ascii'))  // 'defgh'
+console.log(bl.slice(5, 10).toString('ascii')) // 'fghij'
+
+console.log(bl.readUInt16BE(10)) // 0x0304
+console.log(bl.readUInt16LE(10)) // 0x0403
+```
+
+Give it a callback in the constructor and use it just like **[concat-stream](https://github.com/maxogden/node-concat-stream)**:
+
+```js
+const BufferList = require('bl')
+    , fs         = require('fs')
+
+var bl = new BufferList(function (data) {
+	console.log(data.toString())
+})
+
+fs.createReadStream('README.md').pipe(bl)
+```
+
+Or, use it as a readable stream:
+
+```js
+const BufferList = require('bl')
+    , fs         = require('fs')
+
+var bl = new BufferList()
+bl.append(new Buffer('abcd'))
+bl.append(new Buffer('efg'))
+bl.append(new Buffer('hi'))
+bl.append(new Buffer('j'))
+
+bl.pipe(fs.createWriteStream('gibberish.txt'))
+```
+
+## API
+
+  * <a href="#ctor"><code><b>new BufferList([ callback ])</b></code></a>
+  * <a href="#length"><code>bl.<b>length</b></code></a>
+  * <a href="#append"><code>bl.<b>append(buffer)</b></code></a>
+  * <a href="#get"><code>bl.<b>get(index)</b></code></a>
+  * <a href="#slice"><code>bl.<b>slice([ start ], [ end ])</b></code></a>
+  * <a href="#consume"><code>bl.<b>consume(bytes)</b></code></a>
+  * <a href="#readXX"><code>bl.<b>readDoubleBE()</b></code>, <code>bl.<b>readDoubleLE()</b></code>, <code>bl.<b>readFloatBE()</b></code>, <code>bl.<b>readFloatLE()</b></code>, <code>bl.<b>readInt32BE()</b></code>, <code>bl.<b>readInt32LE()</b></code>, <code>bl.<b>readUInt32BE()</b></code>, <code>bl.<b>readUInt32LE()</b></code>, <code>bl.<b>readInt16BE()</b></code>, <code>bl.<b>readInt16LE()</b></code>, <code>bl.<b>readUInt16BE()</b></code>, <code>bl.<b>readUInt16LE()</b></code>, <code>bl.<b>readInt8()</b></code>, <code>bl.<b>readUInt8()</b></code></a>
+  * <a href="#streams">Streams</a>
+
+--------------------------------------------------------
+<a name="ctor"></a>
+### new BufferList([ callback ])
+The constructor takes an optional callback, if supplied, the callback will be called with the total contents of the list, concatenated together (<a href="#slice"><code>bl.slice()</code></a>) when `bl.end()` is called (from a piped stream).
+
+Normally, no arguments are required for the constructor.
+
+--------------------------------------------------------
+<a name="length"></a>
+### bl.length
+Get the length of the list in bytes. This is the sum of the lengths of all of the buffers contained in the list, minus any initial offset for a semi-consumed buffer at the beginning. Should accurately represent the total number of bytes that can be read from the list.
+
+--------------------------------------------------------
+<a name="append"></a>
+### bl.append(buffer)
+`append(buffer)` adds an additional buffer to the internal list.
+
+--------------------------------------------------------
+<a name="get"></a>
+### bl.get(index)
+`get()` will return the byte at the specified index.
+
+--------------------------------------------------------
+<a name="slice"></a>
+### bl.slice([ start, [ end ] ])
+`slice()` returns a new `Buffer` object containing the bytes within the range specified. Both `start` and `end` are optional and will default to the beginning and end of the list respectively.
+
+If the requested range spans a single internal buffer then a slice of that buffer will be returned which shares the original memory range of that Buffer. If the range spans multiple buffers then copy operations will likely occur to give you a uniform Buffer.
+
+--------------------------------------------------------
+<a name="consume"></a>
+### bl.consume(bytes)
+`consume()` will shift bytes *off the start of the list*. The number of bytes consumed don't need to line up with the sizes of the internal Buffers&mdash;initial offsets will be calculated accordingly in order to give you a consistent view of the data.
+
+--------------------------------------------------------
+<a name="readXX"></a>
+### <code>bl.readDoubleBE()</code>, <code>bl.readDoubleLE()</code>, <code>bl.readFloatBE()</code>, <code>bl.readFloatLE()</code>, <code>bl.readInt32BE()</code>, <code>bl.readInt32LE()</code>, <code>bl.readUInt32BE()</code>, <code>bl.readUInt32LE()</code>, <code>bl.readInt16BE()</code>, <code>bl.readInt16LE()</code>, <code>bl.readUInt16BE()</code>, <code>bl.readUInt16LE()</code>, <code>bl.readInt8()</code>, <code>bl.readUInt8()</code>
+
+All of the standard byte-reading methods of the `Buffer` interface are implemented and will operate across internal Buffer boundaries transparently.
+
+See the <b><code>[Buffer](http://nodejs.org/docs/latest/api/buffer.html)</code></b> documentation for how these work.
+
+--------------------------------------------------------
+<a name="streams"></a>
+### Streams
+**bl** is a Node **[Duplex Stream](http://nodejs.org/docs/latest/api/stream.html#stream_class_stream_duplex)**, so it can be read from and written to like a standard Node stream. You can also `pipe()` to and from a **bl** instance.
+
+## License
+
+**bl** is Copyright (c) 2013 Rod Vagg [@rvagg](https://twitter.com/rvagg) and licenced under the MIT licence. All rights not explicitly granted in the MIT license are reserved. See the included LICENSE file for more details.
