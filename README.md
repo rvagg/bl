@@ -26,6 +26,11 @@ console.log(bl.slice(3, 6).toString('ascii'))  // 'def'
 console.log(bl.slice(3, 8).toString('ascii'))  // 'defgh'
 console.log(bl.slice(5, 10).toString('ascii')) // 'fghij'
 
+// or just use toString!
+console.log(bl.toString('ascii', 3, 8))  // 'defgh'
+console.log(bl.toString('ascii', 5, 10)) // 'fghij'
+
+// other standard Buffer readables
 console.log(bl.readUInt16BE(10)) // 0x0304
 console.log(bl.readUInt16LE(10)) // 0x0403
 ```
@@ -36,11 +41,11 @@ Give it a callback in the constructor and use it just like **[concat-stream](htt
 const BufferList = require('bl')
     , fs         = require('fs')
 
-var bl = new BufferList(function (data) {
-	console.log(data.toString())
-})
-
-fs.createReadStream('README.md').pipe(bl)
+fs.createReadStream('README.md')
+  .pipe(new BufferList(function (err, data) {
+    // `data` is just a reference to the BufferList
+    console.log(data.toString())
+  })
 ```
 
 Or, use it as a readable stream:
@@ -64,15 +69,16 @@ bl.pipe(fs.createWriteStream('gibberish.txt'))
   * <a href="#length"><code>bl.<b>length</b></code></a>
   * <a href="#append"><code>bl.<b>append(buffer)</b></code></a>
   * <a href="#get"><code>bl.<b>get(index)</b></code></a>
-  * <a href="#slice"><code>bl.<b>slice([ start ], [ end ])</b></code></a>
+  * <a href="#slice"><code>bl.<b>slice([ start[, end ] ])</b></code></a>
   * <a href="#consume"><code>bl.<b>consume(bytes)</b></code></a>
+  * <a href="#toString"><code>bl.<b>toString([encoding, [ start, [ end ]]])</b></code></a>
   * <a href="#readXX"><code>bl.<b>readDoubleBE()</b></code>, <code>bl.<b>readDoubleLE()</b></code>, <code>bl.<b>readFloatBE()</b></code>, <code>bl.<b>readFloatLE()</b></code>, <code>bl.<b>readInt32BE()</b></code>, <code>bl.<b>readInt32LE()</b></code>, <code>bl.<b>readUInt32BE()</b></code>, <code>bl.<b>readUInt32LE()</b></code>, <code>bl.<b>readInt16BE()</b></code>, <code>bl.<b>readInt16LE()</b></code>, <code>bl.<b>readUInt16BE()</b></code>, <code>bl.<b>readUInt16LE()</b></code>, <code>bl.<b>readInt8()</b></code>, <code>bl.<b>readUInt8()</b></code></a>
   * <a href="#streams">Streams</a>
 
 --------------------------------------------------------
 <a name="ctor"></a>
 ### new BufferList([ callback ])
-The constructor takes an optional callback, if supplied, the callback will be called with the total contents of the list, concatenated together (<a href="#slice"><code>bl.slice()</code></a>) when `bl.end()` is called (from a piped stream).
+The constructor takes an optional callback, if supplied, the callback will be called with an error argument followed by a reference to the **bl** instance, when `bl.end()` is called (i.e. from a piped stream). This is a convenient method of collecting the entire contents of a stream, particularly when the stream is *chunky*, such as a network stream.
 
 Normally, no arguments are required for the constructor.
 
@@ -102,6 +108,11 @@ If the requested range spans a single internal buffer then a slice of that buffe
 <a name="consume"></a>
 ### bl.consume(bytes)
 `consume()` will shift bytes *off the start of the list*. The number of bytes consumed don't need to line up with the sizes of the internal Buffers&mdash;initial offsets will be calculated accordingly in order to give you a consistent view of the data.
+
+--------------------------------------------------------
+<a name="toString"></a>
+### bl.toString([encoding, [ start, [ end ]]])
+`toString()` will return a string representation of the buffer. The optional `start` and `end` arguments are passed on to `slice()`, while the `encoding` is passed on to `toString()` of the resulting Buffer. See the [Buffer#toString()](http://nodejs.org/docs/latest/api/buffer.html#buffer_buf_tostring_encoding_start_end) documentation for more information.
 
 --------------------------------------------------------
 <a name="readXX"></a>

@@ -226,11 +226,49 @@ tape('test readDoubleLE / readDoubleBE', function (t) {
   t.end()
 })
 
+tape('test toString', function (t) {
+  var bl = new BufferList()
+
+  bl.append(new Buffer('abcd'))
+  bl.append(new Buffer('efg'))
+  bl.append(new Buffer('hi'))
+  bl.append(new Buffer('j'))
+
+  t.equal(bl.toString('ascii', 0, 10), 'abcdefghij')
+  t.equal(bl.toString('ascii', 3, 10), 'defghij')
+  t.equal(bl.toString('ascii', 3, 6), 'def')
+  t.equal(bl.toString('ascii', 3, 8), 'defgh')
+  t.equal(bl.toString('ascii', 5, 10), 'fghij')
+
+  t.end()
+})
+
+tape('test toString encoding', function (t) {
+  var bl = new BufferList()
+    , b  = new Buffer('abcdefghij\xff\x00')
+
+  bl.append(new Buffer('abcd'))
+  bl.append(new Buffer('efg'))
+  bl.append(new Buffer('hi'))
+  bl.append(new Buffer('j'))
+  bl.append(new Buffer('\xff\x00'))
+
+  'hex utf8 utf-8 ascii binary base64 ucs2 ucs-2 utf16le utf-16le'
+    .split(' ')
+    .forEach(function (enc) {
+      t.equal(bl.toString(enc), b.toString(enc))
+    })
+
+  t.end()
+})
+
 tape('test stream', function (t) {
   var random = crypto.randomBytes(1024 * 1024)
     , md5sum = crypto.createHash('md5')
     , rndhash
-    , bl     = new BufferList(function () {
+    , bl     = new BufferList(function (err, _bl) {
+        t.ok(bl === _bl)
+        t.ok(err === null)
         md5sum = crypto.createHash('md5')
         md5sum.update(bl.slice())
         t.equal(rndhash, md5sum.digest('hex'))

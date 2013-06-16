@@ -44,7 +44,7 @@ BufferList.prototype._read = function (size) {
 
 BufferList.prototype.end = function () {
   if (this._callback)
-    this._callback(this.slice())
+    this._callback(null, this)
 }
 
 BufferList.prototype.get = function (index) {
@@ -95,6 +95,10 @@ BufferList.prototype.slice = function (start, end) {
   }
 
   return buf
+}
+
+BufferList.prototype.toString = function (encoding, start, end) {
+  return this.slice(start, end).toString(encoding)
 }
 
 BufferList.prototype.consume = function (bytes) {
