@@ -1,6 +1,6 @@
 {
     "name"            : "bl"
-  , "version"         : "0.0.0"
+  , "version"         : "0.1.0"
   , "description"     : "Buffer List: collect buffers and access with a standard readable Buffer interface, streamable too!"
   , "main"            : "bl.js"
   , "scripts"         : {
