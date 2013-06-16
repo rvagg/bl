@@ -16,7 +16,7 @@ bl.append(new Buffer('abcd'))
 bl.append(new Buffer('efg'))
 bl.append(new Buffer('hi'))
 bl.append(new Buffer('j'))
-bl.append(new Buffer([ 0x3, 0x4 ])
+bl.append(new Buffer([ 0x3, 0x4 ]))
 
 console.log(bl.length) // 12
 
@@ -27,6 +27,7 @@ console.log(bl.slice(3, 8).toString('ascii'))  // 'defgh'
 console.log(bl.slice(5, 10).toString('ascii')) // 'fghij'
 
 // or just use toString!
+console.log(bl.toString())               // 'abcdefghij\u0003\u0004'
 console.log(bl.toString('ascii', 3, 8))  // 'defgh'
 console.log(bl.toString('ascii', 5, 10)) // 'fghij'
 
@@ -48,10 +49,10 @@ fs.createReadStream('README.md')
   })
 ```
 
-Or to fetch a URL using [hyperquest](https://github.com/substack/hyperquest) (should work with [request](http://github.com/mikeal/request) too):
+Or to fetch a URL using [hyperquest](https://github.com/substack/hyperquest) (should work with [request](http://github.com/mikeal/request) and even plain Node http too!):
 ```js
 const hyperquest = require('hyperquest')
-    , bl         = require('./')
+    , bl         = require('bl')
     , url        = 'https://raw.github.com/rvagg/bl/master/README.md'
 
 hyperquest(url).pipe(bl(function (err, data) {
