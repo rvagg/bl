@@ -2,6 +2,9 @@ const DuplexStream = require('readable-stream/duplex')
     , util         = require('util')
 
 function BufferList (callback) {
+  if (!(this instanceof BufferList))
+    return new BufferList(callback)
+
   if (typeof callback == 'function')
     this._callback = callback
 

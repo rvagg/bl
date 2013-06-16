@@ -38,17 +38,28 @@ console.log(bl.readUInt16LE(10)) // 0x0403
 Give it a callback in the constructor and use it just like **[concat-stream](https://github.com/maxogden/node-concat-stream)**:
 
 ```js
-const BufferList = require('bl')
-    , fs         = require('fs')
+const bl = require('bl')
+    , fs = require('fs')
 
 fs.createReadStream('README.md')
-  .pipe(new BufferList(function (err, data) {
+  .pipe(bl(function (err, data) { // note 'new' isn't strictly required
     // `data` is just a reference to the BufferList
     console.log(data.toString())
   })
 ```
 
-Or, use it as a readable stream:
+Or to fetch a URL using [hyperquest](https://github.com/substack/hyperquest) (should work with [request](http://github.com/mikeal/request) too):
+```js
+const hyperquest = require('hyperquest')
+    , bl         = require('./')
+    , url        = 'https://raw.github.com/rvagg/bl/master/README.md'
+
+hyperquest(url).pipe(bl(function (err, data) {
+  console.log(data.toString())
+}))
+```
+
+Or, use it as a readable stream to recompose a list of Buffers to an output source:
 
 ```js
 const BufferList = require('bl')
@@ -81,6 +92,18 @@ bl.pipe(fs.createWriteStream('gibberish.txt'))
 The constructor takes an optional callback, if supplied, the callback will be called with an error argument followed by a reference to the **bl** instance, when `bl.end()` is called (i.e. from a piped stream). This is a convenient method of collecting the entire contents of a stream, particularly when the stream is *chunky*, such as a network stream.
 
 Normally, no arguments are required for the constructor.
+
+`new` is not strictly required, if you don't instantiate a new object, it will be done automatically for you so you can create a new instance simply with:
+
+```js
+var bl = require('bl')
+var myinstance = bl()
+
+// equivilant to:
+
+var BufferList = require('bl')
+var myinstance = new BufferList()
+```
 
 --------------------------------------------------------
 <a name="length"></a>
