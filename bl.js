@@ -36,6 +36,7 @@ BufferList.prototype._offset = function (offset) {
 BufferList.prototype.append = function (buf) {
   this._bufs.push(buf)
   this.length += buf.length
+  return this
 }
 
 BufferList.prototype._write = function (buf, encoding, callback) {
@@ -123,6 +124,7 @@ BufferList.prototype.consume = function (bytes) {
       break
     }
   }
+  return this
 }
 
 ;(function () {
