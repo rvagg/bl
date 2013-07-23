@@ -25,6 +25,7 @@
         "readable-stream" : "~1.0.2"
     }
   , "devDependencies" : {
-        "tape": "*"
+        "tape"            : "*"
+      , "hash_file"       : "*"
     }
 }

@@ -89,10 +89,10 @@ bl.pipe(fs.createWriteStream('gibberish.txt'))
 
 --------------------------------------------------------
 <a name="ctor"></a>
-### new BufferList([ callback ])
+### new BufferList([ callback | buffer | buffer array ])
 The constructor takes an optional callback, if supplied, the callback will be called with an error argument followed by a reference to the **bl** instance, when `bl.end()` is called (i.e. from a piped stream). This is a convenient method of collecting the entire contents of a stream, particularly when the stream is *chunky*, such as a network stream.
 
-Normally, no arguments are required for the constructor.
+Normally, no arguments are required for the constructor, but you can initialise the list by passing in a single `Buffer` object or an array of `Buffer` object.
 
 `new` is not strictly required, if you don't instantiate a new object, it will be done automatically for you so you can create a new instance simply with:
 

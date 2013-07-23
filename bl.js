@@ -5,11 +5,18 @@ function BufferList (callback) {
   if (!(this instanceof BufferList))
     return new BufferList(callback)
 
-  if (typeof callback == 'function')
-    this._callback = callback
-
   this._bufs  = []
   this.length = 0
+
+  if (typeof callback == 'function')
+    this._callback = callback
+  else if (Buffer.isBuffer(callback))
+    this.append(callback)
+  else if (Array.isArray(callback)) {
+    callback.forEach(function (b) {
+      Buffer.isBuffer(b) && this.append(b)
+    }.bind(this))
+  }
 
   DuplexStream.call(this)
 }

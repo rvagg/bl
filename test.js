@@ -1,6 +1,7 @@
 const tape       = require('tape')
     , crypto     = require('crypto')
     , fs         = require('fs')
+    , hash       = require('hash_file')
     , BufferList = require('./')
 
 tape('single bytes from single buffer', function (t) {
@@ -264,19 +265,16 @@ tape('test toString encoding', function (t) {
 
 tape('test stream', function (t) {
   var random = crypto.randomBytes(1024 * 1024)
+    , rndhash = hash(random, 'md5')
     , md5sum = crypto.createHash('md5')
-    , rndhash
     , bl     = new BufferList(function (err, _bl) {
         t.ok(bl === _bl)
         t.ok(err === null)
-        md5sum = crypto.createHash('md5')
-        md5sum.update(bl.slice())
-        t.equal(rndhash, md5sum.digest('hex'))
+        t.equal(rndhash, hash(bl.slice(), 'md5'))
 
         bl.pipe(fs.createWriteStream('/tmp/bl_test_rnd_out.dat'))
           .on('close', function () {
             var s = fs.createReadStream('/tmp/bl_test_rnd_out.dat')
-            md5sum = crypto.createHash('md5')
             s.on('data', md5sum.update.bind(md5sum))
             s.on('end', function() {
               t.equal(rndhash, md5sum.digest('hex'), 'woohoo! correct hash!')
@@ -286,9 +284,18 @@ tape('test stream', function (t) {
 
       })
 
-  md5sum.update(random)
-  rndhash = md5sum.digest('hex')
-
   fs.writeFileSync('/tmp/bl_test_rnd.dat', random)
   fs.createReadStream('/tmp/bl_test_rnd.dat').pipe(bl)
 })
+
+tape('instantiation with Buffer', function (t) {
+  var buf  = crypto.randomBytes(1024)
+    , buf2 = crypto.randomBytes(1024)
+    , b    = BufferList(buf)
+
+  t.equal(hash(buf, 'md5'), hash(b.slice(), 'md5'), 'same hash!')
+  b = BufferList([ buf, buf2 ])
+  t.equal(hash(b.slice(), 'md5'), hash(Buffer.concat([ buf, buf2 ]), 'md5'), 'same hash!')
+  t.end()
+})
+
