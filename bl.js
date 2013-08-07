@@ -55,7 +55,7 @@ BufferList.prototype._read = function (size) {
 
 BufferList.prototype.end = function () {
   if (this._callback)
-    this._callback(null, this)
+    this._callback(null, this.slice())
 }
 
 BufferList.prototype.get = function (index) {

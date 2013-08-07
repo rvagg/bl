@@ -267,10 +267,11 @@ tape('test stream', function (t) {
   var random = crypto.randomBytes(1024 * 1024)
     , rndhash = hash(random, 'md5')
     , md5sum = crypto.createHash('md5')
-    , bl     = new BufferList(function (err, _bl) {
-        t.ok(bl === _bl)
+    , bl     = new BufferList(function (err, buf) {
+        t.ok(Buffer.isBuffer(buf))
         t.ok(err === null)
         t.equal(rndhash, hash(bl.slice(), 'md5'))
+        t.equal(rndhash, hash(buf, 'md5'))
 
         bl.pipe(fs.createWriteStream('/tmp/bl_test_rnd_out.dat'))
           .on('close', function () {

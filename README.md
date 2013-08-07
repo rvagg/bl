@@ -44,10 +44,12 @@ const bl = require('bl')
 
 fs.createReadStream('README.md')
   .pipe(bl(function (err, data) { // note 'new' isn't strictly required
-    // `data` is just a reference to the BufferList
+    // `data` is a complete Buffer object containing the full data
     console.log(data.toString())
   })
 ```
+
+Note that when you use the *callback* method like this, the resulting `data` parameter is a concatenation of all `Buffer` objects in the list. If you want to avoid the overhead of this concatenation (in cases of extreme performance consciousness), then avoid the *callback* method and just listen to `'end'` instead, like a standard Stream.
 
 Or to fetch a URL using [hyperquest](https://github.com/substack/hyperquest) (should work with [request](http://github.com/mikeal/request) and even plain Node http too!):
 ```js
