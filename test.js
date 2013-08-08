@@ -300,3 +300,21 @@ tape('instantiation with Buffer', function (t) {
   t.end()
 })
 
+tape('test String appendage', function (t) {
+  var bl = new BufferList()
+    , b  = new Buffer('abcdefghij\xff\x00')
+
+  bl.append('abcd')
+  bl.append('efg')
+  bl.append('hi')
+  bl.append('j')
+  bl.append('\xff\x00')
+
+  'hex utf8 utf-8 ascii binary base64 ucs2 ucs-2 utf16le utf-16le'
+    .split(' ')
+    .forEach(function (enc) {
+      t.equal(bl.toString(enc), b.toString(enc))
+    })
+
+  t.end()
+})

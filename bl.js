@@ -34,7 +34,7 @@ BufferList.prototype._offset = function (offset) {
 }
 
 BufferList.prototype.append = function (buf) {
-  this._bufs.push(buf)
+  this._bufs.push(Buffer.isBuffer(buf) ? buf : new Buffer(buf))
   this.length += buf.length
   return this
 }

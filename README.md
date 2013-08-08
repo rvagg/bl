@@ -14,7 +14,7 @@ const BufferList = require('bl')
 var bl = new BufferList()
 bl.append(new Buffer('abcd'))
 bl.append(new Buffer('efg'))
-bl.append(new Buffer('hi'))
+bl.append('hi')                     // bl will also accept & convert Strings
 bl.append(new Buffer('j'))
 bl.append(new Buffer([ 0x3, 0x4 ]))
 
