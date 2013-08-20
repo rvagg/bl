@@ -318,3 +318,14 @@ tape('test String appendage', function (t) {
 
   t.end()
 })
+
+
+tape('write nothing, should get empty buffer', function (t) {
+  t.plan(3)
+  BufferList(function (err, data) {
+    t.notOk(err, 'no error')
+    t.ok(Buffer.isBuffer(data), 'got a buffer')
+    t.equal(0, data.length, 'got a zero-length buffer')
+    t.end()
+  }).end()
+})
