@@ -319,7 +319,6 @@ tape('test String appendage', function (t) {
   t.end()
 })
 
-
 tape('write nothing, should get empty buffer', function (t) {
   t.plan(3)
   BufferList(function (err, data) {
@@ -328,4 +327,17 @@ tape('write nothing, should get empty buffer', function (t) {
     t.equal(0, data.length, 'got a zero-length buffer')
     t.end()
   }).end()
+})
+
+tape('unicode string', function (t) {
+  t.plan(2)
+  var inp1 = '\u2600'
+    , inp2 = '\u2603'
+    , exp = inp1 + ' and ' + inp2
+    , bl = BufferList()
+  bl.write(inp1)
+  bl.write(' and ')
+  bl.write(inp2)
+  t.equal(exp, bl.toString())
+  t.equal(new Buffer(exp).toString('hex'), bl.toString('hex'))
 })
