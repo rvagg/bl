@@ -129,6 +129,17 @@ BufferList.prototype.consume = function (bytes) {
   return this
 }
 
+BufferList.prototype.duplicate = function () {
+  var i = 0
+    , copy = new BufferList()
+
+  for (; i < this._bufs.length; i++) {
+    copy.append(this._bufs[i]);
+  }
+
+  return copy;
+};
+
 ;(function () {
   var methods = {
       'readDoubleBE' : 8
