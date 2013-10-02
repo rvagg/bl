@@ -53,7 +53,9 @@ BufferList.prototype._read = function (size) {
   this.consume(size)
 }
 
-BufferList.prototype.end = function () {
+BufferList.prototype.end = function (chunk) {
+  DuplexStream.prototype.end.call(this, chunk)
+
   if (this._callback)
     this._callback(null, this.slice())
 }
