@@ -153,6 +153,13 @@ See the <b><code>[Buffer](http://nodejs.org/docs/latest/api/buffer.html)</code><
 ### Streams
 **bl** is a Node **[Duplex Stream](http://nodejs.org/docs/latest/api/stream.html#stream_class_stream_duplex)**, so it can be read from and written to like a standard Node stream. You can also `pipe()` to and from a **bl** instance.
 
+## Contributors
+
+**bl** is brought to you by the following hackers:
+
+ * [Rod Vagg](https://github.com/rvagg)
+ * [Matteo Collina](https://github.com/mcollina)
+
 ## License
 
 **bl** is Copyright (c) 2013 Rod Vagg [@rvagg](https://twitter.com/rvagg) and licenced under the MIT licence. All rights not explicitly granted in the MIT license are reserved. See the included LICENSE file for more details.

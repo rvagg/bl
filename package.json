@@ -13,6 +13,7 @@
   , "homepage"        : "https://github.com/rvagg/bl"
   , "authors"         : [
         "Rod Vagg <rod@vagg.org> (https://github.com/rvagg)"
+      , "Matteo Collina <matteo.collina@gmail.com> (https://github.com/mcollina)"
     ]
   , "keywords"        : [
         "buffer"
