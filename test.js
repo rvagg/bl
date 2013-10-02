@@ -341,3 +341,16 @@ tape('unicode string', function (t) {
   t.equal(exp, bl.toString())
   t.equal(new Buffer(exp).toString('hex'), bl.toString('hex'))
 })
+
+tape('should emit finish', function (t) {
+  var source = BufferList()
+    , dest = BufferList()
+ 
+  source.write('hello')
+  source.pipe(dest)
+
+  dest.on('finish', function () {
+    t.equal(dest.toString('utf8'), 'hello')
+    t.end()
+  })
+})
