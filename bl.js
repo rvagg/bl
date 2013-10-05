@@ -129,6 +129,58 @@ BufferList.prototype.consume = function (bytes) {
   return this
 }
 
+BufferList.prototype.copy = function (dest, targetStart, sourceStart, sourceEnd) {
+  if (typeof sourceStart != 'number' || sourceStart < 0)
+    sourceStart = 0
+  if (typeof sourceEnd != 'number' || sourceEnd > this.length)
+    sourceEnd = this.length
+  if (sourceStart >= this.length)
+    return
+  if (sourceEnd <= 0)
+    return
+
+  var off    = this._offset(sourceStart)
+    , len    = sourceEnd - sourceStart
+    , bytes  = len
+    , bufoff = targetStart || 0
+    , start
+    , l, i
+
+  if (sourceStart === 0 && sourceEnd == this.length) {
+    for (i = 0; i < this._bufs.length; i++) {
+      this._bufs[i].copy(dest, bufoff)
+      bufoff += this._bufs[i].length
+    }
+
+    return dest
+  }
+
+  start = off[1]
+
+  // easy, cheap case where it's a subset of one of the buffers
+  if (bytes <= this._bufs[off[0]].length - start) {
+    return this._bufs[off[0]].copy(dest, targetStart, start, start + bytes)
+  }
+
+  for (i = off[0]; i < this._bufs.length; i++) {
+    l = this._bufs[i].length - start
+    if (bytes > l) {
+      this._bufs[i].copy(dest, bufoff, start)
+    } else {
+      this._bufs[i].copy(dest, bufoff, start, start + bytes)
+      break
+    }
+
+    bufoff += l
+    bytes -= l
+
+    if (start)
+      start = 0
+  }
+
+  return dest
+}
+
 ;(function () {
   var methods = {
       'readDoubleBE' : 8
