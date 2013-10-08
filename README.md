@@ -84,6 +84,8 @@ bl.pipe(fs.createWriteStream('gibberish.txt'))
   * <a href="#append"><code>bl.<b>append(buffer)</b></code></a>
   * <a href="#get"><code>bl.<b>get(index)</b></code></a>
   * <a href="#slice"><code>bl.<b>slice([ start[, end ] ])</b></code></a>
+  * <a href="#copy"><code>bl.<b>copy(dest, [targetStart, [ start[, end ]
+    ]])</b></code></a>
   * <a href="#consume"><code>bl.<b>consume(bytes)</b></code></a>
   * <a href="#toString"><code>bl.<b>toString([encoding, [ start, [ end ]]])</b></code></a>
   * <a href="#readXX"><code>bl.<b>readDoubleBE()</b></code>, <code>bl.<b>readDoubleLE()</b></code>, <code>bl.<b>readFloatBE()</b></code>, <code>bl.<b>readFloatLE()</b></code>, <code>bl.<b>readInt32BE()</b></code>, <code>bl.<b>readInt32LE()</b></code>, <code>bl.<b>readUInt32BE()</b></code>, <code>bl.<b>readUInt32LE()</b></code>, <code>bl.<b>readInt16BE()</b></code>, <code>bl.<b>readInt16LE()</b></code>, <code>bl.<b>readUInt16BE()</b></code>, <code>bl.<b>readUInt16LE()</b></code>, <code>bl.<b>readInt8()</b></code>, <code>bl.<b>readUInt8()</b></code></a>
@@ -129,6 +131,11 @@ Get the length of the list in bytes. This is the sum of the lengths of all of th
 `slice()` returns a new `Buffer` object containing the bytes within the range specified. Both `start` and `end` are optional and will default to the beginning and end of the list respectively.
 
 If the requested range spans a single internal buffer then a slice of that buffer will be returned which shares the original memory range of that Buffer. If the range spans multiple buffers then copy operations will likely occur to give you a uniform Buffer.
+
+--------------------------------------------------------
+<a name="copy"></a>
+### bl.copy(dest, [ targetStart, [ start, [ end ] ] ])
+`copy()` copies the content of the list in the `dest` buffer, starting from `targetStart` and containing the bytes within the range specified. `targetStart`, `start` and `end` are optional and will default to the beginning of the `dest` buffer, and the beginning and end of the list respectively.
 
 --------------------------------------------------------
 <a name="consume"></a>

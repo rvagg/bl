@@ -354,3 +354,71 @@ tape('should emit finish', function (t) {
     t.end()
   })
 })
+
+tape('basic copy', function (t) {
+  var buf  = crypto.randomBytes(1024)
+    , buf2 = new Buffer(1024)
+    , b    = BufferList(buf)
+
+  b.copy(buf2)
+  t.equal(hash(b.slice(), 'md5'), hash(buf2, 'md5'), 'same hash!')
+  t.end()
+})
+
+tape('copy after many appends', function (t) {
+  var buf  = crypto.randomBytes(512)
+    , buf2 = new Buffer(1024)
+    , b    = BufferList(buf)
+
+  b.append(buf)
+  b.copy(buf2)
+  t.equal(hash(b.slice(), 'md5'), hash(buf2, 'md5'), 'same hash!')
+  t.end()
+})
+
+tape('copy at a precise position', function (t) {
+  var buf  = crypto.randomBytes(1004)
+    , buf2 = new Buffer(1024)
+    , b    = BufferList(buf)
+
+  b.copy(buf2, 20)
+  t.equal(hash(b.slice(), 'md5'), hash(buf2.slice(20), 'md5'), 'same hash!')
+  t.end()
+})
+
+tape('copy starting from a precise location', function (t) {
+  var buf  = crypto.randomBytes(10)
+    , buf2 = new Buffer(5)
+    , b    = BufferList(buf)
+
+  b.copy(buf2, 0, 5)
+  t.equal(hash(b.slice(5), 'md5'), hash(buf2, 'md5'), 'same hash!')
+  t.end()
+})
+
+tape('copy in an interval', function (t) {
+  var buf      = crypto.randomBytes(10)
+    , buf2     = new Buffer(3)
+    , b        = BufferList(buf)
+    , expected = new Buffer(3)
+
+  // put the same old data there
+  buf2.copy(expected)
+  buf.copy(expected, 0, 5, 7)
+
+  b.copy(buf2, 0, 5, 7)
+  t.equal(hash(expected, 'md5'), hash(buf2, 'md5'), 'same hash!')
+  t.end()
+})
+
+tape('copy an interval between two buffers', function (t) {
+  var buf      = crypto.randomBytes(10)
+    , buf2     = new Buffer(10)
+    , b        = BufferList(buf)
+
+  b.append(buf)
+  b.copy(buf2, 0, 5, 15)
+
+  t.equal(hash(b.slice(5, 15), 'md5'), hash(buf2, 'md5'), 'same hash!')
+  t.end()
+})
