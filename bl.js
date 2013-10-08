@@ -65,38 +65,59 @@ BufferList.prototype.get = function (index) {
 }
 
 BufferList.prototype.slice = function (start, end) {
-  if (typeof start != 'number' || start < 0)
-    start = 0
-  if (typeof end != 'number' || end > this.length)
-    end = this.length
-  if (start >= this.length)
-    return new Buffer(0)
-  if (end <= 0)
-    return new Buffer(0)
+  return this.copy(null, 0, start, end)
+}
 
-  if (start === 0 && end == this.length)
-    return Buffer.concat(this._bufs)
+BufferList.prototype.copy = function (dst, dstStart, srcStart, srcEnd) {
+  if (typeof srcStart != 'number' || srcStart < 0)
+    srcStart = 0
+  if (typeof srcEnd != 'number' || srcEnd > this.length)
+    srcEnd = this.length
+  if (srcStart >= this.length)
+    return dst || new Buffer(0)
+  if (srcEnd <= 0)
+    return dst || new Buffer(0)
 
-  var off    = this._offset(start)
-    , len    = end - start
+  var copy   = !!dst
+    , off    = this._offset(srcStart)
+    , len    = srcEnd - srcStart
     , bytes  = len
-    , bufoff = 0
-    , buf, l, i
+    , bufoff = (copy && dstStart) || 0
+    , start  = off[1]
+    , l
+    , i
 
-  start = off[1]
+  // copy/slice everything
+  if (srcStart === 0 && srcEnd == this.length) {
+    if (!copy) // slice, just return a full concat
+      return Buffer.concat(this._bufs)
+
+    // copy, need to copy individual buffers
+    for (i = 0; i < this._bufs.length; i++) {
+      this._bufs[i].copy(dst, bufoff)
+      bufoff += this._bufs[i].length
+    }
+
+    return dst
+  }
 
   // easy, cheap case where it's a subset of one of the buffers
-  if (bytes <= this._bufs[off[0]].length - start)
-    return this._bufs[off[0]].slice(start, start + bytes)
+  if (bytes <= this._bufs[off[0]].length - start) {
+    return copy
+      ? this._bufs[off[0]].copy(dst, dstStart, start, start + bytes)
+      : this._bufs[off[0]].slice(start, start + bytes)
+  }
 
-  buf = new Buffer(len)
+  if (!copy) // a slice, we need something to copy in to
+    dst = new Buffer(len)
 
   for (i = off[0]; i < this._bufs.length; i++) {
     l = this._bufs[i].length - start
+
     if (bytes > l) {
-      this._bufs[i].copy(buf, bufoff, start)
+      this._bufs[i].copy(dst, bufoff, start)
     } else {
-      this._bufs[i].copy(buf, bufoff, start, start + bytes)
+      this._bufs[i].copy(dst, bufoff, start, start + bytes)
       break
     }
 
@@ -107,7 +128,7 @@ BufferList.prototype.slice = function (start, end) {
       start = 0
   }
 
-  return buf
+  return dst
 }
 
 BufferList.prototype.toString = function (encoding, start, end) {
@@ -127,58 +148,6 @@ BufferList.prototype.consume = function (bytes) {
     }
   }
   return this
-}
-
-BufferList.prototype.copy = function (dest, targetStart, sourceStart, sourceEnd) {
-  if (typeof sourceStart != 'number' || sourceStart < 0)
-    sourceStart = 0
-  if (typeof sourceEnd != 'number' || sourceEnd > this.length)
-    sourceEnd = this.length
-  if (sourceStart >= this.length)
-    return
-  if (sourceEnd <= 0)
-    return
-
-  var off    = this._offset(sourceStart)
-    , len    = sourceEnd - sourceStart
-    , bytes  = len
-    , bufoff = targetStart || 0
-    , start
-    , l, i
-
-  if (sourceStart === 0 && sourceEnd == this.length) {
-    for (i = 0; i < this._bufs.length; i++) {
-      this._bufs[i].copy(dest, bufoff)
-      bufoff += this._bufs[i].length
-    }
-
-    return dest
-  }
-
-  start = off[1]
-
-  // easy, cheap case where it's a subset of one of the buffers
-  if (bytes <= this._bufs[off[0]].length - start) {
-    return this._bufs[off[0]].copy(dest, targetStart, start, start + bytes)
-  }
-
-  for (i = off[0]; i < this._bufs.length; i++) {
-    l = this._bufs[i].length - start
-    if (bytes > l) {
-      this._bufs[i].copy(dest, bufoff, start)
-    } else {
-      this._bufs[i].copy(dest, bufoff, start, start + bytes)
-      break
-    }
-
-    bufoff += l
-    bytes -= l
-
-    if (start)
-      start = 0
-  }
-
-  return dest
 }
 
 ;(function () {

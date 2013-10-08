@@ -419,9 +419,6 @@ tape('copy an interval between two buffers', function (t) {
   b.append(buf)
   b.copy(buf2, 0, 5, 15)
 
-  console.log(buf)
-  console.log(buf2)
-
   t.equal(hash(b.slice(5, 15), 'md5'), hash(buf2, 'md5'), 'same hash!')
   t.end()
 })
