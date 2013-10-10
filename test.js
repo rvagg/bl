@@ -354,3 +354,13 @@ tape('should emit finish', function (t) {
     t.end()
   })
 })
+
+tape('duplicate', function (t) {
+  t.plan(2)
+
+  var bl = new BufferList('abcdefghij\xff\x00')
+    , dup = bl.duplicate()
+
+  t.equal(bl.prototype, dup.prototype)
+  t.equal(bl.toString('hex'), dup.toString('hex'))
+})
