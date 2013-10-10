@@ -153,12 +153,30 @@ See the <b><code>[Buffer](http://nodejs.org/docs/latest/api/buffer.html)</code><
 ### Streams
 **bl** is a Node **[Duplex Stream](http://nodejs.org/docs/latest/api/stream.html#stream_class_stream_duplex)**, so it can be read from and written to like a standard Node stream. You can also `pipe()` to and from a **bl** instance.
 
+--------------------------------------------------------
+<a name="dulicate"></a>
+### bl.duplicate()
+`duplicate()` does a shallow-copy of the list. The internal buffers remains the same, so if you change the result of `duplicate()`, the original one will be changed too. This method is needed if you want to call `consume()` or `pipe()` and still keep the original list.Example:
+```js
+
+var bl = new BufferList()
+
+bl.append('hello')
+bl.append(' world')
+bl.append('\n')
+
+bl.duplicate().pipe(process.stdout, { end: false })
+
+console.log(bl.toString())
+```
+
 ## Contributors
 
 **bl** is brought to you by the following hackers:
 
  * [Rod Vagg](https://github.com/rvagg)
  * [Matteo Collina](https://github.com/mcollina)
+=======
 
 ## License
 
