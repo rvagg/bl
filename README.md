@@ -88,6 +88,7 @@ bl.pipe(fs.createWriteStream('gibberish.txt'))
   * <a href="#toString"><code>bl.<b>toString([encoding, [ start, [ end ]]])</b></code></a>
   * <a href="#readXX"><code>bl.<b>readDoubleBE()</b></code>, <code>bl.<b>readDoubleLE()</b></code>, <code>bl.<b>readFloatBE()</b></code>, <code>bl.<b>readFloatLE()</b></code>, <code>bl.<b>readInt32BE()</b></code>, <code>bl.<b>readInt32LE()</b></code>, <code>bl.<b>readUInt32BE()</b></code>, <code>bl.<b>readUInt32LE()</b></code>, <code>bl.<b>readInt16BE()</b></code>, <code>bl.<b>readInt16LE()</b></code>, <code>bl.<b>readUInt16BE()</b></code>, <code>bl.<b>readUInt16LE()</b></code>, <code>bl.<b>readInt8()</b></code>, <code>bl.<b>readUInt8()</b></code></a>
   * <a href="#streams">Streams</a>
+  * <a href="#duplicate"><code>bl.<b>duplicate()</b></code></a>
 
 --------------------------------------------------------
 <a name="ctor"></a>
@@ -154,7 +155,7 @@ See the <b><code>[Buffer](http://nodejs.org/docs/latest/api/buffer.html)</code><
 **bl** is a Node **[Duplex Stream](http://nodejs.org/docs/latest/api/stream.html#stream_class_stream_duplex)**, so it can be read from and written to like a standard Node stream. You can also `pipe()` to and from a **bl** instance.
 
 --------------------------------------------------------
-<a name="dulicate"></a>
+<a name="duplicate"></a>
 ### bl.duplicate()
 `duplicate()` does a shallow-copy of the list. The internal buffers remains the same, so if you change the result of `duplicate()`, the original one will be changed too. This method is needed if you want to call `consume()` or `pipe()` and still keep the original list.Example:
 ```js
@@ -176,6 +177,7 @@ console.log(bl.toString())
 
  * [Rod Vagg](https://github.com/rvagg)
  * [Matteo Collina](https://github.com/mcollina)
+
 =======
 
 ## License
