@@ -85,11 +85,11 @@ bl.pipe(fs.createWriteStream('gibberish.txt'))
   * <a href="#get"><code>bl.<b>get(index)</b></code></a>
   * <a href="#slice"><code>bl.<b>slice([ start[, end ] ])</b></code></a>
   * <a href="#copy"><code>bl.<b>copy(dest, [ destStart, [ srcStart [, srcEnd ] ] ])</b></code></a>
+  * <a href="#duplicate"><code>bl.<b>duplicate()</b></code></a>
   * <a href="#consume"><code>bl.<b>consume(bytes)</b></code></a>
   * <a href="#toString"><code>bl.<b>toString([encoding, [ start, [ end ]]])</b></code></a>
   * <a href="#readXX"><code>bl.<b>readDoubleBE()</b></code>, <code>bl.<b>readDoubleLE()</b></code>, <code>bl.<b>readFloatBE()</b></code>, <code>bl.<b>readFloatLE()</b></code>, <code>bl.<b>readInt32BE()</b></code>, <code>bl.<b>readInt32LE()</b></code>, <code>bl.<b>readUInt32BE()</b></code>, <code>bl.<b>readUInt32LE()</b></code>, <code>bl.<b>readInt16BE()</b></code>, <code>bl.<b>readInt16LE()</b></code>, <code>bl.<b>readUInt16BE()</b></code>, <code>bl.<b>readUInt16LE()</b></code>, <code>bl.<b>readInt8()</b></code>, <code>bl.<b>readUInt8()</b></code></a>
   * <a href="#streams">Streams</a>
-  * <a href="#duplicate"><code>bl.<b>duplicate()</b></code></a>
 
 --------------------------------------------------------
 <a name="ctor"></a>
@@ -138,6 +138,23 @@ If the requested range spans a single internal buffer then a slice of that buffe
 `copy()` copies the content of the list in the `dest` buffer, starting from `destStart` and containing the bytes within the range specified with `srcStart` to `srcEnd`. `destStart`, `start` and `end` are optional and will default to the beginning of the `dest` buffer, and the beginning and end of the list respectively.
 
 --------------------------------------------------------
+<a name="duplicate"></a>
+### bl.duplicate()
+`duplicate()` performs a **shallow-copy** of the list. The internal Buffers remains the same, so if you change the underlying Buffers, the change will be reflected in both the original and the duplicate. This method is needed if you want to call `consume()` or `pipe()` and still keep the original list.Example:
+
+```js
+var bl = new BufferList()
+
+bl.append('hello')
+bl.append(' world')
+bl.append('\n')
+
+bl.duplicate().pipe(process.stdout, { end: false })
+
+console.log(bl.toString())
+```
+
+--------------------------------------------------------
 <a name="consume"></a>
 ### bl.consume(bytes)
 `consume()` will shift bytes *off the start of the list*. The number of bytes consumed don't need to line up with the sizes of the internal Buffers&mdash;initial offsets will be calculated accordingly in order to give you a consistent view of the data.
@@ -161,21 +178,6 @@ See the <b><code>[Buffer](http://nodejs.org/docs/latest/api/buffer.html)</code><
 **bl** is a Node **[Duplex Stream](http://nodejs.org/docs/latest/api/stream.html#stream_class_stream_duplex)**, so it can be read from and written to like a standard Node stream. You can also `pipe()` to and from a **bl** instance.
 
 --------------------------------------------------------
-<a name="duplicate"></a>
-### bl.duplicate()
-`duplicate()` does a shallow-copy of the list. The internal buffers remains the same, so if you change the result of `duplicate()`, the original one will be changed too. This method is needed if you want to call `consume()` or `pipe()` and still keep the original list.Example:
-```js
-
-var bl = new BufferList()
-
-bl.append('hello')
-bl.append(' world')
-bl.append('\n')
-
-bl.duplicate().pipe(process.stdout, { end: false })
-
-console.log(bl.toString())
-```
 
 ## Contributors
 
