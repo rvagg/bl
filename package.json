@@ -1,32 +1,32 @@
 {
-    "name"            : "bl"
-  , "version"         : "0.5.0"
-  , "description"     : "Buffer List: collect buffers and access with a standard readable Buffer interface, streamable too!"
-  , "main"            : "bl.js"
-  , "scripts"         : {
-        "test": "tape test.js"
-    }
-  , "repository"      : {
-        "type"            : "git"
-      , "url"             : "https://github.com/rvagg/bl.git"
-    }
-  , "homepage"        : "https://github.com/rvagg/bl"
-  , "authors"         : [
-        "Rod Vagg <rod@vagg.org> (https://github.com/rvagg)"
-      , "Matteo Collina <matteo.collina@gmail.com> (https://github.com/mcollina)"
-    ]
-  , "keywords"        : [
-        "buffer"
-      , "buffers"
-      , "stream"
-      , "awesomesauce"
-    ]
-  , "license"         : "MIT"
-  , "dependencies"    : {
-        "readable-stream" : "~1.0.2"
-    }
-  , "devDependencies" : {
-        "tape"            : "*"
-      , "hash_file"       : "*"
-    }
+  "name": "bl",
+  "version": "0.6.0",
+  "description": "Buffer List: collect buffers and access with a standard readable Buffer interface, streamable too!",
+  "main": "bl.js",
+  "scripts": {
+    "test": "tape test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rvagg/bl.git"
+  },
+  "homepage": "https://github.com/rvagg/bl",
+  "authors": [
+    "Rod Vagg <rod@vagg.org> (https://github.com/rvagg)",
+    "Matteo Collina <matteo.collina@gmail.com> (https://github.com/mcollina)"
+  ],
+  "keywords": [
+    "buffer",
+    "buffers",
+    "stream",
+    "awesomesauce"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "readable-stream": "~1.0.2"
+  },
+  "devDependencies": {
+    "tape": "*",
+    "hash_file": "*"
+  }
 }
