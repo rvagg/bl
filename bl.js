@@ -8,8 +8,23 @@ function BufferList (callback) {
   this._bufs  = []
   this.length = 0
 
-  if (typeof callback == 'function')
+  if (typeof callback == 'function') {
     this._callback = callback
+
+    var piper = function (err) {
+      if (this._callback) {
+        this._callback(err)
+        this._callback = null
+      }
+    }.bind(this)
+
+    this.on('pipe', function (src) {
+      src.on('error', piper)
+    })
+    this.on('unpipe', function (src) {
+      src.removeListener('error', piper)
+    })
+  }
   else if (Buffer.isBuffer(callback))
     this.append(callback)
   else if (Array.isArray(callback)) {
@@ -56,8 +71,10 @@ BufferList.prototype._read = function (size) {
 BufferList.prototype.end = function (chunk) {
   DuplexStream.prototype.end.call(this, chunk)
 
-  if (this._callback)
+  if (this._callback) {
     this._callback(null, this.slice())
+    this._callback = null
+  }
 }
 
 BufferList.prototype.get = function (index) {

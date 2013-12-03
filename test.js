@@ -432,3 +432,11 @@ tape('duplicate', function (t) {
   t.equal(bl.prototype, dup.prototype)
   t.equal(bl.toString('hex'), dup.toString('hex'))
 })
+
+tape('handle error', function (t) {
+  t.plan(2)
+  fs.createReadStream('/does/not/exist').pipe(BufferList(function (err, data) {
+    t.ok(err instanceof Error, 'has error')
+    t.notOk(data, 'no data')
+  }))
+})
