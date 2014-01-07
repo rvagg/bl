@@ -1,4 +1,4 @@
-const DuplexStream = require('stream').DuplexStream || require('readable-stream/duplex')
+const DuplexStream = require('readable-stream').Duplex
     , util         = require('util')
 
 function BufferList (callback) {

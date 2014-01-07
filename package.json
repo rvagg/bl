@@ -4,7 +4,8 @@
   "description": "Buffer List: collect buffers and access with a standard readable Buffer interface, streamable too!",
   "main": "bl.js",
   "scripts": {
-    "test": "tape test.js"
+    "test": "node test/test.js | faucet",
+    "test-local": "brtapsauce-local test/basic-test.js"
   },
   "repository": {
     "type": "git",
@@ -25,8 +26,17 @@
   "dependencies": {
     "readable-stream": "~1.0.2"
   },
+  "peerDependencies": {
+    "stream-browserify": "*"
+  },
   "devDependencies": {
-    "tape": "*",
-    "hash_file": "*"
+    "tape": "~2.3.2",
+    "hash_file": "~0.1.1",
+    "brtapsauce": "~0.3.0",
+    "faucet": "0.0.0",
+    "stream-browserify": "~0.1.2"
+  },
+  "browser": {
+    "readable-stream": "stream-browserify"
   }
 }

@@ -2,7 +2,11 @@ const tape       = require('tape')
     , crypto     = require('crypto')
     , fs         = require('fs')
     , hash       = require('hash_file')
-    , BufferList = require('./')
+    , BufferList = require('../')
+
+    , encodings  =
+        ('hex utf8 utf-8 ascii binary base64'
+            + (process.browser ? '' : ' ucs2 ucs-2 utf16le utf-16le')).split(' ')
 
 tape('single bytes from single buffer', function (t) {
   var bl = new BufferList()
@@ -254,17 +258,15 @@ tape('test toString encoding', function (t) {
   bl.append(new Buffer('j'))
   bl.append(new Buffer('\xff\x00'))
 
-  'hex utf8 utf-8 ascii binary base64 ucs2 ucs-2 utf16le utf-16le'
-    .split(' ')
-    .forEach(function (enc) {
-      t.equal(bl.toString(enc), b.toString(enc))
+  encodings.forEach(function (enc) {
+      t.equal(bl.toString(enc), b.toString(enc), enc)
     })
 
   t.end()
 })
 
-tape('test stream', function (t) {
-  var random = crypto.randomBytes(1024 * 1024)
+!process.browser && tape('test stream', function (t) {
+  var random = crypto.randomBytes(65534)
     , rndhash = hash(random, 'md5')
     , md5sum = crypto.createHash('md5')
     , bl     = new BufferList(function (err, buf) {
@@ -310,9 +312,7 @@ tape('test String appendage', function (t) {
   bl.append('j')
   bl.append('\xff\x00')
 
-  'hex utf8 utf-8 ascii binary base64 ucs2 ucs-2 utf16le utf-16le'
-    .split(' ')
-    .forEach(function (enc) {
+  encodings.forEach(function (enc) {
       t.equal(bl.toString(enc), b.toString(enc))
     })
 
@@ -433,7 +433,7 @@ tape('duplicate', function (t) {
   t.equal(bl.toString('hex'), dup.toString('hex'))
 })
 
-tape('handle error', function (t) {
+!process.browser && tape('handle error', function (t) {
   t.plan(2)
   fs.createReadStream('/does/not/exist').pipe(BufferList(function (err, data) {
     t.ok(err instanceof Error, 'has error')
