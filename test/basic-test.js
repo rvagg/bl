@@ -1,12 +1,12 @@
-const tape       = require('tape')
-    , crypto     = require('crypto')
-    , fs         = require('fs')
-    , hash       = require('hash_file')
-    , BufferList = require('../')
+var tape       = require('tape')
+  , crypto     = require('crypto')
+  , fs         = require('fs')
+  , hash       = require('hash_file')
+  , BufferList = require('../')
 
-    , encodings  =
-        ('hex utf8 utf-8 ascii binary base64'
-            + (process.browser ? '' : ' ucs2 ucs-2 utf16le utf-16le')).split(' ')
+  , encodings  =
+      ('hex utf8 utf-8 ascii binary base64'
+          + (process.browser ? '' : ' ucs2 ucs-2 utf16le utf-16le')).split(' ')
 
 tape('single bytes from single buffer', function (t) {
   var bl = new BufferList()

@@ -1,5 +1,5 @@
-const DuplexStream = require('readable-stream').Duplex
-    , util         = require('util')
+var DuplexStream = require('readable-stream').Duplex
+  , util         = require('util')
 
 function BufferList (callback) {
   if (!(this instanceof BufferList))
