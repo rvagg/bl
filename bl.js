@@ -195,11 +195,13 @@ BufferList.prototype.duplicate = function () {
     , 'readUInt8'    : 1
   }
 
-  Object.keys(methods).forEach(function (m) {
-    BufferList.prototype[m] = function (offset) {
-      return this.slice(offset, offset + methods[m])[m](0)
-    }
-  })
+  for (var m in methods) {
+    (function (m) {
+      BufferList.prototype[m] = function (offset) {
+        return this.slice(offset, offset + methods[m])[m](0)
+      }
+    }(m))
+  }
 }())
 
 module.exports = BufferList
