@@ -296,9 +296,9 @@ tape('instantiation with Buffer', function (t) {
     , buf2 = crypto.randomBytes(1024)
     , b    = BufferList(buf)
 
-  t.equal(hash(buf, 'md5'), hash(b.slice(), 'md5'), 'same hash!')
+  t.equal(buf.toString('hex'), b.slice().toString('hex'), 'same buffer')
   b = BufferList([ buf, buf2 ])
-  t.equal(hash(b.slice(), 'md5'), hash(Buffer.concat([ buf, buf2 ]), 'md5'), 'same hash!')
+  t.equal(b.slice().toString('hex'), Buffer.concat([ buf, buf2 ]).toString('hex'), 'same buffer')
   t.end()
 })
 
@@ -361,7 +361,7 @@ tape('basic copy', function (t) {
     , b    = BufferList(buf)
 
   b.copy(buf2)
-  t.equal(hash(b.slice(), 'md5'), hash(buf2, 'md5'), 'same hash!')
+  t.equal(b.slice().toString('hex'), buf2.toString('hex'), 'same buffer')
   t.end()
 })
 
@@ -372,7 +372,7 @@ tape('copy after many appends', function (t) {
 
   b.append(buf)
   b.copy(buf2)
-  t.equal(hash(b.slice(), 'md5'), hash(buf2, 'md5'), 'same hash!')
+  t.equal(b.slice().toString('hex'), buf2.toString('hex'), 'same buffer')
   t.end()
 })
 
@@ -382,7 +382,7 @@ tape('copy at a precise position', function (t) {
     , b    = BufferList(buf)
 
   b.copy(buf2, 20)
-  t.equal(hash(b.slice(), 'md5'), hash(buf2.slice(20), 'md5'), 'same hash!')
+  t.equal(b.slice().toString('hex'), buf2.slice(20).toString('hex'), 'same buffer')
   t.end()
 })
 
@@ -392,7 +392,7 @@ tape('copy starting from a precise location', function (t) {
     , b    = BufferList(buf)
 
   b.copy(buf2, 0, 5)
-  t.equal(hash(b.slice(5), 'md5'), hash(buf2, 'md5'), 'same hash!')
+  t.equal(b.slice(5).toString('hex'), buf2.toString('hex'), 'same buffer')
   t.end()
 })
 
@@ -407,7 +407,7 @@ tape('copy in an interval', function (t) {
   buf.copy(expected, 0, 5, 7)
 
   b.copy(buf2, 0, 5, 7)
-  t.equal(hash(expected, 'md5'), hash(buf2, 'md5'), 'same hash!')
+  t.equal(expected.slice().toString('hex'), buf2.toString('hex'), 'same buffer')
   t.end()
 })
 
@@ -419,7 +419,7 @@ tape('copy an interval between two buffers', function (t) {
   b.append(buf)
   b.copy(buf2, 0, 5, 15)
 
-  t.equal(hash(b.slice(5, 15), 'md5'), hash(buf2, 'md5'), 'same hash!')
+  t.equal(b.slice(5, 15).toString('hex'), buf2.toString('hex'), 'same buffer')
   t.end()
 })
 
