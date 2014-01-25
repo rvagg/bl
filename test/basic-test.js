@@ -270,8 +270,8 @@ tape('test toString encoding', function (t) {
     , rndhash = hash(random, 'md5')
     , md5sum = crypto.createHash('md5')
     , bl     = new BufferList(function (err, buf) {
+        t.ok(err === null, 'got null err')
         t.ok(Buffer.isBuffer(buf))
-        t.ok(err === null)
         t.equal(rndhash, hash(bl.slice(), 'md5'))
         t.equal(rndhash, hash(buf, 'md5'))
 
@@ -296,7 +296,7 @@ tape('instantiation with Buffer', function (t) {
     , buf2 = crypto.randomBytes(1024)
     , b    = BufferList(buf)
 
-  t.equal(buf.toString('hex'), b.slice().toString('hex'), 'same buffer')
+  t.equal(b.slice().toString('hex'), buf.toString('hex'), 'same buffer')
   b = BufferList([ buf, buf2 ])
   t.equal(b.slice().toString('hex'), Buffer.concat([ buf, buf2 ]).toString('hex'), 'same buffer')
   t.end()
