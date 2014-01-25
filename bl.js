@@ -1,47 +1,44 @@
-var DuplexStream = require('readable-stream').Duplex
-  , util         = require('util')
+var ListStream = require('list-stream')
+  , util       = require('util')
 
-function BufferList (callback) {
+function BufferList (_callback) {
   if (!(this instanceof BufferList))
-    return new BufferList(callback)
+    return new BufferList(_callback)
 
-  this._bufs  = []
+  var callback
+    , self = this
+
+  if (typeof _callback == 'function') {
+    callback = function (err) {
+      if (err)
+        return _callback(err)
+      _callback(null, self.slice())
+    }
+  }
+
+  ListStream.call(this, callback)
+
+  // replace getter from ListStream
+  ;delete this.length
   this.length = 0
 
-  if (typeof callback == 'function') {
-    this._callback = callback
-
-    var piper = function (err) {
-      if (this._callback) {
-        this._callback(err)
-        this._callback = null
-      }
-    }.bind(this)
-
-    this.on('pipe', function (src) {
-      src.on('error', piper)
-    })
-    this.on('unpipe', function (src) {
-      src.removeListener('error', piper)
-    })
+  if (!callback) { // something else in the arg?
+    if (Buffer.isBuffer(_callback)) {
+      this.append(_callback)
+    } else if (Array.isArray(_callback)) {
+      _callback.forEach(function (b) {
+        Buffer.isBuffer(b) && self.append(b)
+      })
+    } // else ignore
   }
-  else if (Buffer.isBuffer(callback))
-    this.append(callback)
-  else if (Array.isArray(callback)) {
-    callback.forEach(function (b) {
-      Buffer.isBuffer(b) && this.append(b)
-    }.bind(this))
-  }
-
-  DuplexStream.call(this)
 }
 
-util.inherits(BufferList, DuplexStream)
+util.inherits(BufferList, ListStream)
 
 BufferList.prototype._offset = function (offset) {
   var tot = 0, i = 0, _t
-  for (; i < this._bufs.length; i++) {
-    _t = tot + this._bufs[i].length
+  for (; i < this._chunks.length; i++) {
+    _t = tot + this._chunks[i].length
     if (offset < _t)
       return [ i, offset - tot ]
     tot = _t
@@ -49,7 +46,7 @@ BufferList.prototype._offset = function (offset) {
 }
 
 BufferList.prototype.append = function (buf) {
-  this._bufs.push(Buffer.isBuffer(buf) ? buf : new Buffer(buf))
+  this._chunks.push(Buffer.isBuffer(buf) ? buf : new Buffer(buf))
   this.length += buf.length
   return this
 }
@@ -66,15 +63,6 @@ BufferList.prototype._read = function (size) {
   size = Math.min(size, this.length)
   this.push(this.slice(0, size))
   this.consume(size)
-}
-
-BufferList.prototype.end = function (chunk) {
-  DuplexStream.prototype.end.call(this, chunk)
-
-  if (this._callback) {
-    this._callback(null, this.slice())
-    this._callback = null
-  }
 }
 
 BufferList.prototype.get = function (index) {
@@ -107,34 +95,34 @@ BufferList.prototype.copy = function (dst, dstStart, srcStart, srcEnd) {
   // copy/slice everything
   if (srcStart === 0 && srcEnd == this.length) {
     if (!copy) // slice, just return a full concat
-      return Buffer.concat(this._bufs)
+      return Buffer.concat(this._chunks)
 
     // copy, need to copy individual buffers
-    for (i = 0; i < this._bufs.length; i++) {
-      this._bufs[i].copy(dst, bufoff)
-      bufoff += this._bufs[i].length
+    for (i = 0; i < this._chunks.length; i++) {
+      this._chunks[i].copy(dst, bufoff)
+      bufoff += this._chunks[i].length
     }
 
     return dst
   }
 
   // easy, cheap case where it's a subset of one of the buffers
-  if (bytes <= this._bufs[off[0]].length - start) {
+  if (bytes <= this._chunks[off[0]].length - start) {
     return copy
-      ? this._bufs[off[0]].copy(dst, dstStart, start, start + bytes)
-      : this._bufs[off[0]].slice(start, start + bytes)
+      ? this._chunks[off[0]].copy(dst, dstStart, start, start + bytes)
+      : this._chunks[off[0]].slice(start, start + bytes)
   }
 
   if (!copy) // a slice, we need something to copy in to
     dst = new Buffer(len)
 
-  for (i = off[0]; i < this._bufs.length; i++) {
-    l = this._bufs[i].length - start
+  for (i = off[0]; i < this._chunks.length; i++) {
+    l = this._chunks[i].length - start
 
     if (bytes > l) {
-      this._bufs[i].copy(dst, bufoff, start)
+      this._chunks[i].copy(dst, bufoff, start)
     } else {
-      this._bufs[i].copy(dst, bufoff, start, start + bytes)
+      this._chunks[i].copy(dst, bufoff, start, start + bytes)
       break
     }
 
@@ -153,13 +141,13 @@ BufferList.prototype.toString = function (encoding, start, end) {
 }
 
 BufferList.prototype.consume = function (bytes) {
-  while (this._bufs.length) {
-    if (bytes > this._bufs[0].length) {
-      bytes -= this._bufs[0].length
-      this.length -= this._bufs[0].length
-      this._bufs.shift()
+  while (this._chunks.length) {
+    if (bytes > this._chunks[0].length) {
+      bytes -= this._chunks[0].length
+      this.length -= this._chunks[0].length
+      this._chunks.shift()
     } else {
-      this._bufs[0] = this._bufs[0].slice(bytes)
+      this._chunks[0] = this._chunks[0].slice(bytes)
       this.length -= bytes
       break
     }
@@ -171,8 +159,8 @@ BufferList.prototype.duplicate = function () {
   var i = 0
     , copy = new BufferList()
 
-  for (; i < this._bufs.length; i++)
-    copy.append(this._bufs[i])
+  for (; i < this._chunks.length; i++)
+    copy.append(this._chunks[i])
 
   return copy
 }
