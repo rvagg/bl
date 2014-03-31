@@ -177,6 +177,12 @@ BufferList.prototype.duplicate = function () {
   return copy
 }
 
+BufferList.prototype.destroy = function () {
+  delete this._bufs;
+  this.length = 0;
+  this.push(null);
+}
+
 ;(function () {
   var methods = {
       'readDoubleBE' : 8
