@@ -481,11 +481,39 @@ tape('destroy no pipe', function (t) {
     .on('end', onEnd)
     .pipe(bl)
 
-  function onEnd() {
+  function onEnd () {
     bl.destroy()
 
     t.equal(bl._bufs.length, 0)
     t.equal(bl.length, 0)
+  }
+})
+
+!process.browser && tape('destroy with pipe while writing to a destination', function (t) {
+  t.plan(4)
+
+  var bl = new BufferList()
+    , ds = new BufferList()
+
+  fs.createReadStream(__dirname + '/sauce.js')
+    .on('end', onEnd)
+    .pipe(bl)
+
+  function onEnd () {
+    bl.pipe(ds)
+
+    setTimeout(function () {
+      bl.destroy()
+
+      t.equals(bl._bufs.length, 0)
+      t.equals(bl.length, 0)
+
+      ds.destroy()
+
+      t.equals(bl._bufs.length, 0)
+      t.equals(bl.length, 0)
+
+    }, 100)
   }
 })
 
