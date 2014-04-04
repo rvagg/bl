@@ -178,7 +178,7 @@ BufferList.prototype.duplicate = function () {
 }
 
 BufferList.prototype.destroy = function () {
-  delete this._bufs;
+  this._bufs.length = 0;
   this.length = 0;
   this.push(null);
 }
