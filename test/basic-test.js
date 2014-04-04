@@ -345,7 +345,7 @@ tape('unicode string', function (t) {
 tape('should emit finish', function (t) {
   var source = BufferList()
     , dest = BufferList()
- 
+
   source.write('hello')
   source.pipe(dest)
 
@@ -431,6 +431,62 @@ tape('duplicate', function (t) {
 
   t.equal(bl.prototype, dup.prototype)
   t.equal(bl.toString('hex'), dup.toString('hex'))
+})
+
+tape('destroy no pipe', function (t) {
+  t.plan(2)
+
+  var bl = new BufferList('alsdkfja;lsdkfja;lsdk')
+  bl.destroy()
+
+  t.equal(bl._bufs.length, 0)
+  t.equal(bl.length, 0)
+})
+
+!process.browser && tape('destroy with pipe before read end', function (t) {
+  t.plan(2)
+
+  var bl = new BufferList()
+  fs.createReadStream(__dirname + '/sauce.js')
+    .pipe(bl)
+
+  bl.destroy()
+
+  t.equal(bl._bufs.length, 0)
+  t.equal(bl.length, 0)
+
+})
+
+!process.browser && tape('destroy with pipe before read end with race', function (t) {
+  t.plan(2)
+
+  var bl = new BufferList()
+  fs.createReadStream(__dirname + '/sauce.js')
+    .pipe(bl)
+
+  setTimeout(function () {
+    bl.destroy()
+    setTimeout(function () {
+      t.equal(bl._bufs.length, 0)
+      t.equal(bl.length, 0)
+    }, 500)
+  }, 500)
+})
+
+!process.browser && tape('destroy with pipe after read end', function (t) {
+  t.plan(2)
+
+  var bl = new BufferList()
+  fs.createReadStream(__dirname + '/sauce.js')
+    .on('end', onEnd)
+    .pipe(bl)
+
+  function onEnd() {
+    bl.destroy()
+
+    t.equal(bl._bufs.length, 0)
+    t.equal(bl.length, 0)
+  }
 })
 
 !process.browser && tape('handle error', function (t) {
