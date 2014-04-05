@@ -27,9 +27,9 @@
     "readable-stream": "~1.0.26"
   },
   "devDependencies": {
-    "tape": "^2.12.3",
-    "hash_file": "^0.1.1",
-    "faucet": "^0.0.1"
+    "tape": "~2.12.3",
+    "hash_file": "~0.1.1",
+    "faucet": "~0.0.1"
   },
   "browser": {
     "readable-stream": "stream-browserify"
