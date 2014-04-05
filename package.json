@@ -24,17 +24,12 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "readable-stream": "~1.0.2"
-  },
-  "peerDependencies": {
-    "stream-browserify": "*"
+    "readable-stream": "~1.0.26"
   },
   "devDependencies": {
-    "tape": "~2.3.2",
-    "hash_file": "~0.1.1",
-    "brtapsauce": "~0.3.0",
-    "faucet": "0.0.0",
-    "stream-browserify": "~0.1.2"
+    "tape": "^2.12.3",
+    "hash_file": "^0.1.1",
+    "faucet": "^0.0.1"
   },
   "browser": {
     "readable-stream": "stream-browserify"
