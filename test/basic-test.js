@@ -397,17 +397,15 @@ tape('copy starting from a precise location', function (t) {
 })
 
 tape('copy in an interval', function (t) {
-  var buf      = crypto.randomBytes(10)
-    , buf2     = new Buffer(3)
-    , b        = BufferList(buf)
+  var rnd      = crypto.randomBytes(10)
+    , b        = BufferList(rnd) // put the random bytes there
+    , actual   = new Buffer(3)
     , expected = new Buffer(3)
 
-  // put the same old data there
-  buf2.copy(expected)
-  buf.copy(expected, 0, 5, 7)
+  rnd.copy(expected, 0, 5, 7)
+  b.copy(actual, 0, 5, 7)
 
-  b.copy(buf2, 0, 5, 7)
-  t.equal(expected.slice().toString('hex'), buf2.toString('hex'), 'same buffer')
+  t.equal(actual.toString('hex'), expected.toString('hex'), 'same buffer')
   t.end()
 })
 
