@@ -402,8 +402,8 @@ tape('copy in an interval', function (t) {
     , actual   = new Buffer(3)
     , expected = new Buffer(3)
 
-  rnd.copy(expected, 0, 5, 7)
-  b.copy(actual, 0, 5, 7)
+  rnd.copy(expected, 0, 5, 8)
+  b.copy(actual, 0, 5, 8)
 
   t.equal(actual.toString('hex'), expected.toString('hex'), 'same buffer')
   t.end()
