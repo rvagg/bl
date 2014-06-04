@@ -49,7 +49,7 @@ fs.createReadStream('README.md')
   .pipe(bl(function (err, data) { // note 'new' isn't strictly required
     // `data` is a complete Buffer object containing the full data
     console.log(data.toString())
-  })
+  }))
 ```
 
 Note that when you use the *callback* method like this, the resulting `data` parameter is a concatenation of all `Buffer` objects in the list. If you want to avoid the overhead of this concatenation (in cases of extreme performance consciousness), then avoid the *callback* method and just listen to `'end'` instead, like a standard Stream.
