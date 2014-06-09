@@ -24,6 +24,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "stream-browserify": "~1.0.0",
     "readable-stream": "~1.0.26"
   },
   "devDependencies": {
