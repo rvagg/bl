@@ -24,7 +24,6 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "stream-browserify": "~1.0.0",
     "readable-stream": "~1.0.26"
   },
   "devDependencies": {
@@ -32,8 +31,5 @@
     "hash_file": "~0.1.1",
     "faucet": "~0.0.1",
     "brtapsauce": "~0.3.0"
-  },
-  "browser": {
-    "readable-stream": "stream-browserify"
   }
 }
