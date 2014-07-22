@@ -121,7 +121,7 @@ Get the length of the list in bytes. This is the sum of the lengths of all of th
 --------------------------------------------------------
 <a name="append"></a>
 ### bl.append(buffer)
-`append(buffer)` adds an additional buffer to the internal list.
+`append(buffer)` adds an additional buffer or BufferList to the internal list.
 
 --------------------------------------------------------
 <a name="get"></a>

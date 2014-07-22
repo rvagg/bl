@@ -76,6 +76,23 @@ tape('multiple bytes from multiple buffers', function (t) {
   t.end()
 })
 
+tape('multiple bytes from multiple buffer lists', function (t) {
+  var bl = new BufferList()
+
+  bl.append(new BufferList([new Buffer('abcd'), new Buffer('efg')]))
+  bl.append(new BufferList([new Buffer('hi'), new Buffer('j')]))
+
+  t.equal(bl.length, 10)
+
+  t.equal(bl.slice(0, 10).toString('ascii'), 'abcdefghij')
+  t.equal(bl.slice(3, 10).toString('ascii'), 'defghij')
+  t.equal(bl.slice(3, 6).toString('ascii'), 'def')
+  t.equal(bl.slice(3, 8).toString('ascii'), 'defgh')
+  t.equal(bl.slice(5, 10).toString('ascii'), 'fghij')
+
+  t.end()
+})
+
 tape('consuming from multiple buffers', function (t) {
   var bl = new BufferList()
 
