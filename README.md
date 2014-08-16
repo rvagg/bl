@@ -4,8 +4,8 @@
 
 **A Node.js Buffer list collector, reader and streamer thingy.**
 
-[![NPM](https://nodei.co/npm/bl.png?downloads=true)](https://nodei.co/npm/bl/)
-[![NPM](https://nodei.co/npm-dl/bl.png?months=6)](https://nodei.co/npm/bl/)
+[![NPM](https://nodei.co/npm/bl.png?downloads=true&downloadRank=true)](https://nodei.co/npm/bl/)
+[![NPM](https://nodei.co/npm-dl/bl.png?months=6&height=3)](https://nodei.co/npm/bl/)
 
 **bl** is a storage object for collections of Node Buffers, exposing them with the main Buffer readable API. Also works as a duplex stream so you can collect buffers from a stream that emits them and emit buffers to a stream that consumes them!
 
