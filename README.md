@@ -169,7 +169,7 @@ console.log(bl.toString())
 
 --------------------------------------------------------
 <a name="readXX"></a>
-### <code>bl.readDoubleBE()</code>, <code>bl.readDoubleLE()</code>, <code>bl.readFloatBE()</code>, <code>bl.readFloatLE()</code>, <code>bl.readInt32BE()</code>, <code>bl.readInt32LE()</code>, <code>bl.readUInt32BE()</code>, <code>bl.readUInt32LE()</code>, <code>bl.readInt16BE()</code>, <code>bl.readInt16LE()</code>, <code>bl.readUInt16BE()</code>, <code>bl.readUInt16LE()</code>, <code>bl.readInt8()</code>, <code>bl.readUInt8()</code>
+### bl.readDoubleBE(), bl.readDoubleLE(), bl.readFloatBE(), bl.readFloatLE(), bl.readInt32BE(), bl.readInt32LE(), bl.readUInt32BE(), bl.readUInt32LE(), bl.readInt16BE(), bl.readInt16LE(), bl.readUInt16BE(), bl.readUInt16LE(), bl.readInt8(), bl.readUInt8()
 
 All of the standard byte-reading methods of the `Buffer` interface are implemented and will operate across internal Buffer boundaries transparently.
 
