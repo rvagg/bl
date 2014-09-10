@@ -186,6 +186,7 @@ See the <b><code>[Buffer](http://nodejs.org/docs/latest/api/buffer.html)</code><
 
  * [Rod Vagg](https://github.com/rvagg)
  * [Matteo Collina](https://github.com/mcollina)
+ * [Jarett Cruger](https://github.com/jcrugzz)
 
 =======
 
