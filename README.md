@@ -1,5 +1,7 @@
 # bl *(BufferList)*
 
+[![Build Status](https://secure.travis-ci.org/rvagg/bl.png)](http://travis-ci.org/rvagg/bl)
+
 **A Node.js Buffer list collector, reader and streamer thingy.**
 
 [![NPM](https://nodei.co/npm/bl.png?downloads=true&downloadRank=true)](https://nodei.co/npm/bl/)
