@@ -1,6 +1,6 @@
 # bl *(BufferList)*
 
-[![Build Status](https://secure.travis-ci.org/rvagg/bl.png)](http://travis-ci.org/rvagg/bl)
+[![Build Status](https://travis-ci.org/rvagg/bl.svg?branch=master)](https://travis-ci.org/rvagg/bl)
 
 **A Node.js Buffer list collector, reader and streamer thingy.**
 
