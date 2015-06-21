@@ -1,3 +1,4 @@
+sudo: false
 language: node_js
 before_install:
   - curl --location http://git.io/1OcIZA | bash -s
