@@ -218,4 +218,33 @@ BufferList.prototype.destroy = function () {
   }
 }())
 
+;(function() {
+  var methods = {
+      'writeDoubleBE'  : 8
+    , 'writeDoubleLE'  : 8
+    , 'writeFloatBE'   : 4
+    , 'writeFloatLE'   : 4
+    , 'writeInt32BE'   : 4
+    , 'writeInt32LE'   : 4
+    , 'writeUInt32BE'  : 4
+    , 'writeUInt32LE'  : 4
+    , 'writeInt16BE'   : 2
+    , 'writeInt16LE'   : 2
+    , 'writeUInt16BE'  : 2
+    , 'writeUInt16LE'  : 2
+    , 'writeInt8'      : 1
+    , 'writeUInt8'     : 1
+  }
+
+  for (var m in methods) {
+    (function(m) {
+      BufferList.prototype[m] = function(value) {
+        var buf = new Buffer(methods[m]);
+        buf[m](value);
+        this.append(buf);
+      }
+    }(m))
+  }
+}())
+
 module.exports = BufferList
