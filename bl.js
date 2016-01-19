@@ -240,7 +240,7 @@ BufferList.prototype.destroy = function () {
     (function(m) {
       BufferList.prototype[m] = function(value) {
         var buf = new Buffer(methods[m]);
-        buf[m](value);
+        buf[m](value, 0);
         this.append(buf);
       }
     }(m))
