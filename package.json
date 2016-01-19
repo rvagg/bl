@@ -28,9 +28,8 @@
     "readable-stream": "~1.0.26"
   },
   "devDependencies": {
-    "tape": "~2.12.3",
-    "hash_file": "~0.1.1",
     "faucet": "~0.0.1",
-    "brtapsauce": "~0.3.0"
+    "hash_file": "~0.1.1",
+    "tape": "~4.4.0"
   }
 }
