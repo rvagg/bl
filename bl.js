@@ -239,9 +239,9 @@ BufferList.prototype.destroy = function () {
   for (var m in methods) {
     (function(m) {
       BufferList.prototype[m] = function(value) {
-        var buf = new Buffer(methods[m]);
-        buf[m](value, 0);
-        this.append(buf);
+        var buf = new Buffer(methods[m])
+        buf[m](value, 0)
+        this.append(buf)
       }
     }(m))
   }
