@@ -125,6 +125,10 @@ tape('consuming from multiple buffers', function (t) {
   t.equal(bl.length, 1)
   t.equal(bl.slice(0, 1).toString('ascii'), 'j')
 
+  bl.consume(1)
+  t.equal(bl.length, 0)
+  t.equal(bl._bufs.length, 0)
+
   t.end()
 })
 
