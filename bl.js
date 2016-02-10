@@ -162,7 +162,7 @@ BufferList.prototype.toString = function (encoding, start, end) {
 
 BufferList.prototype.consume = function (bytes) {
   while (this._bufs.length) {
-    if (bytes > this._bufs[0].length) {
+    if (bytes >= this._bufs[0].length) {
       bytes -= this._bufs[0].length
       this.length -= this._bufs[0].length
       this._bufs.shift()
