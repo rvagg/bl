@@ -262,6 +262,62 @@ tape('test readDoubleLE / readDoubleBE', function (t) {
   t.end()
 })
 
+tape('test appendDoubleBE / appendDoubleLE', function (t) {
+  var bl = new BufferList()
+  var v = 0.3333333333333333
+  
+  bl.appendDoubleBE(v)
+  
+  t.equal(bl.readDoubleBE(0), v)
+  t.end()
+})
+
+tape('test appendFloatBE / appendFloatLE', function (t) {
+  var bl = new BufferList()
+  var v = 0x01
+  
+  bl.appendFloatBE(v)
+  
+  t.equal(bl.readFloatBE(0), v)
+  t.end()
+})
+
+tape('test appendInt32BE / appendInt32LE / appendUInt32BE / appendUInt32LE', function (t) {
+  var bl = new BufferList()
+  var v = 0x7fff7fff
+  
+  bl.appendInt32BE(v)
+  bl.appendUInt32BE(v + v)
+  
+  t.equal(bl.readInt32BE(0), v)
+  t.equal(bl.readUInt32BE(4), v + v)
+  t.end()
+})
+
+tape('test appendInt16BE / appendInt16LE / appendUInt16BE / appendUInt16LE', function (t) {
+  var bl = new BufferList()
+  var v = 0x7f7f
+  
+  bl.appendInt16BE(v)
+  bl.appendUInt16BE(v + v)
+  
+  t.equal(bl.readInt16BE(0), v)
+  t.equal(bl.readUInt16BE(2), v + v)
+  t.end()
+})
+
+tape('test appendInt8 / appendUInt8', function (t) {
+  var bl = new BufferList();
+  var v = 0x77;
+  
+  bl.appendInt8(v)
+  bl.appendUInt8(v + v)
+  
+  t.equal(bl.readInt8(0), v)
+  t.equal(bl.readUInt8(1), v + v)
+  t.end()
+})
+
 tape('test toString', function (t) {
   var bl = new BufferList()
 

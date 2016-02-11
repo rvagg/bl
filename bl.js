@@ -224,4 +224,50 @@ BufferList.prototype.destroy = function () {
   }
 }())
 
+;(function() {
+  var methods = {
+      'appendDoubleBE'  : 8
+    , 'appendDoubleLE'  : 8
+    , 'appendFloatBE'   : 4
+    , 'appendFloatLE'   : 4
+    , 'appendInt32BE'   : 4
+    , 'appendInt32LE'   : 4
+    , 'appendUInt32BE'  : 4
+    , 'appendUInt32LE'  : 4
+    , 'appendInt16BE'   : 2
+    , 'appendInt16LE'   : 2
+    , 'appendUInt16BE'  : 2
+    , 'appendUInt16LE'  : 2
+    , 'appendInt8'      : 1
+    , 'appendUInt8'     : 1
+  }
+  
+  var aliases = {
+      'appendDoubleBE'  : 'writeDoubleBE'
+    , 'appendDoubleLE'  : 'writeDoubleLE'
+    , 'appendFloatBE'   : 'writeFloatBE'
+    , 'appendFloatLE'   : 'writeFloatLE'
+    , 'appendInt32BE'   : 'writeInt32BE'
+    , 'appendInt32LE'   : 'writeInt32LE'
+    , 'appendUInt32BE'  : 'writeUInt32BE'
+    , 'appendUInt32LE'  : 'writeUInt32LE'
+    , 'appendInt16BE'   : 'writeInt16BE'
+    , 'appendInt16LE'   : 'writeInt16LE'
+    , 'appendUInt16BE'  : 'writeUInt16BE'
+    , 'appendUInt16LE'  : 'writeUInt16LE'
+    , 'appendInt8'      : 'writeInt8'
+    , 'appendUInt8'     : 'writeUInt8'
+  }
+
+  for (var m in methods) {
+    (function(m) {
+      BufferList.prototype[m] = function(value) {
+        var buf = new Buffer(methods[m])
+        buf[aliases[m]](value, 0)
+        this.append(buf)
+      }
+    }(m))
+  }
+}())
+
 module.exports = BufferList
