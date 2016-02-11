@@ -24,13 +24,8 @@ function BufferList (callback) {
     this.on('unpipe', function (src) {
       src.removeListener('error', piper)
     })
-  }
-  else if (Buffer.isBuffer(callback))
+  } else {
     this.append(callback)
-  else if (Array.isArray(callback)) {
-    callback.forEach(function (b) {
-      Buffer.isBuffer(b) && this.append(b)
-    }.bind(this))
   }
 
   DuplexStream.call(this)
@@ -49,20 +44,25 @@ BufferList.prototype._offset = function (offset) {
 }
 
 BufferList.prototype.append = function (buf) {
-  var isBuffer = Buffer.isBuffer(buf) ||
-                 buf instanceof BufferList
+  var i = 0
+    , newBuf
 
-  // coerce number arguments to strings, since Buffer(number) does
-  // uninitialized memory allocation
-  if (typeof buf == 'number')
-    buf = buf.toString()
+  if (Array.isArray(buf)) {
+    for (; i < buf.length; i++)
+      this.append(buf[i])
+  } else if (buf instanceof BufferList) {
+    // unwrap argument into individual BufferLists
+    for (; i < buf._bufs.length; i++)
+      this.append(buf._bufs[i])
+  } else if (buf != null) {
+    // coerce number arguments to strings, since Buffer(number) does
+    // uninitialized memory allocation
+    if (typeof buf == 'number')
+      buf = buf.toString()
 
-  if (buf instanceof BufferList) {
-    this._bufs.push.apply(this._bufs, buf._bufs)
-    this.length += buf.length
-  } else {
-    this._bufs.push(isBuffer ? buf : new Buffer(buf))
-    this.length += buf.length
+    newBuf = Buffer.isBuffer(buf) ? buf : new Buffer(buf)
+    this._bufs.push(newBuf)
+    this.length += newBuf.length
   }
 
   return this
