@@ -1,6 +1,7 @@
 var DuplexStream = require('readable-stream/duplex')
   , util         = require('util')
 
+
 function BufferList (callback) {
   if (!(this instanceof BufferList))
     return new BufferList(callback)
@@ -11,17 +12,17 @@ function BufferList (callback) {
   if (typeof callback == 'function') {
     this._callback = callback
 
-    var piper = function (err) {
+    var piper = function piper (err) {
       if (this._callback) {
         this._callback(err)
         this._callback = null
       }
     }.bind(this)
 
-    this.on('pipe', function (src) {
+    this.on('pipe', function onPipe (src) {
       src.on('error', piper)
     })
-    this.on('unpipe', function (src) {
+    this.on('unpipe', function onUnpipe (src) {
       src.removeListener('error', piper)
     })
   } else {
@@ -31,9 +32,11 @@ function BufferList (callback) {
   DuplexStream.call(this)
 }
 
+
 util.inherits(BufferList, DuplexStream)
 
-BufferList.prototype._offset = function (offset) {
+
+BufferList.prototype._offset = function _offset (offset) {
   var tot = 0, i = 0, _t
   for (; i < this._bufs.length; i++) {
     _t = tot + this._bufs[i].length
@@ -43,7 +46,8 @@ BufferList.prototype._offset = function (offset) {
   }
 }
 
-BufferList.prototype.append = function (buf) {
+
+BufferList.prototype.append = function append (buf) {
   var i = 0
     , newBuf
 
@@ -68,21 +72,26 @@ BufferList.prototype.append = function (buf) {
   return this
 }
 
-BufferList.prototype._write = function (buf, encoding, callback) {
+
+BufferList.prototype._write = function _write (buf, encoding, callback) {
   this.append(buf)
-  if (callback)
+
+  if (typeof callback == 'function')
     callback()
 }
 
-BufferList.prototype._read = function (size) {
+
+BufferList.prototype._read = function _read (size) {
   if (!this.length)
     return this.push(null)
+
   size = Math.min(size, this.length)
   this.push(this.slice(0, size))
   this.consume(size)
 }
 
-BufferList.prototype.end = function (chunk) {
+
+BufferList.prototype.end = function end (chunk) {
   DuplexStream.prototype.end.call(this, chunk)
 
   if (this._callback) {
@@ -91,15 +100,18 @@ BufferList.prototype.end = function (chunk) {
   }
 }
 
-BufferList.prototype.get = function (index) {
+
+BufferList.prototype.get = function get (index) {
   return this.slice(index, index + 1)[0]
 }
 
-BufferList.prototype.slice = function (start, end) {
+
+BufferList.prototype.slice = function slice (start, end) {
   return this.copy(null, 0, start, end)
 }
 
-BufferList.prototype.copy = function (dst, dstStart, srcStart, srcEnd) {
+
+BufferList.prototype.copy = function copy (dst, dstStart, srcStart, srcEnd) {
   if (typeof srcStart != 'number' || srcStart < 0)
     srcStart = 0
   if (typeof srcEnd != 'number' || srcEnd > this.length)
@@ -162,11 +174,11 @@ BufferList.prototype.copy = function (dst, dstStart, srcStart, srcEnd) {
   return dst
 }
 
-BufferList.prototype.toString = function (encoding, start, end) {
+BufferList.prototype.toString = function toString (encoding, start, end) {
   return this.slice(start, end).toString(encoding)
 }
 
-BufferList.prototype.consume = function (bytes) {
+BufferList.prototype.consume = function consume (bytes) {
   while (this._bufs.length) {
     if (bytes >= this._bufs[0].length) {
       bytes -= this._bufs[0].length
@@ -181,7 +193,8 @@ BufferList.prototype.consume = function (bytes) {
   return this
 }
 
-BufferList.prototype.duplicate = function () {
+
+BufferList.prototype.duplicate = function duplicate () {
   var i = 0
     , copy = new BufferList()
 
@@ -191,11 +204,13 @@ BufferList.prototype.duplicate = function () {
   return copy
 }
 
-BufferList.prototype.destroy = function () {
-  this._bufs.length = 0;
-  this.length = 0;
-  this.push(null);
+
+BufferList.prototype.destroy = function destroy () {
+  this._bufs.length = 0
+  this.length = 0
+  this.push(null)
 }
+
 
 ;(function () {
   var methods = {
@@ -223,5 +238,6 @@ BufferList.prototype.destroy = function () {
     }(m))
   }
 }())
+
 
 module.exports = BufferList
