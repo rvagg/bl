@@ -537,6 +537,39 @@ tape('copy an interval between two buffers', function (t) {
   t.end()
 })
 
+tape('shallow slice across buffer boundaries', function (t) {
+  var bl = new BufferList(['First', 'Second', 'Third'])
+
+  t.equal(bl.shallowSlice(3, 13).toString(), 'stSecondTh')
+  t.end()
+})
+
+tape('shallow slice within single buffer', function (t) {
+  var bl = new BufferList(['First', 'Second', 'Third'])
+
+  t.equal(bl.shallowSlice(5, 10).toString(), 'Secon')
+  t.end()
+})
+
+tape('shallow slice single buffer', function (t) {
+  t.plan(3)
+  var bl = new BufferList(['First', 'Second', 'Third'])
+
+  t.equal(bl.shallowSlice(0, 5).toString(), 'First')
+  t.equal(bl.shallowSlice(5, 11).toString(), 'Second')
+  t.equal(bl.shallowSlice(11, 16).toString(), 'Third')
+})
+
+tape('shallow slice with negative or omitted indices', function (t) {
+  t.plan(4)
+  var bl = new BufferList(['First', 'Second', 'Third'])
+
+  t.equal(bl.shallowSlice().toString(), 'FirstSecondThird')
+  t.equal(bl.shallowSlice(5).toString(), 'SecondThird')
+  t.equal(bl.shallowSlice(5, -3).toString(), 'SecondTh')
+  t.equal(bl.shallowSlice(-8).toString(), 'ondThird')
+})
+
 tape('duplicate', function (t) {
   t.plan(2)
 
