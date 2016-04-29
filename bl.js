@@ -47,6 +47,19 @@ BufferList.prototype._offset = function _offset (offset) {
 }
 
 
+BufferList.prototype._index = function _index (indexOffsetPair) {
+  var bufferIndex = indexOffsetPair[0]
+  var offset = indexOffsetPair[1]
+  var sum = 0
+
+  for (var i = 0; i < bufferIndex; i++) {
+    sum += this._bufs[i].length
+  }
+
+  return sum + offset
+}
+
+
 BufferList.prototype.append = function append (buf) {
   var i = 0
     , newBuf
@@ -202,6 +215,33 @@ BufferList.prototype.duplicate = function duplicate () {
     copy.append(this._bufs[i])
 
   return copy
+}
+
+BufferList.prototype.indexOf = function indexOf (value, byteOffset, encoding) {
+  byteOffset = byteOffset || 0
+
+  // FIXME: this code does not handle multi-byte searches correctly
+  var beginOffset = this._offset(byteOffset)
+
+  var bufferIndex = beginOffset[0]
+  var searchOffset = beginOffset[1]
+
+  // search each buffer in turn as long as nothing has been found yet
+  for (var result = -1;
+       result == -1 && bufferIndex < this._bufs.length;
+       bufferIndex++) {
+    result = this._bufs[bufferIndex].indexOf(value, searchOffset, encoding)
+    searchOffset = 0
+  }
+
+  // return early if nothing has been found at all
+  if(result == -1) {
+    return -1
+  }
+
+  // fix buffer index because the last iteration increases it even if the first condition failed
+  bufferIndex--
+  return this._index([bufferIndex, result])
 }
 
 
