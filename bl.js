@@ -107,12 +107,10 @@ BufferList.prototype.get = function get (index) {
 
 
 BufferList.prototype.slice = function slice (start, end) {
-  if (typeof start === 'number' && start < 0) {
+  if (typeof start == 'number' && start < 0)
     start += this.length
-  }
-  if (typeof end === 'number' && end < 0) {
+  if (typeof end == 'number' && end < 0)
     end += this.length
-  }
   return this.copy(null, 0, start, end)
 }
 

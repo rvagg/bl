@@ -58,6 +58,19 @@ tape('multi bytes from single buffer', function (t) {
   t.end()
 })
 
+tape('multi bytes from single buffer (negative indexes)', function (t) {
+  var bl = new BufferList()
+  bl.append(new Buffer('buffer'))
+
+  t.equal(bl.length, 6)
+
+  t.equal(bl.slice(-6, -1).toString('ascii'), 'buffe')
+  t.equal(bl.slice(-6, -2).toString('ascii'), 'buff')
+  t.equal(bl.slice(-5, -2).toString('ascii'), 'uff')
+
+  t.end()
+})
+
 tape('multiple bytes from multiple buffers', function (t) {
   var bl = new BufferList()
 
