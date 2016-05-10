@@ -178,15 +178,14 @@ BufferList.prototype.shallowSlice = function shallowSlice (start, end) {
   start = start || 0
   end = end || this.length
 
-  if(start < 0)
+  if (start < 0)
     start += this.length
-  if(end < 0)
+  if (end < 0)
     end += this.length
 
   var startOffset = this._offset(start)
-  var endOffset = this._offset(end)
-
-  var buffers = this._bufs.slice(startOffset[0], endOffset[0]+1)
+    , endOffset = this._offset(end)
+    , buffers = this._bufs.slice(startOffset[0], endOffset[0] + 1)
 
   if(startOffset[1] != 0)
     buffers[0] = buffers[0].slice(startOffset[1])
