@@ -90,6 +90,7 @@ bl.pipe(fs.createWriteStream('gibberish.txt'))
   * <a href="#copy"><code>bl.<b>copy(dest, [ destStart, [ srcStart [, srcEnd ] ] ])</b></code></a>
   * <a href="#duplicate"><code>bl.<b>duplicate()</b></code></a>
   * <a href="#consume"><code>bl.<b>consume(bytes)</b></code></a>
+  * <a href="#indexOf"><code>bl.<b>indexOf(value, [ byteOffset [, encoding ]])</b></code></a>
   * <a href="#toString"><code>bl.<b>toString([encoding, [ start, [ end ]]])</b></code></a>
   * <a href="#readXX"><code>bl.<b>readDoubleBE()</b></code>, <code>bl.<b>readDoubleLE()</b></code>, <code>bl.<b>readFloatBE()</b></code>, <code>bl.<b>readFloatLE()</b></code>, <code>bl.<b>readInt32BE()</b></code>, <code>bl.<b>readInt32LE()</b></code>, <code>bl.<b>readUInt32BE()</b></code>, <code>bl.<b>readUInt32LE()</b></code>, <code>bl.<b>readInt16BE()</b></code>, <code>bl.<b>readInt16LE()</b></code>, <code>bl.<b>readUInt16BE()</b></code>, <code>bl.<b>readUInt16LE()</b></code>, <code>bl.<b>readInt8()</b></code>, <code>bl.<b>readUInt8()</b></code></a>
   * <a href="#streams">Streams</a>
@@ -161,6 +162,13 @@ console.log(bl.toString())
 <a name="consume"></a>
 ### bl.consume(bytes)
 `consume()` will shift bytes *off the start of the list*. The number of bytes consumed don't need to line up with the sizes of the internal Buffers&mdash;initial offsets will be calculated accordingly in order to give you a consistent view of the data.
+
+--------------------------------------------------------
+<a name="indexOf"></a>
+### bl.indexOf(value, [ byteOffset [, encoding ]])
+`indexOf()` looks for the first occurence of `value` within the list. It will return the starting index position of `value` or `-1` if the list does not contain `value`. The `value` can be a String, Buffer or Number. `byteOffset` specifies the index within list at which to start the search and defaults to `0`. Strings are by default interpreted as UTF8 or as `encoding` if specified.
+
+Note that `indexOf()` operates in a much more efficient fashion if `value` is only one byte long.
 
 --------------------------------------------------------
 <a name="toString"></a>
