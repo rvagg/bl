@@ -547,7 +547,9 @@ tape('duplicate', function (t) {
   t.equal(bl.toString('hex'), dup.toString('hex'))
 })
 
-tape('successful indexOf search for byte', function (t) {
+var bufferHasIndexOf = typeof (new Buffer('')).indexOf == 'function'
+
+bufferHasIndexOf && tape('successful indexOf search for byte', function (t) {
   t.plan(2)
 
   var bl = new BufferList()
@@ -563,7 +565,7 @@ tape('successful indexOf search for byte', function (t) {
   t.equal(bl.indexOf(0x03, 4), 22)
 })
 
-tape('failing indexOf search for byte', function (t) {
+bufferHasIndexOf && tape('failing indexOf search for byte', function (t) {
   t.plan(2)
 
   var bl = new BufferList()
@@ -579,7 +581,7 @@ tape('failing indexOf search for byte', function (t) {
   t.equal(bl.indexOf(0xAA, 4), -1)
 })
 
-tape('successful indexOf search for multi-byte', function (t) {
+bufferHasIndexOf && tape('successful indexOf search for multi-byte', function (t) {
   t.plan(2)
 
   var bl = new BufferList()
@@ -596,7 +598,7 @@ tape('successful indexOf search for multi-byte', function (t) {
   t.equal(bl.indexOf(searchBuffer, 4), 6)
 })
 
-tape('failing indexOf search for multi-byte', function (t) {
+bufferHasIndexOf && tape('failing indexOf search for multi-byte', function (t) {
   t.plan(2)
 
   var bl = new BufferList()

@@ -248,6 +248,12 @@ BufferList.prototype.indexOf = function indexOf (value, byteOffset, encoding) {
   return this._index([bufferIndex, result])
 }
 
+if ((typeof (new Buffer('')).indexOf) != 'function') {
+  BufferList.prototype.indexOf = function indexOf () {
+    throw new Error('BufferList.indexOf is not implemented: Missing support for Buffer.indexOf in node.js before v4')
+  }
+}
+
 
 BufferList.prototype._indexOfMultiByte = function _indexOfMultiByte (value, byteOffset, encoding) {
   // this is much more inefficient than the single byte indexOf, as it has to do backtracking in JS
