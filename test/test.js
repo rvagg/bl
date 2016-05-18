@@ -570,6 +570,17 @@ tape('shallow slice with negative or omitted indices', function (t) {
   t.equal(bl.shallowSlice(-8).toString(), 'ondThird')
 })
 
+tape('shallow slice does not make a copy', function (t) {
+  t.plan(1)
+  var buffers = [new Buffer('First'), new Buffer('Second'), new Buffer('Third')]
+  var bl = (new BufferList(buffers)).shallowSlice(5, -3)
+
+  buffers[1].fill('h')
+  buffers[2].fill('h')
+
+  t.equal(bl.toString(), 'hhhhhhhh')
+})
+
 tape('duplicate', function (t) {
   t.plan(2)
 
