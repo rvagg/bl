@@ -170,6 +170,8 @@ console.log(bl.toString())
 
 Note that `indexOf()` operates in a much more efficient fashion if `value` is only one byte long.
 
+This function is only available in node v4 and greater, because it is based on `Buffer.prototype.indexOf()`.
+
 --------------------------------------------------------
 <a name="toString"></a>
 ### bl.toString([encoding, [ start, [ end ]]])
