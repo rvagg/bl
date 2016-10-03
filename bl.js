@@ -49,9 +49,10 @@ BufferList.prototype._offset = function _offset (offset) {
 
 BufferList.prototype.append = function append (buf) {
   var i = 0
-    , newBuf
 
-  if (Array.isArray(buf)) {
+  if (Buffer.isBuffer(buf)) {
+    this._appendBuffer(buf);
+  } else if (Array.isArray(buf)) {
     for (; i < buf.length; i++)
       this.append(buf[i])
   } else if (buf instanceof BufferList) {
@@ -64,17 +65,21 @@ BufferList.prototype.append = function append (buf) {
     if (typeof buf == 'number')
       buf = buf.toString()
 
-    newBuf = Buffer.isBuffer(buf) ? buf : new Buffer(buf)
-    this._bufs.push(newBuf)
-    this.length += newBuf.length
+    this._appendBuffer(new Buffer(buf));
   }
 
   return this
 }
 
 
+BufferList.prototype._appendBuffer = function appendBuffer (buf) {
+  this._bufs.push(buf)
+  this.length += buf.length
+}
+
+
 BufferList.prototype._write = function _write (buf, encoding, callback) {
-  this.append(buf)
+  this._appendBuffer(buf)
 
   if (typeof callback == 'function')
     callback()
