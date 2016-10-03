@@ -132,8 +132,10 @@ BufferList.prototype.copy = function copy (dst, dstStart, srcStart, srcEnd) {
 
   // copy/slice everything
   if (srcStart === 0 && srcEnd == this.length) {
-    if (!copy) // slice, just return a full concat
-      return Buffer.concat(this._bufs)
+    if (!copy) // slice, but full concat if multiple buffers
+      return this._bufs.length === 1
+        ? this._bufs[0]
+        : Buffer.concat(this._bufs, this.length)
 
     // copy, need to copy individual buffers
     for (i = 0; i < this._bufs.length; i++) {
