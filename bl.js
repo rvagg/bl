@@ -38,6 +38,7 @@ util.inherits(BufferList, DuplexStream)
 
 BufferList.prototype._offset = function _offset (offset) {
   var tot = 0, i = 0, _t
+  if (offset === 0) return [ 0, 0 ]
   for (; i < this._bufs.length; i++) {
     _t = tot + this._bufs[i].length
     if (offset < _t)
