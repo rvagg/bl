@@ -24,7 +24,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "readable-stream": "~2.2.2"
+    "readable-stream": "^2.0.5"
   },
   "devDependencies": {
     "faucet": "0.0.1",
