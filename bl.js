@@ -41,7 +41,7 @@ BufferList.prototype._offset = function _offset (offset) {
   if (offset === 0) return [ 0, 0 ]
   for (; i < this._bufs.length; i++) {
     _t = tot + this._bufs[i].length
-    if (offset < _t)
+    if (offset < _t || i == this._bufs.length - 1)
       return [ i, offset - tot ]
     tot = _t
   }
@@ -184,6 +184,30 @@ BufferList.prototype.copy = function copy (dst, dstStart, srcStart, srcEnd) {
   }
 
   return dst
+}
+
+BufferList.prototype.shallowSlice = function shallowSlice (start, end) {
+  start = start || 0
+  end = end || this.length
+
+  if (start < 0)
+    start += this.length
+  if (end < 0)
+    end += this.length
+
+  var startOffset = this._offset(start)
+    , endOffset = this._offset(end)
+    , buffers = this._bufs.slice(startOffset[0], endOffset[0] + 1)
+
+  if(startOffset[1] != 0)
+    buffers[0] = buffers[0].slice(startOffset[1])
+
+  if(endOffset[1] == 0)
+    buffers.pop()
+  else
+    buffers[buffers.length-1] = buffers[buffers.length-1].slice(0, endOffset[1])
+
+  return new BufferList(buffers)
 }
 
 BufferList.prototype.toString = function toString (encoding, start, end) {
