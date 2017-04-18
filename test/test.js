@@ -566,6 +566,14 @@ tape('shallow slice within single buffer', function (t) {
   t.end()
 })
 
+tape('shallow slice of zero length', function (t) {
+  var bl = new BufferList(['First', 'Second', 'Third'])
+
+  t.equal(bl.shallowSlice(0, 0).toString(), '')
+  t.equal(bl.shallowSlice(4, 4).toString(), '')
+  t.end()
+})
+
 tape('shallow slice single buffer', function (t) {
   t.plan(3)
   var bl = new BufferList(['First', 'Second', 'Third'])
