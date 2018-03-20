@@ -24,11 +24,12 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "readable-stream": "^2.0.5"
+    "readable-stream": "^2.3.5",
+    "safe-buffer": "^5.1.1"
   },
   "devDependencies": {
     "faucet": "0.0.1",
     "hash_file": "~0.1.1",
-    "tape": "~4.6.0"
+    "tape": "~4.9.0"
   }
 }

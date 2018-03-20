@@ -3,6 +3,7 @@ var tape       = require('tape')
   , fs         = require('fs')
   , hash       = require('hash_file')
   , BufferList = require('../')
+  , Buffer     = require('safe-buffer').Buffer
 
   , encodings  =
       ('hex utf8 utf-8 ascii binary base64'
@@ -10,7 +11,7 @@ var tape       = require('tape')
 
 tape('single bytes from single buffer', function (t) {
   var bl = new BufferList()
-  bl.append(new Buffer('abcd'))
+  bl.append(Buffer.from('abcd'))
 
   t.equal(bl.length, 4)
 
@@ -24,10 +25,10 @@ tape('single bytes from single buffer', function (t) {
 
 tape('single bytes from multiple buffers', function (t) {
   var bl = new BufferList()
-  bl.append(new Buffer('abcd'))
-  bl.append(new Buffer('efg'))
-  bl.append(new Buffer('hi'))
-  bl.append(new Buffer('j'))
+  bl.append(Buffer.from('abcd'))
+  bl.append(Buffer.from('efg'))
+  bl.append(Buffer.from('hi'))
+  bl.append(Buffer.from('j'))
 
   t.equal(bl.length, 10)
 
@@ -46,7 +47,7 @@ tape('single bytes from multiple buffers', function (t) {
 
 tape('multi bytes from single buffer', function (t) {
   var bl = new BufferList()
-  bl.append(new Buffer('abcd'))
+  bl.append(Buffer.from('abcd'))
 
   t.equal(bl.length, 4)
 
@@ -60,7 +61,7 @@ tape('multi bytes from single buffer', function (t) {
 
 tape('multi bytes from single buffer (negative indexes)', function (t) {
   var bl = new BufferList()
-  bl.append(new Buffer('buffer'))
+  bl.append(Buffer.from('buffer'))
 
   t.equal(bl.length, 6)
 
@@ -74,10 +75,10 @@ tape('multi bytes from single buffer (negative indexes)', function (t) {
 tape('multiple bytes from multiple buffers', function (t) {
   var bl = new BufferList()
 
-  bl.append(new Buffer('abcd'))
-  bl.append(new Buffer('efg'))
-  bl.append(new Buffer('hi'))
-  bl.append(new Buffer('j'))
+  bl.append(Buffer.from('abcd'))
+  bl.append(Buffer.from('efg'))
+  bl.append(Buffer.from('hi'))
+  bl.append(Buffer.from('j'))
 
   t.equal(bl.length, 10)
 
@@ -94,8 +95,8 @@ tape('multiple bytes from multiple buffers', function (t) {
 tape('multiple bytes from multiple buffer lists', function (t) {
   var bl = new BufferList()
 
-  bl.append(new BufferList([ new Buffer('abcd'), new Buffer('efg') ]))
-  bl.append(new BufferList([ new Buffer('hi'), new Buffer('j') ]))
+  bl.append(new BufferList([ Buffer.from('abcd'), Buffer.from('efg') ]))
+  bl.append(new BufferList([ Buffer.from('hi'), Buffer.from('j') ]))
 
   t.equal(bl.length, 10)
 
@@ -115,12 +116,12 @@ tape('multiple bytes from crazy nested buffer lists', function (t) {
 
   bl.append(new BufferList([
       new BufferList([
-          new BufferList(new Buffer('abc'))
-        , new Buffer('d')
-        , new BufferList(new Buffer('efg'))
+          new BufferList(Buffer.from('abc'))
+        , Buffer.from('d')
+        , new BufferList(Buffer.from('efg'))
       ])
-    , new BufferList([ new Buffer('hi') ])
-    , new BufferList(new Buffer('j'))
+    , new BufferList([ Buffer.from('hi') ])
+    , new BufferList(Buffer.from('j'))
   ]))
 
   t.equal(bl.length, 10)
@@ -137,10 +138,10 @@ tape('multiple bytes from crazy nested buffer lists', function (t) {
 
 tape('append accepts arrays of Buffers', function (t) {
   var bl = new BufferList()
-  bl.append(new Buffer('abc'))
-  bl.append([ new Buffer('def') ])
-  bl.append([ new Buffer('ghi'), new Buffer('jkl') ])
-  bl.append([ new Buffer('mnop'), new Buffer('qrstu'), new Buffer('vwxyz') ])
+  bl.append(Buffer.from('abc'))
+  bl.append([ Buffer.from('def') ])
+  bl.append([ Buffer.from('ghi'), Buffer.from('jkl') ])
+  bl.append([ Buffer.from('mnop'), Buffer.from('qrstu'), Buffer.from('vwxyz') ])
   t.equal(bl.length, 26)
   t.equal(bl.slice().toString('ascii'), 'abcdefghijklmnopqrstuvwxyz')
   t.end()
@@ -148,10 +149,10 @@ tape('append accepts arrays of Buffers', function (t) {
 
 tape('append accepts arrays of BufferLists', function (t) {
   var bl = new BufferList()
-  bl.append(new Buffer('abc'))
+  bl.append(Buffer.from('abc'))
   bl.append([ new BufferList('def') ])
-  bl.append(new BufferList([ new Buffer('ghi'), new BufferList('jkl') ]))
-  bl.append([ new Buffer('mnop'), new BufferList([ new Buffer('qrstu'), new Buffer('vwxyz') ]) ])
+  bl.append(new BufferList([ Buffer.from('ghi'), new BufferList('jkl') ]))
+  bl.append([ Buffer.from('mnop'), new BufferList([ Buffer.from('qrstu'), Buffer.from('vwxyz') ]) ])
   t.equal(bl.length, 26)
   t.equal(bl.slice().toString('ascii'), 'abcdefghijklmnopqrstuvwxyz')
   t.end()
@@ -159,18 +160,18 @@ tape('append accepts arrays of BufferLists', function (t) {
 
 tape('append chainable', function (t) {
   var bl = new BufferList()
-  t.ok(bl.append(new Buffer('abcd')) === bl)
-  t.ok(bl.append([ new Buffer('abcd') ]) === bl)
-  t.ok(bl.append(new BufferList(new Buffer('abcd'))) === bl)
-  t.ok(bl.append([ new BufferList(new Buffer('abcd')) ]) === bl)
+  t.ok(bl.append(Buffer.from('abcd')) === bl)
+  t.ok(bl.append([ Buffer.from('abcd') ]) === bl)
+  t.ok(bl.append(new BufferList(Buffer.from('abcd'))) === bl)
+  t.ok(bl.append([ new BufferList(Buffer.from('abcd')) ]) === bl)
   t.end()
 })
 
 tape('append chainable (test results)', function (t) {
   var bl = new BufferList('abc')
     .append([ new BufferList('def') ])
-    .append(new BufferList([ new Buffer('ghi'), new BufferList('jkl') ]))
-    .append([ new Buffer('mnop'), new BufferList([ new Buffer('qrstu'), new Buffer('vwxyz') ]) ])
+    .append(new BufferList([ Buffer.from('ghi'), new BufferList('jkl') ]))
+    .append([ Buffer.from('mnop'), new BufferList([ Buffer.from('qrstu'), Buffer.from('vwxyz') ]) ])
 
   t.equal(bl.length, 26)
   t.equal(bl.slice().toString('ascii'), 'abcdefghijklmnopqrstuvwxyz')
@@ -180,10 +181,10 @@ tape('append chainable (test results)', function (t) {
 tape('consuming from multiple buffers', function (t) {
   var bl = new BufferList()
 
-  bl.append(new Buffer('abcd'))
-  bl.append(new Buffer('efg'))
-  bl.append(new Buffer('hi'))
-  bl.append(new Buffer('j'))
+  bl.append(Buffer.from('abcd'))
+  bl.append(Buffer.from('efg'))
+  bl.append(Buffer.from('hi'))
+  bl.append(Buffer.from('j'))
 
   t.equal(bl.length, 10)
 
@@ -215,8 +216,8 @@ tape('consuming from multiple buffers', function (t) {
 tape('complete consumption', function (t) {
   var bl = new BufferList()
 
-  bl.append(new Buffer('a'))
-  bl.append(new Buffer('b'))
+  bl.append(Buffer.from('a'))
+  bl.append(Buffer.from('b'))
 
   bl.consume(2)
 
@@ -227,9 +228,9 @@ tape('complete consumption', function (t) {
 })
 
 tape('test readUInt8 / readInt8', function (t) {
-  var buf1 = new Buffer(1)
-    , buf2 = new Buffer(3)
-    , buf3 = new Buffer(3)
+  var buf1 = Buffer.alloc(1)
+    , buf2 = Buffer.alloc(3)
+    , buf3 = Buffer.alloc(3)
     , bl  = new BufferList()
 
   buf2[1] = 0x3
@@ -253,9 +254,9 @@ tape('test readUInt8 / readInt8', function (t) {
 })
 
 tape('test readUInt16LE / readUInt16BE / readInt16LE / readInt16BE', function (t) {
-  var buf1 = new Buffer(1)
-    , buf2 = new Buffer(3)
-    , buf3 = new Buffer(3)
+  var buf1 = Buffer.alloc(1)
+    , buf2 = Buffer.alloc(3)
+    , buf3 = Buffer.alloc(3)
     , bl   = new BufferList()
 
   buf2[1] = 0x3
@@ -283,9 +284,9 @@ tape('test readUInt16LE / readUInt16BE / readInt16LE / readInt16BE', function (t
 })
 
 tape('test readUInt32LE / readUInt32BE / readInt32LE / readInt32BE', function (t) {
-  var buf1 = new Buffer(1)
-    , buf2 = new Buffer(3)
-    , buf3 = new Buffer(3)
+  var buf1 = Buffer.alloc(1)
+    , buf2 = Buffer.alloc(3)
+    , buf3 = Buffer.alloc(3)
     , bl   = new BufferList()
 
   buf2[1] = 0x3
@@ -305,9 +306,9 @@ tape('test readUInt32LE / readUInt32BE / readInt32LE / readInt32BE', function (t
 })
 
 tape('test readFloatLE / readFloatBE', function (t) {
-  var buf1 = new Buffer(1)
-    , buf2 = new Buffer(3)
-    , buf3 = new Buffer(3)
+  var buf1 = Buffer.alloc(1)
+    , buf2 = Buffer.alloc(3)
+    , buf3 = Buffer.alloc(3)
     , bl   = new BufferList()
 
   buf2[1] = 0x00
@@ -324,9 +325,9 @@ tape('test readFloatLE / readFloatBE', function (t) {
 })
 
 tape('test readDoubleLE / readDoubleBE', function (t) {
-  var buf1 = new Buffer(1)
-    , buf2 = new Buffer(3)
-    , buf3 = new Buffer(10)
+  var buf1 = Buffer.alloc(1)
+    , buf2 = Buffer.alloc(3)
+    , buf3 = Buffer.alloc(10)
     , bl   = new BufferList()
 
   buf2[1] = 0x55
@@ -349,10 +350,10 @@ tape('test readDoubleLE / readDoubleBE', function (t) {
 tape('test toString', function (t) {
   var bl = new BufferList()
 
-  bl.append(new Buffer('abcd'))
-  bl.append(new Buffer('efg'))
-  bl.append(new Buffer('hi'))
-  bl.append(new Buffer('j'))
+  bl.append(Buffer.from('abcd'))
+  bl.append(Buffer.from('efg'))
+  bl.append(Buffer.from('hi'))
+  bl.append(Buffer.from('j'))
 
   t.equal(bl.toString('ascii', 0, 10), 'abcdefghij')
   t.equal(bl.toString('ascii', 3, 10), 'defghij')
@@ -365,13 +366,13 @@ tape('test toString', function (t) {
 
 tape('test toString encoding', function (t) {
   var bl = new BufferList()
-    , b  = new Buffer('abcdefghij\xff\x00')
+    , b  = Buffer.from('abcdefghij\xff\x00')
 
-  bl.append(new Buffer('abcd'))
-  bl.append(new Buffer('efg'))
-  bl.append(new Buffer('hi'))
-  bl.append(new Buffer('j'))
-  bl.append(new Buffer('\xff\x00'))
+  bl.append(Buffer.from('abcd'))
+  bl.append(Buffer.from('efg'))
+  bl.append(Buffer.from('hi'))
+  bl.append(Buffer.from('j'))
+  bl.append(Buffer.from('\xff\x00'))
 
   encodings.forEach(function (enc) {
       t.equal(bl.toString(enc), b.toString(enc), enc)
@@ -419,7 +420,7 @@ tape('instantiation with Buffer', function (t) {
 
 tape('test String appendage', function (t) {
   var bl = new BufferList()
-    , b  = new Buffer('abcdefghij\xff\x00')
+    , b  = Buffer.from('abcdefghij\xff\x00')
 
   bl.append('abcd')
   bl.append('efg')
@@ -436,7 +437,7 @@ tape('test String appendage', function (t) {
 
 tape('test Number appendage', function (t) {
   var bl = new BufferList()
-    , b  = new Buffer('1234567890')
+    , b  = Buffer.from('1234567890')
 
   bl.append(1234)
   bl.append(567)
@@ -470,7 +471,7 @@ tape('unicode string', function (t) {
   bl.write(' and ')
   bl.write(inp2)
   t.equal(exp, bl.toString())
-  t.equal(new Buffer(exp).toString('hex'), bl.toString('hex'))
+  t.equal(Buffer.from(exp).toString('hex'), bl.toString('hex'))
 })
 
 tape('should emit finish', function (t) {
@@ -488,7 +489,7 @@ tape('should emit finish', function (t) {
 
 tape('basic copy', function (t) {
   var buf  = crypto.randomBytes(1024)
-    , buf2 = new Buffer(1024)
+    , buf2 = Buffer.alloc(1024)
     , b    = BufferList(buf)
 
   b.copy(buf2)
@@ -498,7 +499,7 @@ tape('basic copy', function (t) {
 
 tape('copy after many appends', function (t) {
   var buf  = crypto.randomBytes(512)
-    , buf2 = new Buffer(1024)
+    , buf2 = Buffer.alloc(1024)
     , b    = BufferList(buf)
 
   b.append(buf)
@@ -509,7 +510,7 @@ tape('copy after many appends', function (t) {
 
 tape('copy at a precise position', function (t) {
   var buf  = crypto.randomBytes(1004)
-    , buf2 = new Buffer(1024)
+    , buf2 = Buffer.alloc(1024)
     , b    = BufferList(buf)
 
   b.copy(buf2, 20)
@@ -519,7 +520,7 @@ tape('copy at a precise position', function (t) {
 
 tape('copy starting from a precise location', function (t) {
   var buf  = crypto.randomBytes(10)
-    , buf2 = new Buffer(5)
+    , buf2 = Buffer.alloc(5)
     , b    = BufferList(buf)
 
   b.copy(buf2, 0, 5)
@@ -530,8 +531,8 @@ tape('copy starting from a precise location', function (t) {
 tape('copy in an interval', function (t) {
   var rnd      = crypto.randomBytes(10)
     , b        = BufferList(rnd) // put the random bytes there
-    , actual   = new Buffer(3)
-    , expected = new Buffer(3)
+    , actual   = Buffer.alloc(3)
+    , expected = Buffer.alloc(3)
 
   rnd.copy(expected, 0, 5, 8)
   b.copy(actual, 0, 5, 8)
@@ -542,7 +543,7 @@ tape('copy in an interval', function (t) {
 
 tape('copy an interval between two buffers', function (t) {
   var buf      = crypto.randomBytes(10)
-    , buf2     = new Buffer(10)
+    , buf2     = Buffer.alloc(10)
     , b        = BufferList(buf)
 
   b.append(buf)
@@ -589,7 +590,7 @@ tape('shallow slice with negative or omitted indices', function (t) {
 
 tape('shallow slice does not make a copy', function (t) {
   t.plan(1)
-  var buffers = [new Buffer('First'), new Buffer('Second'), new Buffer('Third')]
+  var buffers = [Buffer.from('First'), Buffer.from('Second'), Buffer.from('Third')]
   var bl = (new BufferList(buffers)).shallowSlice(5, -3)
 
   buffers[1].fill('h')
