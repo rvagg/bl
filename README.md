@@ -203,6 +203,6 @@ See the <b><code>[Buffer](http://nodejs.org/docs/latest/api/buffer.html)</code><
 <a name="license"></a>
 ## License &amp; copyright
 
-Copyright (c) 2013-2016 bl contributors (listed above).
+Copyright (c) 2013-2018 bl contributors (listed above).
 
 bl is licensed under the MIT license. All rights not explicitly granted in the MIT license are reserved. See the included LICENSE.md file for more details.
