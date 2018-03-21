@@ -1,5 +1,6 @@
 var DuplexStream = require('readable-stream/duplex')
   , util         = require('util')
+  , Buffer       = require('safe-buffer').Buffer
 
 
 function BufferList (callback) {
@@ -66,7 +67,7 @@ BufferList.prototype.append = function append (buf) {
     if (typeof buf == 'number')
       buf = buf.toString()
 
-    this._appendBuffer(new Buffer(buf));
+    this._appendBuffer(Buffer.from(buf));
   }
 
   return this
@@ -127,9 +128,9 @@ BufferList.prototype.copy = function copy (dst, dstStart, srcStart, srcEnd) {
   if (typeof srcEnd != 'number' || srcEnd > this.length)
     srcEnd = this.length
   if (srcStart >= this.length)
-    return dst || new Buffer(0)
+    return dst || Buffer.alloc(0)
   if (srcEnd <= 0)
-    return dst || new Buffer(0)
+    return dst || Buffer.alloc(0)
 
   var copy   = !!dst
     , off    = this._offset(srcStart)
@@ -165,7 +166,7 @@ BufferList.prototype.copy = function copy (dst, dstStart, srcStart, srcEnd) {
   }
 
   if (!copy) // a slice, we need something to copy in to
-    dst = new Buffer(len)
+    dst = Buffer.allocUnsafe(len)
 
   for (i = off[0]; i < this._bufs.length; i++) {
     l = this._bufs[i].length - start
