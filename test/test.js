@@ -305,6 +305,50 @@ tape('test readUInt32LE / readUInt32BE / readInt32LE / readInt32BE', function (t
   t.end()
 })
 
+tape('test readUIntLE / readUIntBE / readIntLE / readIntBE', function (t) {
+  var buf1 = Buffer.alloc(1)
+    , buf2 = Buffer.alloc(3)
+    , buf3 = Buffer.alloc(3)
+    , bl   = new BufferList()
+
+  buf2[0] = 0x2
+  buf2[1] = 0x3
+  buf2[2] = 0x4
+  buf3[0] = 0x23
+  buf3[1] = 0x42
+  buf3[2] = 0x61
+
+  bl.append(buf1)
+  bl.append(buf2)
+  bl.append(buf3)
+
+  t.equal(bl.readUIntBE(1, 1), 0x02)
+  t.equal(bl.readUIntBE(1, 2), 0x0203)
+  t.equal(bl.readUIntBE(1, 3), 0x020304)
+  t.equal(bl.readUIntBE(1, 4), 0x02030423)
+  t.equal(bl.readUIntBE(1, 5), 0x0203042342)
+  t.equal(bl.readUIntBE(1, 6), 0x020304234261)
+  t.equal(bl.readUIntLE(1, 1), 0x02)
+  t.equal(bl.readUIntLE(1, 2), 0x0302)
+  t.equal(bl.readUIntLE(1, 3), 0x040302)
+  t.equal(bl.readUIntLE(1, 4), 0x23040302)
+  t.equal(bl.readUIntLE(1, 5), 0x4223040302)
+  t.equal(bl.readUIntLE(1, 6), 0x614223040302)
+  t.equal(bl.readIntBE(1, 1), 0x02)
+  t.equal(bl.readIntBE(1, 2), 0x0203)
+  t.equal(bl.readIntBE(1, 3), 0x020304)
+  t.equal(bl.readIntBE(1, 4), 0x02030423)
+  t.equal(bl.readIntBE(1, 5), 0x0203042342)
+  t.equal(bl.readIntBE(1, 6), 0x020304234261)
+  t.equal(bl.readIntLE(1, 1), 0x02)
+  t.equal(bl.readIntLE(1, 2), 0x0302)
+  t.equal(bl.readIntLE(1, 3), 0x040302)
+  t.equal(bl.readIntLE(1, 4), 0x23040302)
+  t.equal(bl.readIntLE(1, 5), 0x4223040302)
+  t.equal(bl.readIntLE(1, 6), 0x614223040302)
+  t.end()
+})
+
 tape('test readFloatLE / readFloatBE', function (t) {
   var buf1 = Buffer.alloc(1)
     , buf2 = Buffer.alloc(3)
