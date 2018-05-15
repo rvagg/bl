@@ -268,12 +268,23 @@ BufferList.prototype.destroy = function destroy () {
     , 'readUInt16LE' : 2
     , 'readInt8'     : 1
     , 'readUInt8'    : 1
+    , 'readIntBE'    : null
+    , 'readIntLE'    : null
+    , 'readUIntBE'   : null
+    , 'readUIntLE'   : null
   }
 
   for (var m in methods) {
     (function (m) {
-      BufferList.prototype[m] = function (offset) {
-        return this.slice(offset, offset + methods[m])[m](0)
+      if (methods[m] === null) {
+        BufferList.prototype[m] = function (offset, byteLength) {
+          return this.slice(offset, offset + byteLength)[m](0, byteLength)
+        }
+      }
+      else {
+        BufferList.prototype[m] = function (offset) {
+          return this.slice(offset, offset + methods[m])[m](0)
+        }
       }
     }(m))
   }
