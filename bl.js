@@ -1,4 +1,4 @@
-var DuplexStream = require('stream').Duplex || require('readable-stream').Duplex
+var DuplexStream = require('readable-stream').Duplex || require('stream').Duplex
   , util         = require('util')
   , Buffer       = require('safe-buffer').Buffer
 
