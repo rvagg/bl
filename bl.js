@@ -50,6 +50,19 @@ BufferList.prototype._offset = function _offset (offset) {
 }
 
 
+BufferList.prototype._index = function _index (indexOffsetPair) {
+  var bufferIndex = indexOffsetPair[0]
+  var offset = indexOffsetPair[1]
+  var sum = 0
+
+  for (var i = 0; i < bufferIndex; i++) {
+    sum += this._bufs[i].length
+  }
+
+  return sum + offset
+}
+
+
 BufferList.prototype.append = function append (buf) {
   var i = 0
 
@@ -242,6 +255,86 @@ BufferList.prototype.duplicate = function duplicate () {
     copy.append(this._bufs[i])
 
   return copy
+}
+
+BufferList.prototype.indexOf = function indexOf (value, byteOffset, encoding) {
+  byteOffset = byteOffset || 0
+
+  var beginOffset = this._offset(byteOffset)
+
+  var bufferIndex = beginOffset[0]
+  var searchOffset = beginOffset[1]
+
+  // search each buffer in turn as long as nothing has been found yet
+  for (var result = -1;
+       result == -1 && bufferIndex < this._bufs.length;
+       bufferIndex++) {
+    result = this._bufs[bufferIndex].indexOf(value, searchOffset, encoding)
+    searchOffset = 0
+  }
+
+  // if this is a multi-byte search and nothing has been found in individual buffers, maybe we need to search across buffer boundaries
+  if(value.length > 1 && result == -1) {
+    return this._indexOfMultiByte(value, byteOffset, encoding)
+  }
+
+  // return early if nothing has been found at all
+  if(result == -1) {
+    return -1
+  }
+
+  // fix buffer index because the last iteration increases it even if the first condition failed
+  bufferIndex--
+  return this._index([bufferIndex, result])
+}
+
+if ((typeof (new Buffer('')).indexOf) != 'function') {
+  BufferList.prototype.indexOf = function indexOf () {
+    throw new Error('BufferList.indexOf is not implemented: Missing support for Buffer.indexOf in node.js before v4')
+  }
+}
+
+
+BufferList.prototype._indexOfMultiByte = function _indexOfMultiByte (value, byteOffset, encoding) {
+  // this is much more inefficient than the single byte indexOf, as it has to do backtracking in JS
+  if (!(value instanceof Buffer)) {
+    value = new Buffer(value, encoding)
+  }
+
+  var firstByte = value[0];
+
+  // search for first byte only to get a starting point for comparison
+  var index = this.indexOf(firstByte, byteOffset, encoding)
+  while (index != -1) {
+    // compare split buffers until mismatch or complete match is found
+    var offset = this._offset(index)
+    var bufferIndex = offset[0]
+    var bufferOffset = offset[1]
+    var valueOffset = 0
+    var comparisonResult = true
+
+    while (comparisonResult && valueOffset < value.length) {
+      var remainingBufferLength = this._bufs[bufferIndex].length - bufferOffset
+      var remainingValueLength = value.length - valueOffset
+
+      var bufferSlice = this._bufs[bufferIndex].slice(bufferOffset, bufferOffset + remainingValueLength)
+      var valueSlice = value.slice(valueOffset, valueOffset + remainingBufferLength)
+      comparisonResult = (bufferSlice.compare(valueSlice) == 0)
+
+      valueOffset += remainingBufferLength
+      bufferIndex++;
+      bufferOffset = 0;
+    }
+
+    if (comparisonResult)
+      return index;
+
+    // next round, increase offset and search for first byte
+    byteOffset = index + 1
+    var index = this.indexOf(firstByte, byteOffset, encoding)
+  }
+
+  return -1
 }
 
 
