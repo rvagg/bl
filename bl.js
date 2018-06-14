@@ -192,7 +192,7 @@ BufferList.prototype.copy = function copy (dst, dstStart, srcStart, srcEnd) {
 
 BufferList.prototype.shallowSlice = function shallowSlice (start, end) {
   start = start || 0
-  end = end || this.length
+  end = end == null ? this.length : end
 
   if (start < 0)
     start += this.length
