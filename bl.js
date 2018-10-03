@@ -44,12 +44,21 @@ BufferList.prototype._offset = function _offset (offset) {
   if (offset === 0) return [ 0, 0 ]
   for (; i < this._bufs.length; i++) {
     _t = tot + this._bufs[i].length
-    if (offset < _t || i == this._bufs.length - 1)
+    if (offset < _t || i == this._bufs.length - 1) {
       return [ i, offset - tot ]
+    }
     tot = _t
   }
 }
 
+BufferList.prototype._reverseOffset = function (blOffset) {
+  const bufferId = blOffset[0]
+  let offset = blOffset[1]
+  for (let i = 0; i < bufferId; i++) {
+    offset += this._bufs[i].length
+  }
+  return offset
+}
 
 BufferList.prototype.append = function append (buf) {
   var i = 0
@@ -284,6 +293,24 @@ BufferList.prototype.indexOf = function (search, offset, encoding) {
   if (search.length === 0) {
     return offset > this.length ? this.length : offset
   }
+
+  // Use the native buffer indexOf
+  if (search.length === 1) {
+    const searchBuffer = search.slice()
+    const blOffset = this._offset(offset)
+    let blIndex = blOffset[0]
+    let buffOffset = blOffset[1]
+
+    for (blIndex; blIndex < this._bufs.length; blIndex++) {
+      let position = this._bufs[blIndex].indexOf(searchBuffer, buffOffset)
+      if (position !== -1) {
+        return this._reverseOffset([blIndex, position])
+      }
+      buffOffset = 0
+    }
+    return -1
+  }
+
 
   let searchOffset = 0
   let searchPosition = -1
