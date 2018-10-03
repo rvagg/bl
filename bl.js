@@ -1,3 +1,4 @@
+'use strict'
 var DuplexStream = require('readable-stream').Duplex
   , util         = require('util')
   , Buffer       = require('safe-buffer').Buffer
@@ -54,7 +55,7 @@ BufferList.prototype.append = function append (buf) {
   var i = 0
 
   if (Buffer.isBuffer(buf)) {
-    this._appendBuffer(buf);
+    this._appendBuffer(buf)
   } else if (Array.isArray(buf)) {
     for (; i < buf.length; i++)
       this.append(buf[i])
@@ -68,7 +69,7 @@ BufferList.prototype.append = function append (buf) {
     if (typeof buf == 'number')
       buf = buf.toString()
 
-    this._appendBuffer(Buffer.from(buf));
+    this._appendBuffer(Buffer.from(buf))
   }
 
   return this
@@ -249,6 +250,66 @@ BufferList.prototype.destroy = function destroy () {
   this._bufs.length = 0
   this.length = 0
   this.push(null)
+}
+
+BufferList.prototype.indexOf = function (search, offset, encoding) {
+  if (encoding === undefined && typeof offset === 'string') {
+    encoding = offset
+    offset = undefined
+  }
+  if (typeof search === 'function' || Array.isArray(search)) {
+    throw new TypeError('The "value" argument must be one of type string, Buffer, BufferList, or Uint8Array.')
+  } else if (typeof search === 'number') {
+      search = Buffer.from([search])
+  } else if (typeof search === 'string') {
+    search = Buffer.from(search, encoding)
+  } else if (!search instanceof BufferList && !Buffer.isBuffer(search)) {
+    search = Buffer.from(search)
+  }
+  search = new BufferList(search)
+
+  offset = Number(offset || 0)
+  if (isNaN(offset)) {
+    offset = 0
+  }
+
+  if (offset < 0) {
+    offset = this.length + offset
+  }
+
+  if (offset < 0) {
+    offset = 0
+  }
+
+  if (search.length === 0) {
+    return offset > this.length ? this.length : offset
+  }
+
+  let searchOffset = 0
+  let searchPosition = -1
+
+  for (let blSearchOffset = offset; blSearchOffset < this.length ; ++blSearchOffset) {
+    if(this.get(blSearchOffset) != search.get(searchOffset)){
+      searchPosition = -1
+      blSearchOffset -= searchOffset-1
+      searchOffset = 0
+    }
+
+    if(this.get(blSearchOffset) == search.get(searchOffset)) {
+      if(searchPosition == -1) {
+        searchPosition = blSearchOffset
+      }
+      ++searchOffset
+      if(searchOffset == search.length) {
+        break
+      }
+    }
+  }
+
+  if (searchPosition > -1 && this.length - searchPosition < search.length) {
+    return -1
+  }
+  return searchPosition
 }
 
 
