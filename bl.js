@@ -274,8 +274,9 @@ BufferList.prototype.indexOf = function (search, offset, encoding) {
     search = Buffer.from(search, encoding)
   } else if (!search instanceof BufferList && !Buffer.isBuffer(search)) {
     search = Buffer.from(search)
+  } else {
+    search = new BufferList(search).slice()
   }
-  search = new BufferList(search)
 
   offset = Number(offset || 0)
   if (isNaN(offset)) {
@@ -294,49 +295,44 @@ BufferList.prototype.indexOf = function (search, offset, encoding) {
     return offset > this.length ? this.length : offset
   }
 
-  // Use the native buffer indexOf
-  if (search.length === 1) {
-    const searchBuffer = search.slice()
-    const blOffset = this._offset(offset)
-    let blIndex = blOffset[0]
-    let buffOffset = blOffset[1]
+  const blOffset = this._offset(offset)
+  let blIndex = blOffset[0] // index of which internal buffer we're working on
+  let buffOffset = blOffset[1] // offset of the internal buffer we're working on
 
-    for (blIndex; blIndex < this._bufs.length; blIndex++) {
-      let position = this._bufs[blIndex].indexOf(searchBuffer, buffOffset)
-      if (position !== -1) {
-        return this._reverseOffset([blIndex, position])
-      }
-      buffOffset = 0
-    }
-    return -1
-  }
-
-
-  let searchOffset = 0
-  let searchPosition = -1
-
-  for (let blSearchOffset = offset; blSearchOffset < this.length ; ++blSearchOffset) {
-    if(this.get(blSearchOffset) != search.get(searchOffset)){
-      searchPosition = -1
-      blSearchOffset -= searchOffset-1
-      searchOffset = 0
-    }
-
-    if(this.get(blSearchOffset) == search.get(searchOffset)) {
-      if(searchPosition == -1) {
-        searchPosition = blSearchOffset
-      }
-      ++searchOffset
-      if(searchOffset == search.length) {
-        break
+  // scan over each buffer
+  for (blIndex; blIndex < this._bufs.length; blIndex++) {
+    const buff = this._bufs[blIndex]
+    while(buffOffset < buff.length) {
+      const availableWindow = buff.length - buffOffset
+      if (availableWindow >= search.length) {
+        const nativeSearchResult = buff.indexOf(search, buffOffset)
+        if (nativeSearchResult !== -1) {
+          return this._reverseOffset([blIndex, nativeSearchResult])
+        }
+        buffOffset = buff.length - search.length + 1 // end of native search window
+      } else {
+        const revOffset = this._reverseOffset([blIndex, buffOffset])
+        if (this._match(revOffset, search)) {
+          return revOffset
+        }
+        buffOffset++
       }
     }
+    buffOffset = 0
   }
+  return -1
+}
 
-  if (searchPosition > -1 && this.length - searchPosition < search.length) {
-    return -1
+BufferList.prototype._match = function(offset, search) {
+  if (this.length - offset < search.length) {
+    return false
   }
-  return searchPosition
+  for (let searchOffset = 0; searchOffset < search.length ; searchOffset++) {
+    if(this.get(offset + searchOffset) !== search[searchOffset]){
+      return false
+    }
+  }
+  return true
 }
 
 
