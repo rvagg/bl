@@ -29,6 +29,9 @@ console.log(bl.slice(3, 6).toString('ascii'))  // 'def'
 console.log(bl.slice(3, 8).toString('ascii'))  // 'defgh'
 console.log(bl.slice(5, 10).toString('ascii')) // 'fghij'
 
+console.log(bl.indexOf('def')) // 3
+console.log(bl.indexOf('asdf')) // -1
+
 // or just use toString!
 console.log(bl.toString())               // 'abcdefghij\u0003\u0004'
 console.log(bl.toString('ascii', 3, 8))  // 'defgh'
@@ -86,6 +89,7 @@ bl.pipe(fs.createWriteStream('gibberish.txt'))
   * <a href="#length"><code>bl.<b>length</b></code></a>
   * <a href="#append"><code>bl.<b>append(buffer)</b></code></a>
   * <a href="#get"><code>bl.<b>get(index)</b></code></a>
+  * <a href="#indexOf"><code>bl.<b>indexOf(value[, byteOffset][, encoding])</b></code></a>
   * <a href="#slice"><code>bl.<b>slice([ start[, end ] ])</b></code></a>
   * <a href="#shallowSlice"><code>bl.<b>shallowSlice([ start[, end ] ])</b></code></a>
   * <a href="#copy"><code>bl.<b>copy(dest, [ destStart, [ srcStart [, srcEnd ] ] ])</b></code></a>
@@ -128,6 +132,12 @@ Get the length of the list in bytes. This is the sum of the lengths of all of th
 <a name="get"></a>
 ### bl.get(index)
 `get()` will return the byte at the specified index.
+
+--------------------------------------------------------
+<a name="indexOf"></a>
+### bl.indexOf(value[, byteOffset][, encoding])
+`get()` will return the byte at the specified index.
+`indexOf()` method returns the first index at which a given element can be found in the BufferList, or -1 if it is not present.
 
 --------------------------------------------------------
 <a name="slice"></a>
