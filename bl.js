@@ -272,10 +272,10 @@ BufferList.prototype.indexOf = function (search, offset, encoding) {
       search = Buffer.from([search])
   } else if (typeof search === 'string') {
     search = Buffer.from(search, encoding)
-  } else if (!search instanceof BufferList && !Buffer.isBuffer(search)) {
+  } else if (search instanceof BufferList) {
+    search = search.slice()
+  } else if (!Buffer.isBuffer(search)) {
     search = Buffer.from(search)
-  } else {
-    search = new BufferList(search).slice()
   }
 
   offset = Number(offset || 0)
