@@ -262,6 +262,7 @@ BufferList.prototype.destroy = function destroy () {
   this.push(null)
 }
 
+
 BufferList.prototype.indexOf = function (search, offset, encoding) {
   if (encoding === undefined && typeof offset === 'string') {
     encoding = offset
