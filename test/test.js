@@ -19,11 +19,12 @@ tape('single bytes from single buffer', function (t) {
   bl.append(Buffer.from('abcd'))
 
   t.equal(bl.length, 4)
-
+  t.equal(bl.get(-1), undefined)
   t.equal(bl.get(0), 97)
   t.equal(bl.get(1), 98)
   t.equal(bl.get(2), 99)
   t.equal(bl.get(3), 100)
+  t.equal(bl.get(4), undefined)
 
   t.end()
 })

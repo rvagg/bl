@@ -3,8 +3,6 @@ var DuplexStream = require('readable-stream').Duplex
   , util         = require('util')
   , Buffer       = require('safe-buffer').Buffer
 
-var tempBuffer = Buffer.alloc(1)
-
 function BufferList (callback) {
   if (!(this instanceof BufferList))
     return new BufferList(callback)
@@ -120,8 +118,11 @@ BufferList.prototype.end = function end (chunk) {
 
 
 BufferList.prototype.get = function get (index) {
-  this.copy(tempBuffer, 0, index, index + 1)
-  return tempBuffer[0]
+  if (index > this.length || index < 0) {
+    return undefined
+  }
+  const offset = this._offset(index)
+  return this._bufs[offset[0]][offset[1]]
 }
 
 
