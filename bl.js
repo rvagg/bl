@@ -50,9 +50,9 @@ BufferList.prototype._offset = function _offset (offset) {
 }
 
 BufferList.prototype._reverseOffset = function (blOffset) {
-  const bufferId = blOffset[0]
-  let offset = blOffset[1]
-  for (let i = 0; i < bufferId; i++) {
+  var bufferId = blOffset[0]
+  var offset = blOffset[1]
+  for (var i = 0; i < bufferId; i++) {
     offset += this._bufs[i].length
   }
   return offset
@@ -121,7 +121,7 @@ BufferList.prototype.get = function get (index) {
   if (index > this.length || index < 0) {
     return undefined
   }
-  const offset = this._offset(index)
+  var offset = this._offset(index)
   return this._bufs[offset[0]][offset[1]]
 }
 
@@ -297,23 +297,23 @@ BufferList.prototype.indexOf = function (search, offset, encoding) {
     return offset > this.length ? this.length : offset
   }
 
-  const blOffset = this._offset(offset)
-  let blIndex = blOffset[0] // index of which internal buffer we're working on
-  let buffOffset = blOffset[1] // offset of the internal buffer we're working on
+  var blOffset = this._offset(offset)
+  var blIndex = blOffset[0] // index of which internal buffer we're working on
+  var buffOffset = blOffset[1] // offset of the internal buffer we're working on
 
   // scan over each buffer
   for (blIndex; blIndex < this._bufs.length; blIndex++) {
-    const buff = this._bufs[blIndex]
+    var buff = this._bufs[blIndex]
     while(buffOffset < buff.length) {
-      const availableWindow = buff.length - buffOffset
+      var availableWindow = buff.length - buffOffset
       if (availableWindow >= search.length) {
-        const nativeSearchResult = buff.indexOf(search, buffOffset)
+        var nativeSearchResult = buff.indexOf(search, buffOffset)
         if (nativeSearchResult !== -1) {
           return this._reverseOffset([blIndex, nativeSearchResult])
         }
         buffOffset = buff.length - search.length + 1 // end of native search window
       } else {
-        const revOffset = this._reverseOffset([blIndex, buffOffset])
+        var revOffset = this._reverseOffset([blIndex, buffOffset])
         if (this._match(revOffset, search)) {
           return revOffset
         }
@@ -329,7 +329,7 @@ BufferList.prototype._match = function(offset, search) {
   if (this.length - offset < search.length) {
     return false
   }
-  for (let searchOffset = 0; searchOffset < search.length ; searchOffset++) {
+  for (var searchOffset = 0; searchOffset < search.length ; searchOffset++) {
     if(this.get(offset + searchOffset) !== search[searchOffset]){
       return false
     }
