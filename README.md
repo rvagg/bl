@@ -15,11 +15,11 @@ The original buffers are kept intact and copies are only done as necessary. Any 
 const BufferList = require('bl')
 
 var bl = new BufferList()
-bl.append(new Buffer('abcd'))
-bl.append(new Buffer('efg'))
+bl.append(Buffer.from('abcd'))
+bl.append(Buffer.from('efg'))
 bl.append('hi')                     // bl will also accept & convert Strings
-bl.append(new Buffer('j'))
-bl.append(new Buffer([ 0x3, 0x4 ]))
+bl.append(Buffer.from('j'))
+bl.append(Buffer.from([ 0x3, 0x4 ]))
 
 console.log(bl.length) // 12
 
@@ -72,10 +72,10 @@ const BufferList = require('bl')
     , fs         = require('fs')
 
 var bl = new BufferList()
-bl.append(new Buffer('abcd'))
-bl.append(new Buffer('efg'))
-bl.append(new Buffer('hi'))
-bl.append(new Buffer('j'))
+bl.append(Buffer.from('abcd'))
+bl.append(Buffer.from('efg'))
+bl.append(Buffer.from('hi'))
+bl.append(Buffer.from('j'))
 
 bl.pipe(fs.createWriteStream('gibberish.txt'))
 ```
