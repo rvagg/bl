@@ -203,13 +203,16 @@ BufferList.prototype.copy = function copy (dst, dstStart, srcStart, srcEnd) {
 
 BufferList.prototype.shallowSlice = function shallowSlice (start, end) {
   start = start || 0
-  end = end || this.length
+  end = typeof end !== 'number' ? this.length : end
 
   if (start < 0)
     start += this.length
   if (end < 0)
     end += this.length
 
+  if (start === end) {
+    return new BufferList()
+  }
   var startOffset = this._offset(start)
     , endOffset = this._offset(end)
     , buffers = this._bufs.slice(startOffset[0], endOffset[0] + 1)
