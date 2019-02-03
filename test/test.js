@@ -649,6 +649,20 @@ tape('shallow slice does not make a copy', function (t) {
   t.equal(bl.toString(), 'hhhhhhhh')
 })
 
+tape('shallow slice with 0 length', function (t) {
+  t.plan(1)
+  var buffers = [Buffer.from('First'), Buffer.from('Second'), Buffer.from('Third')]
+  var bl = (new BufferList(buffers)).shallowSlice(0, 0)
+  t.equal(bl.length, 0)
+})
+
+tape('shallow slice with 0 length from middle', function (t) {
+  t.plan(1)
+  var buffers = [Buffer.from('First'), Buffer.from('Second'), Buffer.from('Third')]
+  var bl = (new BufferList(buffers)).shallowSlice(10, 10)
+  t.equal(bl.length, 0)
+})
+
 tape('duplicate', function (t) {
   t.plan(2)
 
