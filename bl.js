@@ -247,8 +247,7 @@ BufferList.prototype.duplicate = function duplicate () {
 BufferList.prototype._destroy = function _destroy (err, cb) {
   this._bufs.length = 0
   this.length = 0
-  this.push(null)
-  cb()
+  cb(err)
 }
 
 
