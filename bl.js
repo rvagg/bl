@@ -1,6 +1,5 @@
 var DuplexStream = require('readable-stream').Duplex
   , util         = require('util')
-  , Buffer       = require('safe-buffer').Buffer
 
 var tempBuffer = Buffer.alloc(1)
 
@@ -245,10 +244,11 @@ BufferList.prototype.duplicate = function duplicate () {
 }
 
 
-BufferList.prototype.destroy = function destroy () {
+BufferList.prototype._destroy = function _destroy (err, cb) {
   this._bufs.length = 0
   this.length = 0
   this.push(null)
+  cb()
 }
 
 
