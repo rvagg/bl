@@ -169,16 +169,17 @@ BufferList.prototype.copy = function copy (dst, dstStart, srcStart, srcEnd) {
 
     return dst
   }
+  if (!copy) // a slice, we need something to copy in to
+    dst = Buffer.allocUnsafe(len)
 
   // easy, cheap case where it's a subset of one of the buffers
   if (bytes <= this._bufs[off[0]].length - start) {
     return copy
       ? this._bufs[off[0]].copy(dst, dstStart, start, start + bytes)
-      : this._bufs[off[0]].slice(start, start + bytes)
+      : (this._bufs[off[0]].copy(dst, dstStart, start, start + bytes), dst)
   }
 
-  if (!copy) // a slice, we need something to copy in to
-    dst = Buffer.allocUnsafe(len)
+
 
   for (i = off[0]; i < this._bufs.length; i++) {
     l = this._bufs[i].length - start
