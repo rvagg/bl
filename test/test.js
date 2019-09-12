@@ -13,6 +13,8 @@ var tape       = require('tape')
 
 // run the indexOf tests
 require('./indexOf')
+require('./isBufferList')
+require('./convert')
 
 tape('single bytes from single buffer', function (t) {
   var bl = new BufferList()
