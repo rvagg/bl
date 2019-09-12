@@ -176,6 +176,17 @@ tape('append accepts arrays of BufferLists', function (t) {
   t.end()
 })
 
+tape('append accepts arrays of BufferList like objects', function (t) {
+  var bl = new BufferList()
+  bl.append({ _bufs: [ Buffer.from('abc') ] })
+  bl.append([{ _bufs: [ Buffer.from('def') ] }])
+  bl.append({ _bufs: [ Buffer.from('ghi'), new BufferList('jkl') ]})
+  bl.append([ Buffer.from('mnop'), { _bufs: [ Buffer.from('qrstu'), Buffer.from('vwxyz') ]} ])
+  t.equal(bl.length, 26)
+  t.equal(bl.slice().toString('ascii'), 'abcdefghijklmnopqrstuvwxyz')
+  t.end()
+})
+
 tape('append chainable', function (t) {
   var bl = new BufferList()
   t.ok(bl.append(Buffer.from('abcd')) === bl)

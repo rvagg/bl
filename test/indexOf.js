@@ -40,6 +40,19 @@ tape('indexOf takes a buffer list search', t => {
   t.end()
 })
 
+tape('indexOf takes a buffer list like search', t => {
+  const bl = new BufferList(['abcdefg', 'abcdefg'])
+  const search = Buffer.from('fgabc')
+  const blLike = {
+    _bufs: [search],
+    slice: function() {
+      return search.slice()
+    }
+  }
+  t.equal(bl.indexOf(blLike), 5)
+  t.end()
+})
+
 tape('indexOf a zero byte needle', t => {
   const b = new BufferList('abcdef')
   const buf_empty = Buffer.from('')
