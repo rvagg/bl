@@ -60,16 +60,21 @@ BufferList.prototype._reverseOffset = function (blOffset) {
 BufferList.prototype.append = function append (buf) {
   var i = 0
 
-  if (Buffer.isBuffer(buf)) {
-    this._appendBuffer(buf)
+  if (buf == null) {
+    return this
+  }
+
+  if (buf.buffer) {
+    // append a view of the underlying ArrayBuffer
+    this._appendBuffer(Buffer.from(buf.buffer, buf.byteOffset, buf.byteLength))
   } else if (Array.isArray(buf)) {
     for (; i < buf.length; i++)
       this.append(buf[i])
-  } else if (buf instanceof BufferList) {
+  } else if (Array.isArray(buf._bufs)) {
     // unwrap argument into individual BufferLists
     for (; i < buf._bufs.length; i++)
       this.append(buf._bufs[i])
-  } else if (buf != null) {
+  } else {
     // coerce number arguments to strings, since Buffer(number) does
     // uninitialized memory allocation
     if (typeof buf == 'number')
@@ -276,8 +281,10 @@ BufferList.prototype.indexOf = function (search, offset, encoding) {
       search = Buffer.from([search])
   } else if (typeof search === 'string') {
     search = Buffer.from(search, encoding)
-  } else if (search instanceof BufferList) {
+  } else if (Array.isArray(search._bufs)) {
     search = search.slice()
+  } else if (Array.isArray(search.buffer)) {
+    search = Buffer.from(search.buffer, search.byteOffset, search.byteLength)
   } else if (!Buffer.isBuffer(search)) {
     search = Buffer.from(search)
   }
