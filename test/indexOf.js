@@ -26,6 +26,13 @@ tape('indexOf multiple byte needles across buffer boundaries', t => {
   t.end()
 })
 
+tape('indexOf takes a Uint8Array search', t => {
+  const bl = new BufferList(['abcdefg', 'abcdefg'])
+  const search = new Uint8Array([102, 103, 97, 98, 99]) // fgabc
+  t.equal(bl.indexOf(search), 5)
+  t.end()
+})
+
 tape('indexOf takes a buffer list search', t => {
   const bl = new BufferList(['abcdefg', 'abcdefg'])
   const search = new BufferList('fgabc')
