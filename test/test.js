@@ -153,6 +153,18 @@ tape('append accepts arrays of Buffers', function (t) {
   t.end()
 })
 
+tape('append accepts arrays of Uint8Arrays', function (t) {
+  var bl = new BufferList()
+
+  bl.append(new Uint8Array([97, 98, 99]))
+  bl.append([ Uint8Array.from([100, 101, 102]) ])
+  bl.append([ new Uint8Array([103, 104, 105]), new Uint8Array([106, 107, 108]) ])
+  bl.append([ new Uint8Array([109, 110, 111, 112]), new Uint8Array([113, 114, 115, 116, 117]), new Uint8Array([118, 119, 120, 121, 122]) ])
+  t.equal(bl.length, 26)
+  t.equal(bl.slice().toString('ascii'), 'abcdefghijklmnopqrstuvwxyz')
+  t.end()
+})
+
 tape('append accepts arrays of BufferLists', function (t) {
   var bl = new BufferList()
   bl.append(Buffer.from('abc'))
