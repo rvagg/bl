@@ -4,7 +4,7 @@ var DuplexStream = require('readable-stream').Duplex
   , BufferList   = require('./BufferList')
 
 function BufferListStream (callback) {
-  if (!BufferListStream.isBufferList(this))
+  if (!(this instanceof BufferListStream))
     return new BufferListStream(callback)
 
   if (typeof callback == 'function') {
@@ -26,7 +26,7 @@ function BufferListStream (callback) {
     callback = null
   }
 
-  BufferList.call(this, callback)
+  BufferList._init.call(this, callback)
   DuplexStream.call(this)
 }
 

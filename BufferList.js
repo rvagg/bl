@@ -1,8 +1,16 @@
 'use strict'
 
+var symbol = Symbol.for('BufferList')
+
 function BufferList (buf) {
-  if (!BufferList.isBufferList(this))
+  if (!(this instanceof BufferList))
     return new BufferList(buf)
+
+  BufferList._init.call(this, buf)
+}
+
+BufferList._init = function _init (buf) {
+  Object.defineProperty(this, symbol, { value: true })
 
   this._bufs = []
   this.length = 0
@@ -330,7 +338,7 @@ BufferList.prototype._isBufferList = function _isBufferList (b) {
 }
 
 BufferList.isBufferList = function isBufferList (b) {
-  return b != null && Boolean(b._isBufferList) && Array.isArray(b._bufs)
+  return b != null && b[symbol]
 }
 
 module.exports = BufferList
