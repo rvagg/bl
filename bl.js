@@ -1,16 +1,18 @@
 'use strict'
-var DuplexStream = require('readable-stream').Duplex
-  , util         = require('util')
-  , BufferList   = require('./BufferList')
+
+const DuplexStream = require('readable-stream').Duplex
+const util = require('util')
+const BufferList = require('./BufferList')
 
 function BufferListStream (callback) {
-  if (!(this instanceof BufferListStream))
+  if (!(this instanceof BufferListStream)) {
     return new BufferListStream(callback)
+  }
 
-  if (typeof callback == 'function') {
+  if (typeof callback === 'function') {
     this._callback = callback
 
-    var piper = function piper (err) {
+    const piper = function piper (err) {
       if (this._callback) {
         this._callback(err)
         this._callback = null
@@ -23,6 +25,7 @@ function BufferListStream (callback) {
     this.on('unpipe', function onUnpipe (src) {
       src.removeListener('error', piper)
     })
+
     callback = null
   }
 
@@ -40,13 +43,15 @@ BufferListStream.prototype._new = function _new (callback) {
 BufferListStream.prototype._write = function _write (buf, encoding, callback) {
   this._appendBuffer(buf)
 
-  if (typeof callback == 'function')
+  if (typeof callback === 'function') {
     callback()
+  }
 }
 
 BufferListStream.prototype._read = function _read (size) {
-  if (!this.length)
+  if (!this.length) {
     return this.push(null)
+  }
 
   size = Math.min(size, this.length)
   this.push(this.slice(0, size))
