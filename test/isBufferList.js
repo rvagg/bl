@@ -4,16 +4,15 @@ const tape = require('tape')
 const { BufferList, BufferListStream } = require('../')
 const { Buffer } = require('safe-buffer')
 
-tape('isBufferList positives', t => {
-  for (const obj of [
-    new BufferList(),
-    new BufferListStream()
-  ]) t.ok(BufferList.isBufferList(obj))
+tape('isBufferList positives', (t) => {
+  t.ok(BufferList.isBufferList(new BufferList()))
+  t.ok(BufferList.isBufferList(new BufferListStream()))
+
   t.end()
 })
 
-tape('isBufferList negatives', t => {
-  for (const obj of [
+tape('isBufferList negatives', (t) => {
+  const types = [
     null,
     undefined,
     NaN,
@@ -23,6 +22,11 @@ tape('isBufferList negatives', t => {
     [],
     Buffer.alloc(0),
     [Buffer.alloc(0)]
-  ]) t.notOk(BufferList.isBufferList(obj))
+  ]
+
+  for (const obj of types) {
+    t.notOk(BufferList.isBufferList(obj))
+  }
+
   t.end()
 })
