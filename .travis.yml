@@ -5,7 +5,8 @@ node_js:
   - '8'
   - '10'
   - '12'
-  - master
+  - lts/*
+  - current
 branches:
   only:
     - master

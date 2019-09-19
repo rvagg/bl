@@ -239,8 +239,6 @@ const BufferListStream = require('bl')
  * [Matteo Collina](https://github.com/mcollina)
  * [Jarett Cruger](https://github.com/jcrugzz)
 
-=======
-
 <a name="license"></a>
 ## License &amp; copyright
 
