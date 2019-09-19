@@ -4,8 +4,7 @@
 
 **A Node.js Buffer list collector, reader and streamer thingy.**
 
-[![NPM](https://nodei.co/npm/bl.png?downloads=true&downloadRank=true)](https://nodei.co/npm/bl/)
-[![NPM](https://nodei.co/npm-dl/bl.png?months=6&height=3)](https://nodei.co/npm/bl/)
+[![NPM](https://nodei.co/npm/bl.svg)](https://nodei.co/npm/bl/)
 
 **bl** is a storage object for collections of Node Buffers, exposing them with the main Buffer readable API. Also works as a duplex stream so you can collect buffers from a stream that emits them and emit buffers to a stream that consumes them!
 
@@ -245,6 +244,6 @@ const BufferListStream = require('bl')
 <a name="license"></a>
 ## License &amp; copyright
 
-Copyright (c) 2013-2018 bl contributors (listed above).
+Copyright (c) 2013-2019 bl contributors (listed above).
 
 bl is licensed under the MIT license. All rights not explicitly granted in the MIT license are reserved. See the included LICENSE.md file for more details.
