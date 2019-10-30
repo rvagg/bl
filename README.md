@@ -72,7 +72,7 @@ hyperquest(url).pipe(BufferListStream((err, data) => {
 Or, use it as a readable stream to recompose a list of Buffers to an output source:
 
 ```js
-const { BufferList } = require('bl')
+const { BufferListStream } = require('bl')
 const fs = require('fs')
 
 var bl = new BufferListStream()
