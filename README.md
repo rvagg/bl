@@ -72,10 +72,10 @@ hyperquest(url).pipe(BufferListStream((err, data) => {
 Or, use it as a readable stream to recompose a list of Buffers to an output source:
 
 ```js
-const { BufferList } = require('bl')
+const { BufferListStream } = require('bl')
 const fs = require('fs')
 
-var bl = new BufferList()
+var bl = new BufferListStream()
 bl.append(Buffer.from('abcd'))
 bl.append(Buffer.from('efg'))
 bl.append(Buffer.from('hi'))
@@ -171,7 +171,7 @@ No copies will be performed. All buffers in the result share memory with the ori
 `duplicate()` performs a **shallow-copy** of the list. The internal Buffers remains the same, so if you change the underlying Buffers, the change will be reflected in both the original and the duplicate. This method is needed if you want to call `consume()` or `pipe()` and still keep the original list.Example:
 
 ```js
-var bl = new BufferList()
+var bl = new BufferListStream()
 
 bl.append('hello')
 bl.append(' world')
