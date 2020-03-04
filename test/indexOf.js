@@ -345,9 +345,9 @@ tape('indexOf the entire nodejs10 buffer test suite', (t) => {
 
   // Search for a non-ASCII string in a pure ASCII string.
   const asciiString = Buffer.from(
-    'arglebargleglopglyfarglebargleglopglyfarglebargleglopglyf')
+    'somethingnotatallsinisterwhichalsoworks')
   t.equal(-1, asciiString.indexOf('\x2061'))
-  t.equal(3, asciiString.indexOf('leb', 0))
+  t.equal(3, asciiString.indexOf('eth', 0))
 
   // Search in string containing many non-ASCII chars.
   const allCodePoints = []
