@@ -1,7 +1,7 @@
 'use strict'
 
 const DuplexStream = require('readable-stream').Duplex
-const util = require('util')
+const inherits = require('inherits')
 const BufferList = require('./BufferList')
 
 function BufferListStream (callback) {
@@ -33,7 +33,7 @@ function BufferListStream (callback) {
   DuplexStream.call(this)
 }
 
-util.inherits(BufferListStream, DuplexStream)
+inherits(BufferListStream, DuplexStream)
 Object.assign(BufferListStream.prototype, BufferList.prototype)
 
 BufferListStream.prototype._new = function _new (callback) {

@@ -5,7 +5,7 @@ const crypto = require('crypto')
 const fs = require('fs')
 const path = require('path')
 const BufferList = require('../')
-const Buffer = require('safe-buffer').Buffer
+const { Buffer } = require('buffer')
 
 const encodings =
       ('hex utf8 utf-8 ascii binary base64' +

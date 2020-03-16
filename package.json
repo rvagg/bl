@@ -25,6 +25,8 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "buffer": "^5.5.0",
+    "inherits": "^2.0.4",
     "readable-stream": "^3.4.0"
   },
   "devDependencies": {
