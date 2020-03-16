@@ -2,7 +2,7 @@
 
 const tape = require('tape')
 const { BufferList, BufferListStream } = require('../')
-const { Buffer } = require('safe-buffer')
+const { Buffer } = require('buffer')
 
 tape('isBufferList positives', (t) => {
   t.ok(BufferList.isBufferList(new BufferList()))
