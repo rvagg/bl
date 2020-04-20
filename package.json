@@ -2,6 +2,7 @@
   "name": "bl",
   "version": "4.0.2",
   "description": "Buffer List: collect buffers and access with a standard readable Buffer interface, streamable too!",
+  "license": "MIT",
   "main": "bl.js",
   "scripts": {
     "lint": "standard *.js test/*.js",
