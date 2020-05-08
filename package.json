@@ -34,5 +34,9 @@
     "faucet": "~0.0.1",
     "standard": "^14.3.0",
     "tape": "^4.11.0"
-  }
+  },
+  "files": [
+    "bl.js",
+    "BufferList.js"
+  ]
 }
