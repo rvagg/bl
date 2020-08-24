@@ -388,6 +388,40 @@ tape('test readUInt32LE / readUInt32BE / readInt32LE / readInt32BE', function (t
   t.end()
 })
 
+tape('test readBigUInt64LE / readBigUInt64BE / readBigInt64LE / readBigInt64BE', function (t) {
+  const buf1 = Buffer.alloc(1)
+  const buf2 = Buffer.alloc(3)
+  const buf3 = Buffer.alloc(2)
+  const buf4 = Buffer.alloc(5)
+  const bl = new BufferListStream()
+
+  buf1[0] = 0x05
+  buf2[0] = 0x07
+
+  buf2[1] = 0x03
+  buf2[2] = 0x04
+  buf3[0] = 0x23
+  buf3[1] = 0x42
+  buf4[0] = 0x00
+  buf4[1] = 0x01
+  buf4[2] = 0x02
+  buf4[3] = 0x03
+
+  buf4[4] = 0x04
+
+  bl.append(buf1)
+  bl.append(buf2)
+  bl.append(buf3)
+  bl.append(buf4)
+
+  t.equal(bl.readBigUInt64BE(2), 0x0304234200010203n)
+  t.equal(bl.readBigUInt64LE(2), 0x0302010042230403n)
+  t.equal(bl.readBigInt64BE(2), 0x0304234200010203n)
+  t.equal(bl.readBigInt64LE(2), 0x0302010042230403n)
+
+  t.end()
+})
+
 tape('test readUIntLE / readUIntBE / readIntLE / readIntBE', function (t) {
   const buf1 = Buffer.alloc(1)
   const buf2 = Buffer.alloc(3)
