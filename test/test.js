@@ -7,6 +7,10 @@ const path = require('path')
 const BufferList = require('../')
 const { Buffer } = require('buffer')
 
+function tempPath (filename) {
+  if (process.platform === 'win32') { return 'tmp_' + filename } else { return '/tmp/' + filename }
+}
+
 const encodings =
       ('hex utf8 utf-8 ascii binary base64' +
           (process.browser ? '' : ' ucs2 ucs-2 utf16le utf-16le')).split(' ')
@@ -340,6 +344,40 @@ tape('test readUInt32LE / readUInt32BE / readInt32LE / readInt32BE', function (t
   t.end()
 })
 
+tape('test readBigUInt64LE / readBigUInt64BE / readBigInt64LE / readBigInt64BE', function (t) {
+  const buf1 = Buffer.alloc(1)
+  const buf2 = Buffer.alloc(3)
+  const buf3 = Buffer.alloc(2)
+  const buf4 = Buffer.alloc(5)
+  const bl = new BufferList()
+
+  buf1[0] = 0x05
+  buf2[0] = 0x07
+
+  buf2[1] = 0x03
+  buf2[2] = 0x04
+  buf3[0] = 0x23
+  buf3[1] = 0x42
+  buf4[0] = 0x00
+  buf4[1] = 0x01
+  buf4[2] = 0x02
+  buf4[3] = 0x03
+
+  buf4[4] = 0x04
+
+  bl.append(buf1)
+  bl.append(buf2)
+  bl.append(buf3)
+  bl.append(buf4)
+
+  t.equal(bl.readBigUInt64BE(2), 0x0304234200010203n)
+  t.equal(bl.readBigUInt64LE(2), 0x0302010042230403n)
+  t.equal(bl.readBigInt64BE(2), 0x0304234200010203n)
+  t.equal(bl.readBigInt64LE(2), 0x0302010042230403n)
+
+  t.end()
+})
+
 tape('test readUIntLE / readUIntBE / readIntLE / readIntBE', function (t) {
   const buf1 = Buffer.alloc(1)
   const buf2 = Buffer.alloc(3)
@@ -472,11 +510,11 @@ tape('test toString encoding', function (t) {
     t.ok(random.equals(bl.slice()))
     t.ok(random.equals(buf.slice()))
 
-    bl.pipe(fs.createWriteStream('/tmp/bl_test_rnd_out.dat'))
+    bl.pipe(fs.createWriteStream(tempPath('bl_test_rnd_out.dat')))
       .on('close', function () {
         const rndhash = crypto.createHash('md5').update(random).digest('hex')
         const md5sum = crypto.createHash('md5')
-        const s = fs.createReadStream('/tmp/bl_test_rnd_out.dat')
+        const s = fs.createReadStream(tempPath('bl_test_rnd_out.dat'))
 
         s.on('data', md5sum.update.bind(md5sum))
         s.on('end', function () {
@@ -486,8 +524,8 @@ tape('test toString encoding', function (t) {
       })
   })
 
-  fs.writeFileSync('/tmp/bl_test_rnd.dat', random)
-  fs.createReadStream('/tmp/bl_test_rnd.dat').pipe(bl)
+  fs.writeFileSync(tempPath('bl_test_rnd.dat'), random)
+  fs.createReadStream(tempPath('bl_test_rnd.dat')).pipe(bl)
 })
 
 tape('instantiation with Buffer', function (t) {
