@@ -344,7 +344,7 @@ BufferList.prototype._match = function (offset, search) {
     readInt64BE: 8,
     readInt64LE: 8,
     readUInt64BE: 8,
-    readUInt64LE: 8,    
+    readUInt64LE: 8,
     readInt32BE: 4,
     readInt32LE: 4,
     readUInt32BE: 4,
