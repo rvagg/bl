@@ -369,11 +369,11 @@ BufferList.prototype._match = function (offset, search) {
   for (const m in methods) {
     (function (m) {
       if (methods[m] === null) {
-        BufferList.prototype[m] = function (offset, byteLength) {
+        BufferList.prototype[m] = function (offset = 0, byteLength) {
           return this.slice(offset, offset + byteLength)[m](0, byteLength)
         }
       } else {
-        BufferList.prototype[m] = function (offset) {
+        BufferList.prototype[m] = function (offset = 0) {
           return this.slice(offset, offset + methods[m])[m](0)
         }
       }
