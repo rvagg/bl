@@ -409,11 +409,11 @@ tape('test readFloatLE / readFloatBE', function (t) {
   bl.append(buf2)
   bl.append(buf3)
 
-  const src = Buffer.concat([buf1, buf2, buf3])
-  t.equal(bl.readFloatLE(), src.readFloatLE())
-  t.equal(bl.readFloatBE(), src.readFloatBE())
-  t.equal(bl.readFloatLE(2), src.readFloatLE(2))
-  t.equal(bl.readFloatBE(2), src.readFloatBE(2))
+  const canonical = Buffer.concat([buf1, buf2, buf3])
+  t.equal(bl.readFloatLE(), canonical.readFloatLE())
+  t.equal(bl.readFloatBE(), canonical.readFloatBE())
+  t.equal(bl.readFloatLE(2), canonical.readFloatLE(2))
+  t.equal(bl.readFloatBE(2), canonical.readFloatBE(2))
 
   t.end()
 })
@@ -438,11 +438,11 @@ tape('test readDoubleLE / readDoubleBE', function (t) {
   bl.append(buf2)
   bl.append(buf3)
 
-  const src = Buffer.concat([buf1, buf2, buf3])
-  t.equal(bl.readDoubleBE(), src.readDoubleBE())
-  t.equal(bl.readDoubleLE(), src.readDoubleLE())
-  t.equal(bl.readDoubleBE(2), src.readDoubleBE(2))
-  t.equal(bl.readDoubleLE(2), src.readDoubleLE(2))
+  const canonical = Buffer.concat([buf1, buf2, buf3])
+  t.equal(bl.readDoubleBE(), canonical.readDoubleBE())
+  t.equal(bl.readDoubleLE(), canonical.readDoubleLE())
+  t.equal(bl.readDoubleBE(2), canonical.readDoubleBE(2))
+  t.equal(bl.readDoubleLE(2), canonical.readDoubleLE(2))
 
   t.end()
 })
