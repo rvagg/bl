@@ -25,13 +25,13 @@
     "awesomesauce"
   ],
   "dependencies": {
-    "buffer": "^5.5.0",
+    "buffer": "^6.0.3",
     "inherits": "^2.0.4",
     "readable-stream": "^3.4.0"
   },
   "devDependencies": {
     "faucet": "~0.0.1",
-    "standard": "^14.3.0",
-    "tape": "^4.11.0"
+    "standard": "^16.0.3",
+    "tape": "^5.2.2"
   }
 }
