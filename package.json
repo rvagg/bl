@@ -30,6 +30,7 @@
     "readable-stream": "^3.4.0"
   },
   "devDependencies": {
+    "@types/readable-stream": "^2.3.13",
     "faucet": "~0.0.1",
     "standard": "^16.0.3",
     "tape": "^5.2.2"
