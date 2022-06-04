@@ -25,7 +25,6 @@ interface BufferListStreamConstructor {
   isBufferList(other: unknown): boolean;
 }
 
-/** Type Entrypoint */
 export interface BufferListStream extends Duplex, BufferList {}
 
 /**
@@ -48,7 +47,6 @@ export interface BufferListStream extends Duplex, BufferList {}
  *
  * `new` is not strictly required, if you don't instantiate a new object,
  * it will be done automatically for you so you can create a new instance
- *
  * simply with:
  *
  * ```js
@@ -60,7 +58,19 @@ export interface BufferListStream extends Duplex, BufferList {}
  * const { BufferListStream } = require('bl');
  * const bl = new BufferListStream();
  * ```
+ *
+ * N.B. For backwards compatibility reasons, BufferListStream is the default
+ * export when you `require('bl')`:
+ *
+ * ```js
+ * const { BufferListStream } = require('bl')
+ *
+ * // equivalent to:
+ *
+ * const BufferListStream = require('bl')
+ * ```
  */
 
 export const BufferListStream: BufferListStreamConstructor;
 export default BufferListStream;
+export = BufferListStream;
