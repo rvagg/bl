@@ -25,6 +25,14 @@ interface BufferListStreamConstructor {
    */
 
   isBufferList(other: unknown): boolean;
+
+  /**
+   * Rexporting BufferList and BufferListStream to fix
+   * issue with require/commonjs import and "export = " below.
+   */
+
+  BufferList: BufferListConstructor;
+  BufferListStream: BufferListStreamConstructor;
 }
 
 interface BufferListStream extends Duplex, BL {}
@@ -73,6 +81,6 @@ interface BufferListStream extends Duplex, BL {}
  * ```
  */
 
-export const BufferListStream: BufferListStreamConstructor;
-export default BufferListStream;
+declare const BufferListStream: BufferListStreamConstructor;
+
 export = BufferListStream;
