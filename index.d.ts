@@ -1,7 +1,9 @@
-import type { Duplex } from "readable-stream";
-import type { BufferList, BufferListInitData } from "./BufferList";
-
-export * from "./BufferList";
+import { Duplex } from "readable-stream";
+import {
+  BufferList as BL,
+  BufferListConstructor,
+  BufferListInitData,
+} from "./BufferList";
 
 type BufferListStreamInit =
   | ((err: Error, buffer: Buffer) => void)
@@ -25,7 +27,7 @@ interface BufferListStreamConstructor {
   isBufferList(other: unknown): boolean;
 }
 
-export interface BufferListStream extends Duplex, BufferList {}
+interface BufferListStream extends Duplex, BL {}
 
 /**
  * BufferListStream is a Node Duplex Stream, so it can be read from
