@@ -3,7 +3,8 @@ export type BufferListAcceptedTypes =
   | BufferList
   | Uint8Array
   | BufferListAcceptedTypes[]
-  | string;
+  | string
+  | number;
 
 export interface BufferListConstructor {
   new (initData?: BufferListAcceptedTypes): BufferList;
