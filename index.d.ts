@@ -2,12 +2,12 @@ import { Duplex } from "readable-stream";
 import {
   BufferList as BL,
   BufferListConstructor,
-  BufferListInitData,
+  BufferListAcceptedTypes,
 } from "./BufferList";
 
 type BufferListStreamInit =
   | ((err: Error, buffer: Buffer) => void)
-  | BufferListInitData;
+  | BufferListAcceptedTypes;
 
 interface BufferListStreamConstructor {
   new (initData?: BufferListStreamInit): BufferListStream;

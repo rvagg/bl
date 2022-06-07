@@ -1,13 +1,13 @@
-export type BufferListInitData =
+export type BufferListAcceptedTypes =
   | Buffer
-  | Buffer[]
   | BufferList
-  | BufferList[]
+  | Uint8Array
+  | BufferListAcceptedTypes[]
   | string;
 
 export interface BufferListConstructor {
-  new (initData?: BufferListInitData): BufferList;
-  (initData?: BufferListInitData): BufferList;
+  new (initData?: BufferListAcceptedTypes): BufferList;
+  (initData?: BufferListAcceptedTypes): BufferList;
 
   /**
    * Determines if the passed object is a BufferList. It will return true
@@ -40,7 +40,7 @@ interface BufferList {
    * @param buffer
    */
 
-  append(buffer: Buffer | Buffer[] | BufferList | BufferList[] | string): this;
+  append(buffer: BufferListAcceptedTypes): this;
 
   /**
    * Will return the byte at the specified index.
