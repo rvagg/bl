@@ -173,7 +173,7 @@ interface BufferList {
    * @param offset
    */
 
-  readDoubleBE(offset?: number): number;
+  readDoubleBE: Buffer['readDoubleBE'];
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
@@ -182,7 +182,7 @@ interface BufferList {
    * @param offset
    */
 
-  readDoubleLE(offset?: number): number;
+  readDoubleLE: Buffer['readDoubleLE'];
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
@@ -191,7 +191,7 @@ interface BufferList {
    * @param offset
    */
 
-  readFloatBE(offset?: number): number;
+  readFloatBE: Buffer['readFloatBE'];
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
@@ -200,7 +200,7 @@ interface BufferList {
    * @param offset
    */
 
-  readFloatLE(offset?: number): number;
+  readFloatLE: Buffer['readFloatLE'];
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
@@ -209,7 +209,7 @@ interface BufferList {
    * @param offset
    */
 
-  readInt32BE(offset?: number): number;
+  readInt32BE: Buffer['readInt32BE'];
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
@@ -218,7 +218,7 @@ interface BufferList {
    * @param offset
    */
 
-  readInt32LE(offset?: number): number;
+  readInt32LE: Buffer['readInt32LE'];
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
@@ -227,7 +227,7 @@ interface BufferList {
    * @param offset
    */
 
-  readUInt32BE(offset?: number): number;
+  readUInt32BE: Buffer['readUInt32BE'];
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
@@ -236,7 +236,7 @@ interface BufferList {
    * @param offset
    */
 
-  readUInt32LE(offset?: number): number;
+  readUInt32LE: Buffer['readUInt32LE'];
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
@@ -245,7 +245,7 @@ interface BufferList {
    * @param offset
    */
 
-  readInt16BE(offset?: number): number;
+  readInt16BE: Buffer['readInt16BE'];
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are
@@ -257,7 +257,7 @@ interface BufferList {
    * @param offset
    */
 
-  readInt16LE(offset?: number): number;
+  readInt16LE: Buffer['readInt16LE'];
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are
@@ -269,7 +269,7 @@ interface BufferList {
    * @param offset
    */
 
-  readUInt16BE(offset?: number): number;
+  readUInt16BE: Buffer['readUInt16BE'];
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are
@@ -281,7 +281,7 @@ interface BufferList {
    * @param offset
    */
 
-  readUInt16LE(offset?: number): number;
+  readUInt16LE: Buffer['readUInt16LE'];
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are
@@ -293,7 +293,7 @@ interface BufferList {
    * @param offset
    */
 
-  readInt8(offset: number): number;
+  readInt8: Buffer['readInt8'];
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are
@@ -305,7 +305,7 @@ interface BufferList {
    * @param offset
    */
 
-  readUInt8(offset: number): number;
+  readUInt8: Buffer['readUInt8'];
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are
@@ -317,7 +317,7 @@ interface BufferList {
    * @param offset
    */
 
-  readIntBE(offset: number): number;
+  readIntBE: Buffer['readIntBE'];
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are
@@ -329,7 +329,7 @@ interface BufferList {
    * @param offset
    */
 
-  readIntLE(offset: number): number;
+  readIntLE: Buffer['readIntLE'];
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are
@@ -341,7 +341,7 @@ interface BufferList {
    * @param offset
    */
 
-  readUIntBE(offset: number): number;
+  readUIntBE: Buffer['readUIntBE'];
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are
@@ -353,7 +353,7 @@ interface BufferList {
    * @param offset
    */
 
-  readUIntLE(offset: number): number;
+  readUIntLE: Buffer['readUIntLE'];
 }
 
 /**
