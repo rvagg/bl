@@ -35,7 +35,9 @@ interface BufferListStreamConstructor {
   BufferListStream: BufferListStreamConstructor;
 }
 
-interface BufferListStream extends Duplex, BL {}
+interface BufferListStream extends Duplex, BL {
+  prototype: BufferListStream & BL
+}
 
 /**
  * BufferListStream is a Node Duplex Stream, so it can be read from

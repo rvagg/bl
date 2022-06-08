@@ -25,6 +25,8 @@ export interface BufferListConstructor {
 }
 
 interface BufferList {
+  prototype: Object
+
   /**
    * Get the length of the list in bytes. This is the sum of the lengths
    * of all of the buffers contained in the list, minus any initial offset
