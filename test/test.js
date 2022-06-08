@@ -7,9 +7,34 @@ const path = require('path')
 const BufferListStream = require('../')
 const { Buffer } = require('buffer')
 
-const encodings =
-      ('hex utf8 utf-8 ascii binary base64' +
-          (process.browser ? '' : ' ucs2 ucs-2 utf16le utf-16le')).split(' ')
+/**
+ * This typedef allows us to add _bufs to the API without declaring it publicly on types.
+ * @typedef { BufferListStream & { _bufs?: Buffer[] }} BufferListStreamWithPrivate
+ */
+
+/**
+ * Just for typechecking in js
+ * @type { NodeJS.Process & { browser?: boolean }}
+ */
+
+const process = globalThis.process
+
+/** @type {BufferEncoding[]} */
+const encodings = ['ascii', 'utf8', 'utf-8', 'hex', 'binary', 'base64']
+
+if (process.browser) {
+  encodings.push(
+    'ucs2',
+    'ucs-2',
+    'utf16le',
+    /**
+     * This alias is not in typescript typings for BufferEncoding. Still have to fix
+     * @see https://nodejs.org/api/buffer.html#buffers-and-character-encodings
+     */
+    // @ts-ignore
+    'utf-16le'
+  )
+}
 
 require('./indexOf')
 require('./isBufferList')
@@ -258,6 +283,7 @@ tape('consuming from multiple buffers', function (t) {
 })
 
 tape('complete consumption', function (t) {
+  /** @type {BufferListStreamWithPrivate} */
   const bl = new BufferListStream()
 
   bl.append(Buffer.from('a'))
@@ -774,6 +800,7 @@ tape('duplicate', function (t) {
 tape('destroy no pipe', function (t) {
   t.plan(2)
 
+  /** @type {BufferListStreamWithPrivate} */
   const bl = new BufferListStream('alsdkfja;lsdkfja;lsdk')
 
   bl.destroy()
@@ -785,6 +812,7 @@ tape('destroy no pipe', function (t) {
 tape('destroy with error', function (t) {
   t.plan(3)
 
+  /** @type {BufferListStreamWithPrivate} */
   const bl = new BufferListStream('alsdkfja;lsdkfja;lsdk')
   const err = new Error('kaboom')
 
@@ -800,6 +828,7 @@ tape('destroy with error', function (t) {
 !process.browser && tape('destroy with pipe before read end', function (t) {
   t.plan(2)
 
+  /** @type {BufferListStreamWithPrivate} */
   const bl = new BufferListStream()
   fs.createReadStream(path.join(__dirname, '/test.js'))
     .pipe(bl)
@@ -813,6 +842,7 @@ tape('destroy with error', function (t) {
 !process.browser && tape('destroy with pipe before read end with race', function (t) {
   t.plan(2)
 
+  /** @type {BufferListStreamWithPrivate} */
   const bl = new BufferListStream()
 
   fs.createReadStream(path.join(__dirname, '/test.js'))
@@ -830,6 +860,7 @@ tape('destroy with error', function (t) {
 !process.browser && tape('destroy with pipe after read end', function (t) {
   t.plan(2)
 
+  /** @type {BufferListStreamWithPrivate} */
   const bl = new BufferListStream()
   fs.createReadStream(path.join(__dirname, '/test.js'))
     .on('end', onEnd)
@@ -846,6 +877,7 @@ tape('destroy with error', function (t) {
 !process.browser && tape('destroy with pipe while writing to a destination', function (t) {
   t.plan(4)
 
+  /** @type {BufferListStreamWithPrivate} */
   const bl = new BufferListStream()
   const ds = new BufferListStream()
 
