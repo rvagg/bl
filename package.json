@@ -6,8 +6,8 @@
   "main": "bl.js",
   "scripts": {
     "lint": "standard *.js test/*.js",
-    "test": "npm run lint && npm run test:typings && node test/test.js | faucet",
-    "test:typings": "npx tsc --allowJs --noEmit test/test.js"
+    "test": "npm run lint && npm run test:types && node test/test.js | faucet",
+    "test:types": "npx tsc --allowJs --noEmit test/test.js"
   },
   "repository": {
     "type": "git",
