@@ -1,13 +1,15 @@
 // @ts-check
 'use strict'
 
-const tape = require('tape')
+const { Buffer } = require('buffer')
 const crypto = require('crypto')
 const fs = require('fs')
-const path = require('path')
 const os = require('os')
+const path = require('path')
+
+const tape = require('tape')
+
 const BufferListStream = require('../')
-const { Buffer } = require('buffer')
 
 /**
  * This typedef allows us to add _bufs to the API without declaring it publicly on types.
