@@ -36,7 +36,7 @@ interface BufferListStreamConstructor {
 }
 
 interface BufferListStream extends Duplex, BL {
-  prototype: BufferListStream & BL
+  prototype: BufferListStream & BL;
 }
 
 /**
