@@ -540,7 +540,7 @@ tape('uninitialized memory', function (t) {
 !process.browser && tape('test stream', function (t) {
   const random = crypto.randomBytes(65534)
 
-    const bl = new BufferListStream((err, buf) => {
+  const bl = new BufferListStream((err, buf) => {
     t.ok(Buffer.isBuffer(buf))
     t.ok(err === null)
     t.ok(random.equals(bl.slice()))
