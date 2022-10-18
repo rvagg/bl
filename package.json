@@ -30,7 +30,7 @@
   "dependencies": {
     "buffer": "^6.0.3",
     "inherits": "^2.0.4",
-    "readable-stream": "^3.4.0"
+    "readable-stream": "^4.2.0"
   },
   "devDependencies": {
     "@types/readable-stream": "^2.3.13",
