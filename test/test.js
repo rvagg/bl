@@ -10,8 +10,12 @@ const BufferListStream = require('../')
 const { Buffer } = require('buffer')
 
 /**
+ * @typedef { { _bufs?: Buffer[] } } InternalBufferArray;
+ */
+
+/**
  * This typedef allows us to add _bufs to the API without declaring it publicly on types.
- * @typedef { BufferListStream & { _bufs?: Buffer[] }} BufferListStreamWithPrivate
+ * @typedef { BufferListStream & InternalBufferArray} BufferListStreamWithPrivate
  */
 
 /**
@@ -158,10 +162,10 @@ tape('multiple bytes from crazy nested buffer lists', function (t) {
       new BufferListStream([
         new BufferListStream(Buffer.from('abc')),
         Buffer.from('d'),
-        new BufferListStream(Buffer.from('efg'))
+        new BufferListStream(Buffer.from('efg')),
       ]),
       new BufferListStream([Buffer.from('hi')]),
-      new BufferListStream(Buffer.from('j'))
+      new BufferListStream(Buffer.from('j')),
     ])
   )
 
@@ -196,7 +200,11 @@ tape('append accepts arrays of Uint8Arrays', function (t) {
   bl.append(new Uint8Array([97, 98, 99]))
   bl.append([Uint8Array.from([100, 101, 102])])
   bl.append([new Uint8Array([103, 104, 105]), new Uint8Array([106, 107, 108])])
-  bl.append([new Uint8Array([109, 110, 111, 112]), new Uint8Array([113, 114, 115, 116, 117]), new Uint8Array([118, 119, 120, 121, 122])])
+  bl.append([
+    new Uint8Array([109, 110, 111, 112]),
+    new Uint8Array([113, 114, 115, 116, 117]),
+    new Uint8Array([118, 119, 120, 121, 122]),
+  ])
   t.equal(bl.length, 26)
   t.equal(bl.slice().toString('ascii'), 'abcdefghijklmnopqrstuvwxyz')
 
@@ -213,7 +221,7 @@ tape('append accepts arrays of BufferLists', function (t) {
   )
   bl.append([
     Buffer.from('mnop'),
-    new BufferListStream([Buffer.from('qrstu'), Buffer.from('vwxyz')])
+    new BufferListStream([Buffer.from('qrstu'), Buffer.from('vwxyz')]),
   ])
   t.equal(bl.length, 26)
   t.equal(bl.slice().toString('ascii'), 'abcdefghijklmnopqrstuvwxyz')
@@ -240,7 +248,7 @@ tape('append chainable (test results)', function (t) {
     )
     .append([
       Buffer.from('mnop'),
-      new BufferListStream([Buffer.from('qrstu'), Buffer.from('vwxyz')])
+      new BufferListStream([Buffer.from('qrstu'), Buffer.from('vwxyz')]),
     ])
 
   t.equal(bl.length, 26)
@@ -328,65 +336,71 @@ tape('test readUInt8 / readInt8', function (t) {
   t.end()
 })
 
-tape('test readUInt16LE / readUInt16BE / readInt16LE / readInt16BE', function (t) {
-  const buf1 = Buffer.alloc(1)
-  const buf2 = Buffer.alloc(3)
-  const buf3 = Buffer.alloc(3)
-  const bl = new BufferListStream()
+tape(
+  'test readUInt16LE / readUInt16BE / readInt16LE / readInt16BE',
+  function (t) {
+    const buf1 = Buffer.alloc(1)
+    const buf2 = Buffer.alloc(3)
+    const buf3 = Buffer.alloc(3)
+    const bl = new BufferListStream()
 
-  buf1[0] = 0x1
-  buf2[1] = 0x3
-  buf2[2] = 0x4
-  buf3[0] = 0x23
-  buf3[1] = 0x42
+    buf1[0] = 0x1
+    buf2[1] = 0x3
+    buf2[2] = 0x4
+    buf3[0] = 0x23
+    buf3[1] = 0x42
 
-  bl.append(buf1)
-  bl.append(buf2)
-  bl.append(buf3)
+    bl.append(buf1)
+    bl.append(buf2)
+    bl.append(buf3)
 
-  t.equal(bl.readUInt16BE(), 0x0100)
-  t.equal(bl.readUInt16LE(), 0x0001)
-  t.equal(bl.readUInt16BE(2), 0x0304)
-  t.equal(bl.readUInt16LE(2), 0x0403)
-  t.equal(bl.readInt16BE(2), 0x0304)
-  t.equal(bl.readInt16LE(2), 0x0403)
-  t.equal(bl.readUInt16BE(3), 0x0423)
-  t.equal(bl.readUInt16LE(3), 0x2304)
-  t.equal(bl.readInt16BE(3), 0x0423)
-  t.equal(bl.readInt16LE(3), 0x2304)
-  t.equal(bl.readUInt16BE(4), 0x2342)
-  t.equal(bl.readUInt16LE(4), 0x4223)
-  t.equal(bl.readInt16BE(4), 0x2342)
-  t.equal(bl.readInt16LE(4), 0x4223)
+    t.equal(bl.readUInt16BE(), 0x0100)
+    t.equal(bl.readUInt16LE(), 0x0001)
+    t.equal(bl.readUInt16BE(2), 0x0304)
+    t.equal(bl.readUInt16LE(2), 0x0403)
+    t.equal(bl.readInt16BE(2), 0x0304)
+    t.equal(bl.readInt16LE(2), 0x0403)
+    t.equal(bl.readUInt16BE(3), 0x0423)
+    t.equal(bl.readUInt16LE(3), 0x2304)
+    t.equal(bl.readInt16BE(3), 0x0423)
+    t.equal(bl.readInt16LE(3), 0x2304)
+    t.equal(bl.readUInt16BE(4), 0x2342)
+    t.equal(bl.readUInt16LE(4), 0x4223)
+    t.equal(bl.readInt16BE(4), 0x2342)
+    t.equal(bl.readInt16LE(4), 0x4223)
 
-  t.end()
-})
+    t.end()
+  }
+)
 
-tape('test readUInt32LE / readUInt32BE / readInt32LE / readInt32BE', function (t) {
-  const buf1 = Buffer.alloc(1)
-  const buf2 = Buffer.alloc(3)
-  const buf3 = Buffer.alloc(3)
-  const bl = new BufferListStream()
+tape(
+  'test readUInt32LE / readUInt32BE / readInt32LE / readInt32BE',
+  function (t) {
+    const buf1 = Buffer.alloc(1)
+    const buf2 = Buffer.alloc(3)
+    const buf3 = Buffer.alloc(3)
+    const bl = new BufferListStream()
 
-  buf1[0] = 0x1
-  buf2[1] = 0x3
-  buf2[2] = 0x4
-  buf3[0] = 0x23
-  buf3[1] = 0x42
+    buf1[0] = 0x1
+    buf2[1] = 0x3
+    buf2[2] = 0x4
+    buf3[0] = 0x23
+    buf3[1] = 0x42
 
-  bl.append(buf1)
-  bl.append(buf2)
-  bl.append(buf3)
+    bl.append(buf1)
+    bl.append(buf2)
+    bl.append(buf3)
 
-  t.equal(bl.readUInt32BE(), 0x01000304)
-  t.equal(bl.readUInt32LE(), 0x04030001)
-  t.equal(bl.readUInt32BE(2), 0x03042342)
-  t.equal(bl.readUInt32LE(2), 0x42230403)
-  t.equal(bl.readInt32BE(2), 0x03042342)
-  t.equal(bl.readInt32LE(2), 0x42230403)
+    t.equal(bl.readUInt32BE(), 0x01000304)
+    t.equal(bl.readUInt32LE(), 0x04030001)
+    t.equal(bl.readUInt32BE(2), 0x03042342)
+    t.equal(bl.readUInt32LE(2), 0x42230403)
+    t.equal(bl.readInt32BE(2), 0x03042342)
+    t.equal(bl.readInt32LE(2), 0x42230403)
 
-  t.end()
-})
+    t.end()
+  }
+)
 
 tape('test readUIntLE / readUIntBE / readIntLE / readIntBE', function (t) {
   const buf1 = Buffer.alloc(1)
@@ -537,20 +551,24 @@ tape('uninitialized memory', function (t) {
   t.end()
 })
 
-!process.browser && tape('test stream', function (t) {
-  const random = crypto.randomBytes(65534)
+!process.browser &&
+  tape('test stream', function (t) {
+    const random = crypto.randomBytes(65534)
 
-  const bl = new BufferListStream((err, buf) => {
-    t.ok(Buffer.isBuffer(buf))
-    t.ok(err === null)
-    t.ok(random.equals(bl.slice()))
-    t.ok(random.equals(buf.slice()))
+    const bl = new BufferListStream((err, buf) => {
+      t.ok(Buffer.isBuffer(buf))
+      t.ok(err === null)
+      t.ok(random.equals(bl.slice()))
+      t.ok(random.equals(buf.slice()))
 
-    bl.pipe(fs.createWriteStream(path.join(os.tmpdir(), 'bl_test_rnd_out.dat')))
-      .on('close', function () {
+      bl.pipe(
+        fs.createWriteStream(path.join(os.tmpdir(), 'bl_test_rnd_out.dat'))
+      ).on('close', function () {
         const rndhash = crypto.createHash('md5').update(random).digest('hex')
         const md5sum = crypto.createHash('md5')
-        const s = fs.createReadStream(path.join(os.tmpdir(), 'bl_test_rnd_out.dat'))
+        const s = fs.createReadStream(
+          path.join(os.tmpdir(), 'bl_test_rnd_out.dat')
+        )
 
         s.on('data', md5sum.update.bind(md5sum))
         s.on('end', function () {
@@ -558,11 +576,11 @@ tape('uninitialized memory', function (t) {
           t.end()
         })
       })
-  })
+    })
 
-  fs.writeFileSync(path.join(os.tmpdir(), 'bl_test_rnd.dat'), random)
-  fs.createReadStream(path.join(os.tmpdir(), 'bl_test_rnd.dat')).pipe(bl)
-})
+    fs.writeFileSync(path.join(os.tmpdir(), 'bl_test_rnd.dat'), random)
+    fs.createReadStream(path.join(os.tmpdir(), 'bl_test_rnd.dat')).pipe(bl)
+  })
 
 tape('instantiation with Buffer', function (t) {
   const buf = crypto.randomBytes(1024)
@@ -571,7 +589,11 @@ tape('instantiation with Buffer', function (t) {
 
   t.equal(buf.toString('hex'), b.slice().toString('hex'), 'same buffer')
   b = BufferListStream([buf, buf2])
-  t.equal(b.slice().toString('hex'), Buffer.concat([buf, buf2]).toString('hex'), 'same buffer')
+  t.equal(
+    b.slice().toString('hex'),
+    Buffer.concat([buf, buf2]).toString('hex'),
+    'same buffer'
+  )
 
   t.end()
 })
@@ -676,7 +698,11 @@ tape('copy at a precise position', function (t) {
   const b = BufferListStream(buf)
 
   b.copy(buf2, 20)
-  t.equal(b.slice().toString('hex'), buf2.slice(20).toString('hex'), 'same buffer')
+  t.equal(
+    b.slice().toString('hex'),
+    buf2.slice(20).toString('hex'),
+    'same buffer'
+  )
 
   t.end()
 })
@@ -762,7 +788,11 @@ tape('shallow slice with negative or omitted indices', function (t) {
 tape('shallow slice does not make a copy', function (t) {
   t.plan(1)
 
-  const buffers = [Buffer.from('First'), Buffer.from('Second'), Buffer.from('Third')]
+  const buffers = [
+    Buffer.from('First'),
+    Buffer.from('Second'),
+    Buffer.from('Third'),
+  ]
   const bl = new BufferListStream(buffers).shallowSlice(5, -3)
 
   buffers[1].fill('h')
@@ -774,8 +804,12 @@ tape('shallow slice does not make a copy', function (t) {
 tape('shallow slice with 0 length', function (t) {
   t.plan(1)
 
-  const buffers = [Buffer.from('First'), Buffer.from('Second'), Buffer.from('Third')]
-  const bl = (new BufferListStream(buffers)).shallowSlice(0, 0)
+  const buffers = [
+    Buffer.from('First'),
+    Buffer.from('Second'),
+    Buffer.from('Third'),
+  ]
+  const bl = new BufferListStream(buffers).shallowSlice(0, 0)
 
   t.equal(bl.length, 0)
 })
@@ -783,8 +817,12 @@ tape('shallow slice with 0 length', function (t) {
 tape('shallow slice with 0 length from middle', function (t) {
   t.plan(1)
 
-  const buffers = [Buffer.from('First'), Buffer.from('Second'), Buffer.from('Third')]
-  const bl = (new BufferListStream(buffers)).shallowSlice(10, 10)
+  const buffers = [
+    Buffer.from('First'),
+    Buffer.from('Second'),
+    Buffer.from('Third'),
+  ]
+  const bl = new BufferListStream(buffers).shallowSlice(10, 10)
 
   t.equal(bl.length, 0)
 })
@@ -827,88 +865,93 @@ tape('destroy with error', function (t) {
   t.equal(bl.length, 0)
 })
 
-!process.browser && tape('destroy with pipe before read end', function (t) {
-  t.plan(2)
+!process.browser &&
+  tape('destroy with pipe before read end', function (t) {
+    t.plan(2)
 
-  /** @type {BufferListStreamWithPrivate} */
-  const bl = new BufferListStream()
-  fs.createReadStream(path.join(__dirname, '/test.js'))
-    .pipe(bl)
+    /** @type {BufferListStreamWithPrivate} */
+    const bl = new BufferListStream()
+    fs.createReadStream(path.join(__dirname, '/test.js')).pipe(bl)
 
-  bl.destroy()
-
-  t.equal(bl._bufs.length, 0)
-  t.equal(bl.length, 0)
-})
-
-!process.browser && tape('destroy with pipe before read end with race', function (t) {
-  t.plan(2)
-
-  /** @type {BufferListStreamWithPrivate} */
-  const bl = new BufferListStream()
-
-  fs.createReadStream(path.join(__dirname, '/test.js'))
-    .pipe(bl)
-
-  setTimeout(function () {
-    bl.destroy()
-    setTimeout(function () {
-      t.equal(bl._bufs.length, 0)
-      t.equal(bl.length, 0)
-    }, 500)
-  }, 500)
-})
-
-!process.browser && tape('destroy with pipe after read end', function (t) {
-  t.plan(2)
-
-  /** @type {BufferListStreamWithPrivate} */
-  const bl = new BufferListStream()
-  fs.createReadStream(path.join(__dirname, '/test.js'))
-    .on('end', onEnd)
-    .pipe(bl)
-
-  function onEnd () {
     bl.destroy()
 
     t.equal(bl._bufs.length, 0)
     t.equal(bl.length, 0)
-  }
-})
+  })
 
-!process.browser && tape('destroy with pipe while writing to a destination', function (t) {
-  t.plan(4)
+!process.browser &&
+  tape('destroy with pipe before read end with race', function (t) {
+    t.plan(2)
 
-  /** @type {BufferListStreamWithPrivate} */
-  const bl = new BufferListStream()
-  const ds = new BufferListStream()
+    /** @type {BufferListStreamWithPrivate} */
+    const bl = new BufferListStream()
 
-  fs.createReadStream(path.join(__dirname, '/test.js'))
-    .on('end', onEnd)
-    .pipe(bl)
-
-  function onEnd () {
-    bl.pipe(ds)
+    fs.createReadStream(path.join(__dirname, '/test.js')).pipe(bl)
 
     setTimeout(function () {
       bl.destroy()
+      setTimeout(function () {
+        t.equal(bl._bufs.length, 0)
+        t.equal(bl.length, 0)
+      }, 500)
+    }, 500)
+  })
 
-      t.equals(bl._bufs.length, 0)
-      t.equals(bl.length, 0)
+!process.browser &&
+  tape('destroy with pipe after read end', function (t) {
+    t.plan(2)
 
-      ds.destroy()
+    /** @type {BufferListStreamWithPrivate} */
+    const bl = new BufferListStream()
+    fs.createReadStream(path.join(__dirname, '/test.js'))
+      .on('end', onEnd)
+      .pipe(bl)
 
-      t.equals(bl._bufs.length, 0)
-      t.equals(bl.length, 0)
-    }, 100)
-  }
-})
+    function onEnd() {
+      bl.destroy()
 
-!process.browser && tape('handle error', function (t) {
-  t.plan(2)
+      t.equal(bl._bufs.length, 0)
+      t.equal(bl.length, 0)
+    }
+  })
 
-  fs.createReadStream('/does/not/exist').pipe(BufferListStream(function (err, data) {
-    t.ok(err instanceof Error, 'has error')
-    t.notOk(data, 'no data')
-  }))
-})
+!process.browser &&
+  tape('destroy with pipe while writing to a destination', function (t) {
+    t.plan(4)
+
+    /** @type {BufferListStreamWithPrivate} */
+    const bl = new BufferListStream()
+    const ds = new BufferListStream()
+
+    fs.createReadStream(path.join(__dirname, '/test.js'))
+      .on('end', onEnd)
+      .pipe(bl)
+
+    function onEnd() {
+      bl.pipe(ds)
+
+      setTimeout(function () {
+        bl.destroy()
+
+        t.equals(bl._bufs.length, 0)
+        t.equals(bl.length, 0)
+
+        ds.destroy()
+
+        t.equals(bl._bufs.length, 0)
+        t.equals(bl.length, 0)
+      }, 100)
+    }
+  })
+
+!process.browser &&
+  tape('handle error', function (t) {
+    t.plan(2)
+
+    fs.createReadStream('/does/not/exist').pipe(
+      BufferListStream(function (err, data) {
+        t.ok(err instanceof Error, 'has error')
+        t.notOk(data, 'no data')
+      })
+    )
+  })

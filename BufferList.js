@@ -3,7 +3,7 @@
 const { Buffer } = require('buffer')
 const symbol = Symbol.for('BufferList')
 
-function BufferList (buf) {
+function BufferList(buf) {
   if (!(this instanceof BufferList)) {
     return new BufferList(buf)
   }
@@ -11,7 +11,7 @@ function BufferList (buf) {
   BufferList._init.call(this, buf)
 }
 
-BufferList._init = function _init (buf) {
+BufferList._init = function _init(buf) {
   Object.defineProperty(this, symbol, { value: true })
 
   this._bufs = []
@@ -22,11 +22,11 @@ BufferList._init = function _init (buf) {
   }
 }
 
-BufferList.prototype._new = function _new (buf) {
+BufferList.prototype._new = function _new(buf) {
   return new BufferList(buf)
 }
 
-BufferList.prototype._offset = function _offset (offset) {
+BufferList.prototype._offset = function _offset(offset) {
   if (offset === 0) {
     return [0, 0]
   }
@@ -53,7 +53,7 @@ BufferList.prototype._reverseOffset = function (blOffset) {
   return offset
 }
 
-BufferList.prototype.get = function get (index) {
+BufferList.prototype.get = function get(index) {
   if (index > this.length || index < 0) {
     return undefined
   }
@@ -63,7 +63,7 @@ BufferList.prototype.get = function get (index) {
   return this._bufs[offset[0]][offset[1]]
 }
 
-BufferList.prototype.slice = function slice (start, end) {
+BufferList.prototype.slice = function slice(start, end) {
   if (typeof start === 'number' && start < 0) {
     start += this.length
   }
@@ -75,7 +75,7 @@ BufferList.prototype.slice = function slice (start, end) {
   return this.copy(null, 0, start, end)
 }
 
-BufferList.prototype.copy = function copy (dst, dstStart, srcStart, srcEnd) {
+BufferList.prototype.copy = function copy(dst, dstStart, srcStart, srcEnd) {
   if (typeof srcStart !== 'number' || srcStart < 0) {
     srcStart = 0
   }
@@ -154,7 +154,7 @@ BufferList.prototype.copy = function copy (dst, dstStart, srcStart, srcEnd) {
   return dst
 }
 
-BufferList.prototype.shallowSlice = function shallowSlice (start, end) {
+BufferList.prototype.shallowSlice = function shallowSlice(start, end) {
   start = start || 0
   end = typeof end !== 'number' ? this.length : end
 
@@ -177,7 +177,10 @@ BufferList.prototype.shallowSlice = function shallowSlice (start, end) {
   if (endOffset[1] === 0) {
     buffers.pop()
   } else {
-    buffers[buffers.length - 1] = buffers[buffers.length - 1].slice(0, endOffset[1])
+    buffers[buffers.length - 1] = buffers[buffers.length - 1].slice(
+      0,
+      endOffset[1]
+    )
   }
 
   if (startOffset[1] !== 0) {
@@ -187,11 +190,11 @@ BufferList.prototype.shallowSlice = function shallowSlice (start, end) {
   return this._new(buffers)
 }
 
-BufferList.prototype.toString = function toString (encoding, start, end) {
+BufferList.prototype.toString = function toString(encoding, start, end) {
   return this.slice(start, end).toString(encoding)
 }
 
-BufferList.prototype.consume = function consume (bytes) {
+BufferList.prototype.consume = function consume(bytes) {
   // first, normalize the argument, in accordance with how Buffer does it
   bytes = Math.trunc(bytes)
   // do nothing if not a positive number
@@ -212,7 +215,7 @@ BufferList.prototype.consume = function consume (bytes) {
   return this
 }
 
-BufferList.prototype.duplicate = function duplicate () {
+BufferList.prototype.duplicate = function duplicate() {
   const copy = this._new()
 
   for (let i = 0; i < this._bufs.length; i++) {
@@ -222,7 +225,7 @@ BufferList.prototype.duplicate = function duplicate () {
   return copy
 }
 
-BufferList.prototype.append = function append (buf) {
+BufferList.prototype.append = function append(buf) {
   if (buf == null) {
     return this
   }
@@ -252,7 +255,7 @@ BufferList.prototype.append = function append (buf) {
   return this
 }
 
-BufferList.prototype._appendBuffer = function appendBuffer (buf) {
+BufferList.prototype._appendBuffer = function appendBuffer(buf) {
   this._bufs.push(buf)
   this.length += buf.length
 }
@@ -264,7 +267,9 @@ BufferList.prototype.indexOf = function (search, offset, encoding) {
   }
 
   if (typeof search === 'function' || Array.isArray(search)) {
-    throw new TypeError('The "value" argument must be one of type string, Buffer, BufferList, or Uint8Array.')
+    throw new TypeError(
+      'The "value" argument must be one of type string, Buffer, BufferList, or Uint8Array.'
+    )
   } else if (typeof search === 'number') {
     search = Buffer.from([search])
   } else if (typeof search === 'string') {
@@ -343,7 +348,6 @@ BufferList.prototype._match = function (offset, search) {
   }
   return true
 }
-
 ;(function () {
   const methods = {
     readDoubleBE: 8,
@@ -363,11 +367,11 @@ BufferList.prototype._match = function (offset, search) {
     readIntBE: null,
     readIntLE: null,
     readUIntBE: null,
-    readUIntLE: null
+    readUIntLE: null,
   }
 
   for (const m in methods) {
-    (function (m) {
+    ;(function (m) {
       if (methods[m] === null) {
         BufferList.prototype[m] = function (offset, byteLength) {
           return this.slice(offset, offset + byteLength)[m](0, byteLength)
@@ -377,19 +381,19 @@ BufferList.prototype._match = function (offset, search) {
           return this.slice(offset, offset + methods[m])[m](0)
         }
       }
-    }(m))
+    })(m)
   }
-}())
+})()
 
 // Used internally by the class and also as an indicator of this object being
 // a `BufferList`. It's not possible to use `instanceof BufferList` in a browser
 // environment because there could be multiple different copies of the
 // BufferList class and some `BufferList`s might be `BufferList`s.
-BufferList.prototype._isBufferList = function _isBufferList (b) {
+BufferList.prototype._isBufferList = function _isBufferList(b) {
   return b instanceof BufferList || BufferList.isBufferList(b)
 }
 
-BufferList.isBufferList = function isBufferList (b) {
+BufferList.isBufferList = function isBufferList(b) {
   return b != null && b[symbol]
 }
 

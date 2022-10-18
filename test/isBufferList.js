@@ -21,7 +21,7 @@ tape('isBufferList negatives', (t) => {
     {},
     [],
     Buffer.alloc(0),
-    [Buffer.alloc(0)]
+    [Buffer.alloc(0)],
   ]
 
   for (const obj of types) {
