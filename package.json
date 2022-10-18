@@ -7,7 +7,9 @@
   "scripts": {
     "lint": "standard *.js test/*.js",
     "test": "npm run lint && npm run test:types && node test/test.js | faucet",
+    "test:ci": "npm run lint && node test/test.js && npm run test:types",
     "test:types": "tsc --allowJs --noEmit test/test.js"
+    "build": "true"
   },
   "repository": {
     "type": "git",
@@ -33,8 +35,89 @@
   "devDependencies": {
     "@types/readable-stream": "^2.3.13",
     "faucet": "~0.0.1",
-    "standard": "^16.0.3",
+    "standard": "^17.0.0",
     "tape": "^5.2.2",
     "typescript": "~4.7.3"
+  },
+  "release": {
+    "branches": [
+      "master"
+    ],
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits",
+          "releaseRules": [
+            {
+              "breaking": true,
+              "release": "major"
+            },
+            {
+              "revert": true,
+              "release": "patch"
+            },
+            {
+              "type": "feat",
+              "release": "minor"
+            },
+            {
+              "type": "fix",
+              "release": "patch"
+            },
+            {
+              "type": "chore",
+              "release": "patch"
+            },
+            {
+              "type": "docs",
+              "release": "patch"
+            },
+            {
+              "type": "test",
+              "release": "patch"
+            },
+            {
+              "scope": "no-release",
+              "release": false
+            }
+          ]
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits",
+          "presetConfig": {
+            "types": [
+              {
+                "type": "feat",
+                "section": "Features"
+              },
+              {
+                "type": "fix",
+                "section": "Bug Fixes"
+              },
+              {
+                "type": "chore",
+                "section": "Trivial Changes"
+              },
+              {
+                "type": "docs",
+                "section": "Trivial Changes"
+              },
+              {
+                "type": "test",
+                "section": "Tests"
+              }
+            ]
+          }
+        }
+      ],
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/github",
+      "@semantic-release/git"
+    ]
   }
 }

@@ -5,6 +5,7 @@ const tape = require('tape')
 const crypto = require('crypto')
 const fs = require('fs')
 const path = require('path')
+const os = require('os')
 const BufferListStream = require('../')
 const { Buffer } = require('buffer')
 
@@ -545,11 +546,11 @@ tape('uninitialized memory', function (t) {
     t.ok(random.equals(bl.slice()))
     t.ok(random.equals(buf.slice()))
 
-    bl.pipe(fs.createWriteStream('/tmp/bl_test_rnd_out.dat'))
+    bl.pipe(fs.createWriteStream(path.join(os.tmpdir(), 'bl_test_rnd_out.dat')))
       .on('close', function () {
         const rndhash = crypto.createHash('md5').update(random).digest('hex')
         const md5sum = crypto.createHash('md5')
-        const s = fs.createReadStream('/tmp/bl_test_rnd_out.dat')
+        const s = fs.createReadStream(path.join(os.tmpdir(), 'bl_test_rnd_out.dat'))
 
         s.on('data', md5sum.update.bind(md5sum))
         s.on('end', function () {
@@ -559,8 +560,8 @@ tape('uninitialized memory', function (t) {
       })
   })
 
-  fs.writeFileSync('/tmp/bl_test_rnd.dat', random)
-  fs.createReadStream('/tmp/bl_test_rnd.dat').pipe(bl)
+  fs.writeFileSync(path.join(os.tmpdir(), 'bl_test_rnd.dat'), random)
+  fs.createReadStream(path.join(os.tmpdir(), 'bl_test_rnd.dat')).pipe(bl)
 })
 
 tape('instantiation with Buffer', function (t) {
