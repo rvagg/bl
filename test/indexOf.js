@@ -77,65 +77,90 @@ tape('indexOf buffers smaller and larger than the needle', (t) => {
 })
 
 // only present in node 6+
-;(process.version.substr(1).split('.')[0] >= 6) && tape('indexOf latin1 and binary encoding', (t) => {
-  const b = new BufferList('abcdef')
+process.version.substr(1).split('.')[0] >= 6 &&
+  tape('indexOf latin1 and binary encoding', (t) => {
+    const b = new BufferList('abcdef')
 
-  // test latin1 encoding
-  t.equal(
-    new BufferList(Buffer.from(b.toString('latin1'), 'latin1'))
-      .indexOf('d', 0, 'latin1'),
-    3
-  )
-  t.equal(
-    new BufferList(Buffer.from(b.toString('latin1'), 'latin1'))
-      .indexOf(Buffer.from('d', 'latin1'), 0, 'latin1'),
-    3
-  )
-  t.equal(
-    new BufferList(Buffer.from('aa\u00e8aa', 'latin1'))
-      .indexOf('\u00e8', 'latin1'),
-    2
-  )
-  t.equal(
-    new BufferList(Buffer.from('\u00e8', 'latin1'))
-      .indexOf('\u00e8', 'latin1'),
-    0
-  )
-  t.equal(
-    new BufferList(Buffer.from('\u00e8', 'latin1'))
-      .indexOf(Buffer.from('\u00e8', 'latin1'), 'latin1'),
-    0
-  )
+    // test latin1 encoding
+    t.equal(
+      new BufferList(Buffer.from(b.toString('latin1'), 'latin1')).indexOf(
+        'd',
+        0,
+        'latin1'
+      ),
+      3
+    )
+    t.equal(
+      new BufferList(Buffer.from(b.toString('latin1'), 'latin1')).indexOf(
+        Buffer.from('d', 'latin1'),
+        0,
+        'latin1'
+      ),
+      3
+    )
+    t.equal(
+      new BufferList(Buffer.from('aa\u00e8aa', 'latin1')).indexOf(
+        '\u00e8',
+        'latin1'
+      ),
+      2
+    )
+    t.equal(
+      new BufferList(Buffer.from('\u00e8', 'latin1')).indexOf(
+        '\u00e8',
+        'latin1'
+      ),
+      0
+    )
+    t.equal(
+      new BufferList(Buffer.from('\u00e8', 'latin1')).indexOf(
+        Buffer.from('\u00e8', 'latin1'),
+        'latin1'
+      ),
+      0
+    )
 
-  // test binary encoding
-  t.equal(
-    new BufferList(Buffer.from(b.toString('binary'), 'binary'))
-      .indexOf('d', 0, 'binary'),
-    3
-  )
-  t.equal(
-    new BufferList(Buffer.from(b.toString('binary'), 'binary'))
-      .indexOf(Buffer.from('d', 'binary'), 0, 'binary'),
-    3
-  )
-  t.equal(
-    new BufferList(Buffer.from('aa\u00e8aa', 'binary'))
-      .indexOf('\u00e8', 'binary'),
-    2
-  )
-  t.equal(
-    new BufferList(Buffer.from('\u00e8', 'binary'))
-      .indexOf('\u00e8', 'binary'),
-    0
-  )
-  t.equal(
-    new BufferList(Buffer.from('\u00e8', 'binary'))
-      .indexOf(Buffer.from('\u00e8', 'binary'), 'binary'),
-    0
-  )
+    // test binary encoding
+    t.equal(
+      new BufferList(Buffer.from(b.toString('binary'), 'binary')).indexOf(
+        'd',
+        0,
+        'binary'
+      ),
+      3
+    )
+    t.equal(
+      new BufferList(Buffer.from(b.toString('binary'), 'binary')).indexOf(
+        Buffer.from('d', 'binary'),
+        0,
+        'binary'
+      ),
+      3
+    )
+    t.equal(
+      new BufferList(Buffer.from('aa\u00e8aa', 'binary')).indexOf(
+        '\u00e8',
+        'binary'
+      ),
+      2
+    )
+    t.equal(
+      new BufferList(Buffer.from('\u00e8', 'binary')).indexOf(
+        '\u00e8',
+        'binary'
+      ),
+      0
+    )
+    t.equal(
+      new BufferList(Buffer.from('\u00e8', 'binary')).indexOf(
+        Buffer.from('\u00e8', 'binary'),
+        'binary'
+      ),
+      0
+    )
 
-  t.end()
-})
+    t.end()
+  })
 
 tape('indexOf the entire nodejs10 buffer test suite', (t) => {
   const b = new BufferList('abcdef')
@@ -214,38 +239,38 @@ tape('indexOf the entire nodejs10 buffer test suite', (t) => {
   t.throws(() => b.indexOf('bad', 'enc'), TypeError)
 
   // test hex encoding
+  t.equal(Buffer.from(b.toString('hex'), 'hex').indexOf('64', 0, 'hex'), 3)
   t.equal(
-    Buffer.from(b.toString('hex'), 'hex')
-      .indexOf('64', 0, 'hex'),
-    3
-  )
-  t.equal(
-    Buffer.from(b.toString('hex'), 'hex')
-      .indexOf(Buffer.from('64', 'hex'), 0, 'hex'),
+    Buffer.from(b.toString('hex'), 'hex').indexOf(
+      Buffer.from('64', 'hex'),
+      0,
+      'hex'
+    ),
     3
   )
 
   // test base64 encoding
   t.equal(
-    Buffer.from(b.toString('base64'), 'base64')
-      .indexOf('ZA==', 0, 'base64'),
+    Buffer.from(b.toString('base64'), 'base64').indexOf('ZA==', 0, 'base64'),
     3
   )
   t.equal(
-    Buffer.from(b.toString('base64'), 'base64')
-      .indexOf(Buffer.from('ZA==', 'base64'), 0, 'base64'),
+    Buffer.from(b.toString('base64'), 'base64').indexOf(
+      Buffer.from('ZA==', 'base64'),
+      0,
+      'base64'
+    ),
     3
   )
 
   // test ascii encoding
+  t.equal(Buffer.from(b.toString('ascii'), 'ascii').indexOf('d', 0, 'ascii'), 3)
   t.equal(
-    Buffer.from(b.toString('ascii'), 'ascii')
-      .indexOf('d', 0, 'ascii'),
-    3
-  )
-  t.equal(
-    Buffer.from(b.toString('ascii'), 'ascii')
-      .indexOf(Buffer.from('d', 'ascii'), 0, 'ascii'),
+    Buffer.from(b.toString('ascii'), 'ascii').indexOf(
+      Buffer.from('d', 'ascii'),
+      0,
+      'ascii'
+    ),
     3
   )
 
@@ -260,24 +285,28 @@ tape('indexOf the entire nodejs10 buffer test suite', (t) => {
     t.equal(8, twoByteString.indexOf('\u0395', 4, 'ucs2'))
     t.equal(6, twoByteString.indexOf('\u03a3', -4, 'ucs2'))
     t.equal(4, twoByteString.indexOf('\u03a3', -6, 'ucs2'))
-    t.equal(4, twoByteString.indexOf(
-      Buffer.from('\u03a3', 'ucs2'), -6, 'ucs2'))
+    t.equal(4, twoByteString.indexOf(Buffer.from('\u03a3', 'ucs2'), -6, 'ucs2'))
     t.equal(-1, twoByteString.indexOf('\u03a3', -2, 'ucs2'))
   }
 
-  const mixedByteStringUcs2 =
-      Buffer.from('\u039a\u0391abc\u03a3\u03a3\u0395', 'ucs2')
+  const mixedByteStringUcs2 = Buffer.from(
+    '\u039a\u0391abc\u03a3\u03a3\u0395',
+    'ucs2'
+  )
 
   t.equal(6, mixedByteStringUcs2.indexOf('bc', 0, 'ucs2'))
   t.equal(10, mixedByteStringUcs2.indexOf('\u03a3', 0, 'ucs2'))
   t.equal(-1, mixedByteStringUcs2.indexOf('\u0396', 0, 'ucs2'))
 
+  t.equal(6, mixedByteStringUcs2.indexOf(Buffer.from('bc', 'ucs2'), 0, 'ucs2'))
   t.equal(
-    6, mixedByteStringUcs2.indexOf(Buffer.from('bc', 'ucs2'), 0, 'ucs2'))
+    10,
+    mixedByteStringUcs2.indexOf(Buffer.from('\u03a3', 'ucs2'), 0, 'ucs2')
+  )
   t.equal(
-    10, mixedByteStringUcs2.indexOf(Buffer.from('\u03a3', 'ucs2'), 0, 'ucs2'))
-  t.equal(
-    -1, mixedByteStringUcs2.indexOf(Buffer.from('\u0396', 'ucs2'), 0, 'ucs2'))
+    -1,
+    mixedByteStringUcs2.indexOf(Buffer.from('\u0396', 'ucs2'), 0, 'ucs2')
+  )
 
   {
     const twoByteString = Buffer.from('\u039a\u0391\u03a3\u03a3\u0395', 'ucs2')
@@ -317,7 +346,8 @@ tape('indexOf the entire nodejs10 buffer test suite', (t) => {
   // Test complex string indexOf algorithms. Only trigger for long strings.
   // Long string that isn't a simple repeat of a shorter string.
   let longString = 'A'
-  for (let i = 66; i < 76; i++) { // from 'B' to 'K'
+  for (let i = 66; i < 76; i++) {
+    // from 'B' to 'K'
     longString = longString + String.fromCharCode(i) + longString
   }
 
@@ -327,8 +357,7 @@ tape('indexOf the entire nodejs10 buffer test suite', (t) => {
   let pattern = 'ABACABADABACABA'
   for (let i = 0; i < longBufferString.length - pattern.length; i += 7) {
     const index = longBufferString.indexOf(pattern, i)
-    t.equal((i + 15) & ~0xf, index,
-      `Long ABACABA...-string at index ${i}`)
+    t.equal((i + 15) & ~0xf, index, `Long ABACABA...-string at index ${i}`)
   }
 
   let index = longBufferString.indexOf('AJABACA')
@@ -340,12 +369,10 @@ tape('indexOf the entire nodejs10 buffer test suite', (t) => {
   index = longBufferString.indexOf(pattern)
   t.equal(511, index, `Long JABACABA..., First J - at index ${index}`)
   index = longBufferString.indexOf(pattern, 512)
-  t.equal(
-    1535, index, `Long JABACABA..., Second J - at index ${index}`)
+  t.equal(1535, index, `Long JABACABA..., Second J - at index ${index}`)
 
   // Search for a non-ASCII string in a pure ASCII string.
-  const asciiString = Buffer.from(
-    'somethingnotatallsinisterwhichalsoworks')
+  const asciiString = Buffer.from('somethingnotatallsinisterwhichalsoworks')
   t.equal(-1, asciiString.indexOf('\x2061'))
   t.equal(3, asciiString.indexOf('eth', 0))
 
@@ -376,25 +403,28 @@ tape('indexOf the entire nodejs10 buffer test suite', (t) => {
   {
     // Find substrings in Utf8.
     const lengths = [1, 3, 15] // Single char, simple and complex.
-    const indices = [0x5, 0x60, 0x400, 0x680, 0x7ee, 0xFF02, 0x16610, 0x2f77b]
+    const indices = [0x5, 0x60, 0x400, 0x680, 0x7ee, 0xff02, 0x16610, 0x2f77b]
     for (let lengthIndex = 0; lengthIndex < lengths.length; lengthIndex++) {
       for (let i = 0; i < indices.length; i++) {
         const index = indices[i]
         let length = lengths[lengthIndex]
 
-        if (index + length > 0x7F) {
+        if (index + length > 0x7f) {
           length = 2 * length
         }
 
-        if (index + length > 0x7FF) {
+        if (index + length > 0x7ff) {
           length = 3 * length
         }
 
-        if (index + length > 0xFFFF) {
+        if (index + length > 0xffff) {
           length = 4 * length
         }
 
-        const patternBufferUtf8 = allCharsBufferUtf8.slice(index, index + length)
+        const patternBufferUtf8 = allCharsBufferUtf8.slice(
+          index,
+          index + length
+        )
         t.equal(index, allCharsBufferUtf8.indexOf(patternBufferUtf8))
 
         const patternStringUtf8 = patternBufferUtf8.toString()
@@ -413,24 +443,24 @@ tape('indexOf the entire nodejs10 buffer test suite', (t) => {
         const index = indices[i] * 2
         const length = lengths[lengthIndex]
 
-        const patternBufferUcs2 =
-            allCharsBufferUcs2.slice(index, index + length)
-        t.equal(
-          index, allCharsBufferUcs2.indexOf(patternBufferUcs2, 0, 'ucs2'))
+        const patternBufferUcs2 = allCharsBufferUcs2.slice(
+          index,
+          index + length
+        )
+        t.equal(index, allCharsBufferUcs2.indexOf(patternBufferUcs2, 0, 'ucs2'))
 
         const patternStringUcs2 = patternBufferUcs2.toString('ucs2')
-        t.equal(
-          index, allCharsBufferUcs2.indexOf(patternStringUcs2, 0, 'ucs2'))
+        t.equal(index, allCharsBufferUcs2.indexOf(patternStringUcs2, 0, 'ucs2'))
       }
     }
   }
 
-  [
-    () => {},
-    {},
-    []
-  ].forEach((val) => {
-    t.throws(() => b.indexOf(val), TypeError, `"${JSON.stringify(val)}" should throw`)
+  ;[() => {}, {}, []].forEach((val) => {
+    t.throws(
+      () => b.indexOf(val),
+      TypeError,
+      `"${JSON.stringify(val)}" should throw`
+    )
   })
 
   // Test weird offset arguments.
@@ -445,24 +475,12 @@ tape('indexOf the entire nodejs10 buffer test suite', (t) => {
   t.equal(b.indexOf('b', [2]), -1)
 
   // Behavior should match String.indexOf()
-  t.equal(
-    b.indexOf('b', undefined),
-    stringComparison.indexOf('b', undefined))
-  t.equal(
-    b.indexOf('b', {}),
-    stringComparison.indexOf('b', {}))
-  t.equal(
-    b.indexOf('b', 0),
-    stringComparison.indexOf('b', 0))
-  t.equal(
-    b.indexOf('b', null),
-    stringComparison.indexOf('b', null))
-  t.equal(
-    b.indexOf('b', []),
-    stringComparison.indexOf('b', []))
-  t.equal(
-    b.indexOf('b', [2]),
-    stringComparison.indexOf('b', [2]))
+  t.equal(b.indexOf('b', undefined), stringComparison.indexOf('b', undefined))
+  t.equal(b.indexOf('b', {}), stringComparison.indexOf('b', {}))
+  t.equal(b.indexOf('b', 0), stringComparison.indexOf('b', 0))
+  t.equal(b.indexOf('b', null), stringComparison.indexOf('b', null))
+  t.equal(b.indexOf('b', []), stringComparison.indexOf('b', []))
+  t.equal(b.indexOf('b', [2]), stringComparison.indexOf('b', [2]))
 
   // test truncation of Number arguments to uint8
   {

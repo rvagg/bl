@@ -4,11 +4,11 @@ export type BufferListAcceptedTypes =
   | Uint8Array
   | BufferListAcceptedTypes[]
   | string
-  | number;
+  | number
 
 export interface BufferListConstructor {
-  new (initData?: BufferListAcceptedTypes): BufferList;
-  (initData?: BufferListAcceptedTypes): BufferList;
+  new (initData?: BufferListAcceptedTypes): BufferList
+  (initData?: BufferListAcceptedTypes): BufferList
 
   /**
    * Determines if the passed object is a BufferList. It will return true
@@ -21,7 +21,7 @@ export interface BufferListConstructor {
    * @param other
    */
 
-  isBufferList(other: unknown): boolean;
+  isBufferList(other: unknown): boolean
 }
 
 interface BufferList {
@@ -34,7 +34,7 @@ interface BufferList {
    * represent the total number of bytes that can be read from the list.
    */
 
-  length: number;
+  length: number
 
   /**
    * Adds an additional buffer or BufferList to the internal list.
@@ -43,14 +43,14 @@ interface BufferList {
    * @param buffer
    */
 
-  append(buffer: BufferListAcceptedTypes): this;
+  append(buffer: BufferListAcceptedTypes): this
 
   /**
    * Will return the byte at the specified index.
    * @param index
    */
 
-  get(index: number): number;
+  get(index: number): number
 
   /**
    * Returns a new Buffer object containing the bytes within the
@@ -66,7 +66,7 @@ interface BufferList {
    * @param end
    */
 
-  slice(start?: number, end?: number): Buffer;
+  slice(start?: number, end?: number): Buffer
 
   /**
    * Returns a new BufferList object containing the bytes within the
@@ -80,7 +80,7 @@ interface BufferList {
    * @param end
    */
 
-  shallowSlice(start?: number, end?: number): this;
+  shallowSlice(start?: number, end?: number): this
 
   /**
    * Copies the content of the list in the `dest` buffer, starting from
@@ -102,7 +102,7 @@ interface BufferList {
     destStart?: number,
     srcStart?: number,
     srcEnd?: number
-  ): Buffer;
+  ): Buffer
 
   /**
    * Performs a shallow-copy of the list. The internal Buffers remains the
@@ -125,7 +125,7 @@ interface BufferList {
    * ```
    */
 
-  duplicate(): this;
+  duplicate(): this
 
   /**
    * Will shift bytes off the start of the list. The number of bytes
@@ -136,7 +136,7 @@ interface BufferList {
    * @param bytes
    */
 
-  consume(bytes?: number): void;
+  consume(bytes?: number): void
 
   /**
    * Will return a string representation of the buffer. The optional
@@ -151,7 +151,7 @@ interface BufferList {
    * @param end
    */
 
-  toString(encoding?: string, start?: number, end?: number): string;
+  toString(encoding?: string, start?: number, end?: number): string
 
   /**
    * Will return the byte at the specified index. indexOf() method
@@ -167,7 +167,7 @@ interface BufferList {
     value: string | number | Uint8Array | BufferList | Buffer,
     byteOffset?: number,
     encoding?: string
-  ): number;
+  ): number
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
@@ -176,7 +176,7 @@ interface BufferList {
    * @param offset
    */
 
-  readDoubleBE: Buffer['readDoubleBE'];
+  readDoubleBE: Buffer['readDoubleBE']
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
@@ -185,7 +185,7 @@ interface BufferList {
    * @param offset
    */
 
-  readDoubleLE: Buffer['readDoubleLE'];
+  readDoubleLE: Buffer['readDoubleLE']
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
@@ -194,7 +194,7 @@ interface BufferList {
    * @param offset
    */
 
-  readFloatBE: Buffer['readFloatBE'];
+  readFloatBE: Buffer['readFloatBE']
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
@@ -203,7 +203,7 @@ interface BufferList {
    * @param offset
    */
 
-  readFloatLE: Buffer['readFloatLE'];
+  readFloatLE: Buffer['readFloatLE']
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
@@ -212,7 +212,7 @@ interface BufferList {
    * @param offset
    */
 
-  readInt32BE: Buffer['readInt32BE'];
+  readInt32BE: Buffer['readInt32BE']
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
@@ -221,7 +221,7 @@ interface BufferList {
    * @param offset
    */
 
-  readInt32LE: Buffer['readInt32LE'];
+  readInt32LE: Buffer['readInt32LE']
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
@@ -230,7 +230,7 @@ interface BufferList {
    * @param offset
    */
 
-  readUInt32BE: Buffer['readUInt32BE'];
+  readUInt32BE: Buffer['readUInt32BE']
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
@@ -239,7 +239,7 @@ interface BufferList {
    * @param offset
    */
 
-  readUInt32LE: Buffer['readUInt32LE'];
+  readUInt32LE: Buffer['readUInt32LE']
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
@@ -248,7 +248,7 @@ interface BufferList {
    * @param offset
    */
 
-  readInt16BE: Buffer['readInt16BE'];
+  readInt16BE: Buffer['readInt16BE']
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are
@@ -260,7 +260,7 @@ interface BufferList {
    * @param offset
    */
 
-  readInt16LE: Buffer['readInt16LE'];
+  readInt16LE: Buffer['readInt16LE']
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are
@@ -272,7 +272,7 @@ interface BufferList {
    * @param offset
    */
 
-  readUInt16BE: Buffer['readUInt16BE'];
+  readUInt16BE: Buffer['readUInt16BE']
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are
@@ -284,7 +284,7 @@ interface BufferList {
    * @param offset
    */
 
-  readUInt16LE: Buffer['readUInt16LE'];
+  readUInt16LE: Buffer['readUInt16LE']
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are
@@ -296,7 +296,7 @@ interface BufferList {
    * @param offset
    */
 
-  readInt8: Buffer['readInt8'];
+  readInt8: Buffer['readInt8']
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are
@@ -308,7 +308,7 @@ interface BufferList {
    * @param offset
    */
 
-  readUInt8: Buffer['readUInt8'];
+  readUInt8: Buffer['readUInt8']
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are
@@ -320,7 +320,7 @@ interface BufferList {
    * @param offset
    */
 
-  readIntBE: Buffer['readIntBE'];
+  readIntBE: Buffer['readIntBE']
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are
@@ -332,7 +332,7 @@ interface BufferList {
    * @param offset
    */
 
-  readIntLE: Buffer['readIntLE'];
+  readIntLE: Buffer['readIntLE']
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are
@@ -344,7 +344,7 @@ interface BufferList {
    * @param offset
    */
 
-  readUIntBE: Buffer['readUIntBE'];
+  readUIntBE: Buffer['readUIntBE']
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are
@@ -356,7 +356,7 @@ interface BufferList {
    * @param offset
    */
 
-  readUIntLE: Buffer['readUIntLE'];
+  readUIntLE: Buffer['readUIntLE']
 }
 
 /**
@@ -379,4 +379,4 @@ interface BufferList {
  * ```
  */
 
-declare const BufferList: BufferListConstructor;
+declare const BufferList: BufferListConstructor

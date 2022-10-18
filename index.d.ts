@@ -1,17 +1,17 @@
-import { Duplex } from "readable-stream";
+import { Duplex } from 'readable-stream'
 import {
   BufferList as BL,
   BufferListConstructor,
   BufferListAcceptedTypes,
-} from "./BufferList";
+} from './BufferList'
 
 type BufferListStreamInit =
   | ((err: Error, buffer: Buffer) => void)
-  | BufferListAcceptedTypes;
+  | BufferListAcceptedTypes
 
 interface BufferListStreamConstructor {
-  new (initData?: BufferListStreamInit): BufferListStream;
-  (callback?: BufferListStreamInit): BufferListStream;
+  new (initData?: BufferListStreamInit): BufferListStream
+  (callback?: BufferListStreamInit): BufferListStream
 
   /**
    * Determines if the passed object is a BufferList. It will return true
@@ -24,19 +24,19 @@ interface BufferListStreamConstructor {
    * @param other
    */
 
-  isBufferList(other: unknown): boolean;
+  isBufferList(other: unknown): boolean
 
   /**
    * Rexporting BufferList and BufferListStream to fix
    * issue with require/commonjs import and "export = " below.
    */
 
-  BufferList: BufferListConstructor;
-  BufferListStream: BufferListStreamConstructor;
+  BufferList: BufferListConstructor
+  BufferListStream: BufferListStreamConstructor
 }
 
 interface BufferListStream extends Duplex, BL {
-  prototype: BufferListStream & BL;
+  prototype: BufferListStream & BL
 }
 
 /**
@@ -83,6 +83,6 @@ interface BufferListStream extends Duplex, BL {
  * ```
  */
 
-declare const BufferListStream: BufferListStreamConstructor;
+declare const BufferListStream: BufferListStreamConstructor
 
-export = BufferListStream;
+export = BufferListStream
