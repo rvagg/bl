@@ -212,6 +212,42 @@ interface BufferList {
    * @param offset
    */
 
+  readBigInt64BE: Buffer['readBigInt64BE'];
+
+  /**
+   * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
+   * See the [Buffer](http://nodejs.org/docs/latest/api/buffer.html) documentation for how these work.
+   *
+   * @param offset
+   */
+
+  readBigInt64LE: Buffer['readBigInt64LE'];
+
+  /**
+   * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
+   * See the [Buffer](http://nodejs.org/docs/latest/api/buffer.html) documentation for how these work.
+   *
+   * @param offset
+   */
+
+  readBigUInt64BE: Buffer['readBigUInt64BE'];
+
+  /**
+   * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
+   * See the [Buffer](http://nodejs.org/docs/latest/api/buffer.html) documentation for how these work.
+   *
+   * @param offset
+   */
+
+  readBigUInt64LE: Buffer['readBigUInt64LE'];
+
+  /**
+   * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.
+   * See the [Buffer](http://nodejs.org/docs/latest/api/buffer.html) documentation for how these work.
+   *
+   * @param offset
+   */
+
   readInt32BE: Buffer['readInt32BE'];
 
   /**
