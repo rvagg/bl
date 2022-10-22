@@ -23,13 +23,6 @@ declare namespace BL {
      */
 
     isBufferList(other: unknown): boolean;
-
-    /**
-     * Rexporting BufferList to fix
-     * issue with require/commonjs import and "export = " below.
-     */
-
-    BufferList: BufferListConstructor;
   }
 
   interface BufferList {
