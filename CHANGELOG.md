@@ -1,3 +1,17 @@
+## [6.0.1](https://github.com/rvagg/bl/compare/v6.0.0...v6.0.1) (2023-03-17)
+
+
+### Bug Fixes
+
+* release with Node.js 18 ([6965a1d](https://github.com/rvagg/bl/commit/6965a1dee6b2af5bca304c8c9b747b796a652ffd))
+
+
+### Trivial Changes
+
+* **deps-dev:** bump typescript from 4.9.5 to 5.0.2 ([0885658](https://github.com/rvagg/bl/commit/0885658f7c1696220ac846e5bbc19f8b6ae8d3c0))
+* **no-release:** bump actions/setup-node from 3.5.1 to 3.6.0 ([#120](https://github.com/rvagg/bl/issues/120)) ([60bee1b](https://github.com/rvagg/bl/commit/60bee1bd37a9f1a2a128f506f7da008c094db5c4))
+* **no-release:** bump typescript from 4.8.4 to 4.9.3 ([#118](https://github.com/rvagg/bl/issues/118)) ([8be6dd6](https://github.com/rvagg/bl/commit/8be6dd62f639fd6c2c2f7d5d6ac4db988adb1886))
+
 ## [6.0.0](https://github.com/rvagg/bl/compare/v5.1.0...v6.0.0) (2022-10-19)
 
 
