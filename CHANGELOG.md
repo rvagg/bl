@@ -1,3 +1,10 @@
+## [6.0.4](https://github.com/rvagg/bl/compare/v6.0.3...v6.0.4) (2023-08-07)
+
+
+### Trivial Changes
+
+* **deps-dev:** bump @types/readable-stream from 2.3.15 to 4.0.0 ([dd8cdb0](https://github.com/rvagg/bl/commit/dd8cdb0c64e1272c21d3bb251971afaaabbb0a1b))
+
 ## [6.0.3](https://github.com/rvagg/bl/compare/v6.0.2...v6.0.3) (2023-07-07)
 
 
