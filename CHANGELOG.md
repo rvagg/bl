@@ -1,3 +1,11 @@
+## [6.0.8](https://github.com/rvagg/bl/compare/v6.0.7...v6.0.8) (2023-10-25)
+
+
+### Trivial Changes
+
+* **deps:** bump actions/checkout from 3 to 4 ([a9ad973](https://github.com/rvagg/bl/commit/a9ad973d1fe4e5f673fe3b9b72b4484136e1655d))
+* **deps:** bump actions/setup-node from 3.8.1 to 4.0.0 ([5921489](https://github.com/rvagg/bl/commit/59214897520fd6ba6d20a7cf370373275d4cfe1d))
+
 ## [6.0.7](https://github.com/rvagg/bl/compare/v6.0.6...v6.0.7) (2023-08-25)
 
 
