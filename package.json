@@ -1,6 +1,6 @@
 {
   "name": "bl",
-  "version": "6.0.9",
+  "version": "6.0.10",
   "description": "Buffer List: collect buffers and access with a standard readable Buffer interface, streamable too!",
   "license": "MIT",
   "main": "bl.js",
@@ -28,12 +28,12 @@
     "awesomesauce"
   ],
   "dependencies": {
+    "@types/readable-stream": "^4.0.0",
     "buffer": "^6.0.3",
     "inherits": "^2.0.4",
     "readable-stream": "^4.2.0"
   },
   "devDependencies": {
-    "@types/readable-stream": "^4.0.0",
     "faucet": "~0.0.1",
     "standard": "^17.0.0",
     "tape": "^5.2.2",
