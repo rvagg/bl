@@ -1,3 +1,11 @@
+## [6.0.11](https://github.com/rvagg/bl/compare/v6.0.10...v6.0.11) (2024-02-08)
+
+
+### Trivial Changes
+
+* **deps:** bump actions/setup-node from 4.0.1 to 4.0.2 ([d8ac460](https://github.com/rvagg/bl/commit/d8ac460597a24b0e783da2acd6ab37eacbbb0af5))
+* update Node.js versions in CI ([863a5e0](https://github.com/rvagg/bl/commit/863a5e02f2c144c54be88ff962b0a902684c6527))
+
 ## [6.0.10](https://github.com/rvagg/bl/compare/v6.0.9...v6.0.10) (2024-01-01)
 
 
