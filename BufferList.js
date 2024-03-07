@@ -75,6 +75,13 @@ BufferList.prototype.slice = function slice (start, end) {
   return this.copy(null, 0, start, end)
 }
 
+BufferList.prototype.join = function join() {
+  if(this._bufs.length > 1) {
+    this._bufs[0] = this.copy(null, 0, 0, this.length);
+    this._bufs.length = 1;
+  }
+}
+
 BufferList.prototype.copy = function copy (dst, dstStart, srcStart, srcEnd) {
   if (typeof srcStart !== 'number' || srcStart < 0) {
     srcStart = 0
