@@ -29,7 +29,6 @@
   ],
   "dependencies": {
     "@types/readable-stream": "^4.0.0",
-    "buffer": "^6.0.3",
     "inherits": "^2.0.4",
     "readable-stream": "^4.2.0"
   },
