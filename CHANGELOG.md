@@ -1,3 +1,9 @@
+## [6.0.15](https://github.com/rvagg/bl/compare/v6.0.14...v6.0.15) (2024-09-10)
+
+### Trivial Changes
+
+* **deps-dev:** bump typescript from 5.5.4 to 5.6.2 ([edfc739](https://github.com/rvagg/bl/commit/edfc73964665530cfcc046319b446c6b6efeebff))
+
 ## [6.0.14](https://github.com/rvagg/bl/compare/v6.0.13...v6.0.14) (2024-07-10)
 
 ### Trivial Changes
