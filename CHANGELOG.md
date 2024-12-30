@@ -1,3 +1,10 @@
+## [6.0.18](https://github.com/rvagg/bl/compare/v6.0.17...v6.0.18) (2024-12-30)
+
+### Trivial Changes
+
+* **deps-dev:** bump typescript from 5.6.3 to 5.7.2 ([d28178a](https://github.com/rvagg/bl/commit/d28178ae2e5c740de0e3d891beae77b26f801b0f))
+* **deps:** bump actions/setup-node from 4.0.4 to 4.1.0 ([#146](https://github.com/rvagg/bl/issues/146)) ([45c312b](https://github.com/rvagg/bl/commit/45c312b48b150d53336fecce69cb6895c8daaaeb))
+
 ## [6.0.17](https://github.com/rvagg/bl/compare/v6.0.16...v6.0.17) (2024-12-30)
 
 ### Tests
