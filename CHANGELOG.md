@@ -1,3 +1,9 @@
+## [6.0.17](https://github.com/rvagg/bl/compare/v6.0.16...v6.0.17) (2024-12-30)
+
+### Tests
+
+* ignore TS errors from dependencies ([17e7a10](https://github.com/rvagg/bl/commit/17e7a10c82b07f3ef63a4235a842159d6c08a7d0))
+
 ## [6.0.16](https://github.com/rvagg/bl/compare/v6.0.15...v6.0.16) (2024-09-25)
 
 ### Trivial Changes
