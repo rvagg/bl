@@ -1,6 +1,6 @@
 {
   "name": "bl",
-  "version": "6.0.18",
+  "version": "6.0.19",
   "description": "Buffer List: collect buffers and access with a standard readable Buffer interface, streamable too!",
   "license": "MIT",
   "main": "bl.js",
