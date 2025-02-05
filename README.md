@@ -1,6 +1,6 @@
 # bl *(BufferList)*
 
-[![Build Status](https://api.travis-ci.com/rvagg/bl.svg?branch=master)](https://travis-ci.com/rvagg/bl/)
+![Build Status](https://img.shields.io/github/actions/workflow/status/rvagg/bl/test-and-release.yml?branch=master)
 
 **A Node.js Buffer list collector, reader and streamer thingy.**
 
