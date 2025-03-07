@@ -1,6 +1,6 @@
-import { Duplex } from "readable-stream";
-import {
-  BufferList as BL,
+import type { Duplex } from "readable-stream";
+import type {
+  BufferList,
   BufferListConstructor,
   BufferListAcceptedTypes,
 } from "./BufferList";
@@ -35,8 +35,8 @@ interface BufferListStreamConstructor {
   BufferListStream: BufferListStreamConstructor;
 }
 
-interface BufferListStream extends Duplex, BL {
-  prototype: BufferListStream & BL;
+interface BufferListStream extends Duplex, BufferList {
+  prototype: BufferListStream & BufferList;
 }
 
 /**
@@ -83,6 +83,5 @@ interface BufferListStream extends Duplex, BL {
  * ```
  */
 
-declare const BufferListStream: BufferListStreamConstructor;
-
-export = BufferListStream;
+declare const BLS: BufferListStreamConstructor;
+export = BLS;
