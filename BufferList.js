@@ -53,6 +53,10 @@ BufferList.prototype._reverseOffset = function (blOffset) {
   return offset
 }
 
+BufferList.prototype.getBuffers = function getBuffers () {
+  return this._bufs
+}
+
 BufferList.prototype.get = function get (index) {
   if (index > this.length || index < 0) {
     return undefined
@@ -254,6 +258,41 @@ BufferList.prototype.append = function append (buf) {
 
 BufferList.prototype._appendBuffer = function appendBuffer (buf) {
   this._bufs.push(buf)
+  this.length += buf.length
+}
+
+BufferList.prototype.prepend = function append (buf) {
+  if (buf == null) {
+    return this
+  }
+
+  if (buf.buffer) {
+    // prepend a view of the underlying ArrayBuffer
+    this._prependBuffer(Buffer.from(buf.buffer, buf.byteOffset, buf.byteLength))
+  } else if (Array.isArray(buf)) {
+    for (let i = buf.length - 1; i >= 0; i--) {
+      this.prepend(buf[i])
+    }
+  } else if (this._isBufferList(buf)) {
+    // unwrap argument into individual BufferLists
+    for (let i = buf._bufs.length - 1; i >= 0; i--) {
+      this.prepend(buf._bufs[i])
+    }
+  } else {
+    // coerce number arguments to strings, since Buffer(number) does
+    // uninitialized memory allocation
+    if (typeof buf === 'number') {
+      buf = buf.toString()
+    }
+
+    this._prependBuffer(Buffer.from(buf))
+  }
+
+  return this
+}
+
+BufferList.prototype._prependBuffer = function prependBuffer (buf) {
+  this._bufs.unshift(buf)
   this.length += buf.length
 }
 

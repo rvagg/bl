@@ -249,6 +249,78 @@ tape('append chainable (test results)', function (t) {
   t.end()
 })
 
+tape('prepend accepts arrays of Buffers', function (t) {
+  const bl = new BufferListStream()
+
+  bl.prepend(Buffer.from('abc'))
+  bl.prepend([Buffer.from('def')])
+  bl.prepend([Buffer.from('ghi'), Buffer.from('jkl')])
+  bl.prepend([Buffer.from('mnop'), Buffer.from('qrstu'), Buffer.from('vwxyz')])
+  t.equal(bl.length, 26)
+  t.equal(bl.slice().toString('ascii'), 'mnopqrstuvwxyzghijkldefabc')
+
+  t.end()
+})
+
+tape('prepend accepts arrays of Uint8Arrays', function (t) {
+  const bl = new BufferListStream()
+
+  bl.prepend(new Uint8Array([97, 98, 99]))
+  bl.prepend([Uint8Array.from([100, 101, 102])])
+  bl.prepend([new Uint8Array([103, 104, 105]), new Uint8Array([106, 107, 108])])
+  bl.prepend([new Uint8Array([109, 110, 111, 112]), new Uint8Array([113, 114, 115, 116, 117]), new Uint8Array([118, 119, 120, 121, 122])])
+  t.equal(bl.length, 26)
+  t.equal(bl.slice().toString('ascii'), 'mnopqrstuvwxyzghijkldefabc')
+
+  t.end()
+})
+
+tape('prepend accepts arrays of BufferLists', function (t) {
+  const bl = new BufferListStream()
+
+  bl.prepend(Buffer.from('abc'))
+  bl.prepend([new BufferListStream('def')])
+  bl.prepend(
+    new BufferListStream([Buffer.from('ghi'), new BufferListStream('jkl')])
+  )
+  bl.prepend([
+    Buffer.from('mnop'),
+    new BufferListStream([Buffer.from('qrstu'), Buffer.from('vwxyz')])
+  ])
+  t.equal(bl.length, 26)
+  t.equal(bl.slice().toString('ascii'), 'mnopqrstuvwxyzghijkldefabc')
+
+  t.end()
+})
+
+tape('prepend chainable', function (t) {
+  const bl = new BufferListStream()
+
+  t.ok(bl.prepend(Buffer.from('abcd')) === bl)
+  t.ok(bl.prepend([Buffer.from('abcd')]) === bl)
+  t.ok(bl.prepend(new BufferListStream(Buffer.from('abcd'))) === bl)
+  t.ok(bl.prepend([new BufferListStream(Buffer.from('abcd'))]) === bl)
+
+  t.end()
+})
+
+tape('prepend chainable (test results)', function (t) {
+  const bl = new BufferListStream('abc')
+    .prepend([new BufferListStream('def')])
+    .prepend(
+      new BufferListStream([Buffer.from('ghi'), new BufferListStream('jkl')])
+    )
+    .prepend([
+      Buffer.from('mnop'),
+      new BufferListStream([Buffer.from('qrstu'), Buffer.from('vwxyz')])
+    ])
+
+  t.equal(bl.length, 26)
+  t.equal(bl.slice().toString('ascii'), 'mnopqrstuvwxyzghijkldefabc')
+
+  t.end()
+})
+
 tape('consuming from multiple buffers', function (t) {
   const bl = new BufferListStream()
 
@@ -551,6 +623,18 @@ tape('test toString encoding', function (t) {
   encodings.forEach(function (enc) {
     t.equal(bl.toString(enc), b.toString(enc), enc)
   })
+
+  t.end()
+})
+
+tape('getBuffers', function (t) {
+  const bl = new BufferListStream([Buffer.from('First'), Buffer.from('Second'), Buffer.from('Third')])
+
+  t.deepEquals(
+    bl.getBuffers(),
+    // @ts-ignore
+    bl._bufs
+  )
 
   t.end()
 })
