@@ -227,21 +227,35 @@ BufferList.prototype.duplicate = function duplicate () {
 }
 
 BufferList.prototype.append = function append (buf) {
+  return this._attach(buf)
+}
+
+BufferList.prototype.prepend = function prepend (buf) {
+  return this._attach(buf, true)
+}
+
+BufferList.prototype._attach = function _attach (buf, prepend) {
   if (buf == null) {
     return this
   }
 
+  const attacher = prepend === true ? BufferList.prototype._prependBuffer : BufferList.prototype._appendBuffer
+
   if (buf.buffer) {
-    // append a view of the underlying ArrayBuffer
-    this._appendBuffer(Buffer.from(buf.buffer, buf.byteOffset, buf.byteLength))
+    // append/prepend a view of the underlying ArrayBuffer
+    attacher.call(this, Buffer.from(buf.buffer, buf.byteOffset, buf.byteLength))
   } else if (Array.isArray(buf)) {
-    for (let i = 0; i < buf.length; i++) {
-      this.append(buf[i])
+    const [starting, modifier] = prepend ? [buf.length - 1, -1] : [0, 1]
+
+    for (let i = starting; i >= 0 && i < buf.length; i += modifier) {
+      this._attach(buf[i], prepend)
     }
   } else if (this._isBufferList(buf)) {
     // unwrap argument into individual BufferLists
-    for (let i = 0; i < buf._bufs.length; i++) {
-      this.append(buf._bufs[i])
+    const [starting, modifier] = prepend ? [buf._bufs.length - 1, -1] : [0, 1]
+
+    for (let i = starting; i >= 0 && i < buf._bufs.length; i += modifier) {
+      this._attach(buf._bufs[i], prepend)
     }
   } else {
     // coerce number arguments to strings, since Buffer(number) does
@@ -250,7 +264,7 @@ BufferList.prototype.append = function append (buf) {
       buf = buf.toString()
     }
 
-    this._appendBuffer(Buffer.from(buf))
+    attacher.call(this, Buffer.from(buf))
   }
 
   return this
@@ -259,36 +273,6 @@ BufferList.prototype.append = function append (buf) {
 BufferList.prototype._appendBuffer = function appendBuffer (buf) {
   this._bufs.push(buf)
   this.length += buf.length
-}
-
-BufferList.prototype.prepend = function append (buf) {
-  if (buf == null) {
-    return this
-  }
-
-  if (buf.buffer) {
-    // prepend a view of the underlying ArrayBuffer
-    this._prependBuffer(Buffer.from(buf.buffer, buf.byteOffset, buf.byteLength))
-  } else if (Array.isArray(buf)) {
-    for (let i = buf.length - 1; i >= 0; i--) {
-      this.prepend(buf[i])
-    }
-  } else if (this._isBufferList(buf)) {
-    // unwrap argument into individual BufferLists
-    for (let i = buf._bufs.length - 1; i >= 0; i--) {
-      this.prepend(buf._bufs[i])
-    }
-  } else {
-    // coerce number arguments to strings, since Buffer(number) does
-    // uninitialized memory allocation
-    if (typeof buf === 'number') {
-      buf = buf.toString()
-    }
-
-    this._prependBuffer(Buffer.from(buf))
-  }
-
-  return this
 }
 
 BufferList.prototype._prependBuffer = function prependBuffer (buf) {
