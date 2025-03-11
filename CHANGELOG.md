@@ -1,3 +1,9 @@
+## [6.1.0](https://github.com/rvagg/bl/compare/v6.0.20...v6.1.0) (2025-03-11)
+
+### Features
+
+* Added prepend and getBuffers methods. ([#154](https://github.com/rvagg/bl/issues/154)) ([e9eda95](https://github.com/rvagg/bl/commit/e9eda9549b1235af16afbe0c721f92e705109663))
+
 ## [6.0.20](https://github.com/rvagg/bl/compare/v6.0.19...v6.0.20) (2025-03-03)
 
 ### Trivial Changes
