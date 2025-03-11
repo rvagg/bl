@@ -53,6 +53,10 @@ BufferList.prototype._reverseOffset = function (blOffset) {
   return offset
 }
 
+BufferList.prototype.getBuffers = function getBuffers () {
+  return this._bufs
+}
+
 BufferList.prototype.get = function get (index) {
   if (index > this.length || index < 0) {
     return undefined
@@ -223,21 +227,33 @@ BufferList.prototype.duplicate = function duplicate () {
 }
 
 BufferList.prototype.append = function append (buf) {
+  return this._attach(buf, BufferList.prototype._appendBuffer)
+}
+
+BufferList.prototype.prepend = function prepend (buf) {
+  return this._attach(buf, BufferList.prototype._prependBuffer, true)
+}
+
+BufferList.prototype._attach = function _attach (buf, attacher, prepend) {
   if (buf == null) {
     return this
   }
 
   if (buf.buffer) {
-    // append a view of the underlying ArrayBuffer
-    this._appendBuffer(Buffer.from(buf.buffer, buf.byteOffset, buf.byteLength))
+    // append/prepend a view of the underlying ArrayBuffer
+    attacher.call(this, Buffer.from(buf.buffer, buf.byteOffset, buf.byteLength))
   } else if (Array.isArray(buf)) {
-    for (let i = 0; i < buf.length; i++) {
-      this.append(buf[i])
+    const [starting, modifier] = prepend ? [buf.length - 1, -1] : [0, 1]
+
+    for (let i = starting; i >= 0 && i < buf.length; i += modifier) {
+      this._attach(buf[i], attacher, prepend)
     }
   } else if (this._isBufferList(buf)) {
     // unwrap argument into individual BufferLists
-    for (let i = 0; i < buf._bufs.length; i++) {
-      this.append(buf._bufs[i])
+    const [starting, modifier] = prepend ? [buf._bufs.length - 1, -1] : [0, 1]
+
+    for (let i = starting; i >= 0 && i < buf._bufs.length; i += modifier) {
+      this._attach(buf._bufs[i], attacher, prepend)
     }
   } else {
     // coerce number arguments to strings, since Buffer(number) does
@@ -246,7 +262,7 @@ BufferList.prototype.append = function append (buf) {
       buf = buf.toString()
     }
 
-    this._appendBuffer(Buffer.from(buf))
+    attacher.call(this, Buffer.from(buf))
   }
 
   return this
@@ -254,6 +270,11 @@ BufferList.prototype.append = function append (buf) {
 
 BufferList.prototype._appendBuffer = function appendBuffer (buf) {
   this._bufs.push(buf)
+  this.length += buf.length
+}
+
+BufferList.prototype._prependBuffer = function prependBuffer (buf) {
+  this._bufs.unshift(buf)
   this.length += buf.length
 }
 

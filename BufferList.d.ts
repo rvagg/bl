@@ -46,6 +46,14 @@ interface BufferList {
   append(buffer: BufferListAcceptedTypes): this;
 
   /**
+   * Adds an additional buffer or BufferList at the beginning of the internal list.
+   * this is returned so it can be chained.
+   *
+   * @param buffer
+   */
+  prepend(buffer: BufferListAcceptedTypes): this;
+
+  /**
    * Will return the byte at the specified index.
    * @param index
    */
@@ -168,6 +176,11 @@ interface BufferList {
     byteOffset?: number,
     encoding?: string
   ): number;
+
+  /**
+   * Will return the internal list of buffers.
+   */
+  getBuffers(): Buffer[];
 
   /**
    * All of the standard byte-reading methods of the Buffer interface are implemented and will operate across internal Buffer boundaries transparently.

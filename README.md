@@ -90,6 +90,7 @@ bl.pipe(fs.createWriteStream('gibberish.txt'))
   * <a href="#isBufferList"><code><b>BufferList.isBufferList(obj)</b></code></a>
   * <a href="#length"><code>bl.<b>length</b></code></a>
   * <a href="#append"><code>bl.<b>append(buffer)</b></code></a>
+  * <a href="#prepend"><code>bl.<b>append(buffer)</b></code></a>
   * <a href="#get"><code>bl.<b>get(index)</b></code></a>
   * <a href="#indexOf"><code>bl.<b>indexOf(value[, byteOffset][, encoding])</b></code></a>
   * <a href="#slice"><code>bl.<b>slice([ start[, end ] ])</b></code></a>
@@ -100,7 +101,8 @@ bl.pipe(fs.createWriteStream('gibberish.txt'))
   * <a href="#toString"><code>bl.<b>toString([encoding, [ start, [ end ]]])</b></code></a>
   * <a href="#readXX"><code>bl.<b>readDoubleBE()</b></code>, <code>bl.<b>readDoubleLE()</b></code>, <code>bl.<b>readFloatBE()</b></code>, <code>bl.<b>readFloatLE()</b></code>, <code>bl.<b>readBigInt64BE()</b></code>, <code>bl.<b>readBigInt64LE()</b></code>, <code>bl.<b>readBigUInt64BE()</b></code>, <code>bl.<b>readBigUInt64LE()</b></code>, <code>bl.<b>readInt32BE()</b></code>, <code>bl.<b>readInt32LE()</b></code>, <code>bl.<b>readUInt32BE()</b></code>, <code>bl.<b>readUInt32LE()</b></code>, <code>bl.<b>readInt16BE()</b></code>, <code>bl.<b>readInt16LE()</b></code>, <code>bl.<b>readUInt16BE()</b></code>, <code>bl.<b>readUInt16LE()</b></code>, <code>bl.<b>readInt8()</b></code>, <code>bl.<b>readUInt8()</b></code></a>
   * <a href="#ctorStream"><code><b>new BufferListStream([ callback ])</b></code></a>
-
+  * <a href="#getBuffers"><code>bl.<b>getBuffers()</b></code></a>
+  
 --------------------------------------------------------
 <a name="ctor"></a>
 ### new BufferList([ Buffer | Buffer array | BufferList | BufferList array | String ])
@@ -134,6 +136,11 @@ Get the length of the list in bytes. This is the sum of the lengths of all of th
 <a name="append"></a>
 ### bl.append(Buffer | Buffer array | BufferList | BufferList array | String)
 `append(buffer)` adds an additional buffer or BufferList to the internal list. `this` is returned so it can be chained.
+
+--------------------------------------------------------
+<a name="prepend"></a>
+### bl.prepend(Buffer | Buffer array | BufferList | BufferList array | String)
+`prepend(buffer)` adds an additional buffer or BufferList at the beginning of the internal list. `this` is returned so it can be chained.
 
 --------------------------------------------------------
 <a name="get"></a>
@@ -230,6 +237,11 @@ const BufferListStream = require('bl')
 ```
 
 --------------------------------------------------------
+<a name="getBuffers"></a>
+### bl.getBuffers()
+
+`getBuffers()` returns the internal list of buffers.
+
 
 ## Contributors
 
