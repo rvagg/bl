@@ -227,19 +227,17 @@ BufferList.prototype.duplicate = function duplicate () {
 }
 
 BufferList.prototype.append = function append (buf) {
-  return this._attach(buf)
+  return this._attach(buf, BufferList.prototype._appendBuffer)
 }
 
 BufferList.prototype.prepend = function prepend (buf) {
-  return this._attach(buf, true)
+  return this._attach(buf, BufferList.prototype._prependBuffer, true)
 }
 
-BufferList.prototype._attach = function _attach (buf, prepend) {
+BufferList.prototype._attach = function _attach (buf, attacher, prepend) {
   if (buf == null) {
     return this
   }
-
-  const attacher = prepend === true ? BufferList.prototype._prependBuffer : BufferList.prototype._appendBuffer
 
   if (buf.buffer) {
     // append/prepend a view of the underlying ArrayBuffer
@@ -248,14 +246,14 @@ BufferList.prototype._attach = function _attach (buf, prepend) {
     const [starting, modifier] = prepend ? [buf.length - 1, -1] : [0, 1]
 
     for (let i = starting; i >= 0 && i < buf.length; i += modifier) {
-      this._attach(buf[i], prepend)
+      this._attach(buf[i], attacher, prepend)
     }
   } else if (this._isBufferList(buf)) {
     // unwrap argument into individual BufferLists
     const [starting, modifier] = prepend ? [buf._bufs.length - 1, -1] : [0, 1]
 
     for (let i = starting; i >= 0 && i < buf._bufs.length; i += modifier) {
-      this._attach(buf._bufs[i], prepend)
+      this._attach(buf._bufs[i], attacher, prepend)
     }
   } else {
     // coerce number arguments to strings, since Buffer(number) does
