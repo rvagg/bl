@@ -1,3 +1,9 @@
+## [6.1.2](https://github.com/rvagg/bl/compare/v6.1.1...v6.1.2) (2025-08-12)
+
+### Trivial Changes
+
+* **deps:** bump actions/checkout from 4 to 5 ([#158](https://github.com/rvagg/bl/issues/158)) ([28a3852](https://github.com/rvagg/bl/commit/28a385240073abe68517d56d18b442d55b16ebe9))
+
 ## [6.1.1](https://github.com/rvagg/bl/compare/v6.1.0...v6.1.1) (2025-08-01)
 
 ### Trivial Changes
