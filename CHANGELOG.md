@@ -1,3 +1,9 @@
+## [6.1.6](https://github.com/rvagg/bl/compare/v6.1.5...v6.1.6) (2025-12-04)
+
+### Trivial Changes
+
+* **deps:** bump actions/setup-node from 6.0.0 to 6.1.0 ([#163](https://github.com/rvagg/bl/issues/163)) ([c51e63d](https://github.com/rvagg/bl/commit/c51e63d1ad01426135f79b09c5a355c4c4fd9df0))
+
 ## [6.1.5](https://github.com/rvagg/bl/compare/v6.1.4...v6.1.5) (2025-11-24)
 
 ### Trivial Changes
