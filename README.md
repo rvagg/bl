@@ -1,17 +1,23 @@
 # bl *(BufferList)*
 
-![Build Status](https://img.shields.io/github/actions/workflow/status/rvagg/bl/test-and-release.yml?branch=master)
+[![NPM](https://nodei.co/npm/bl.svg?style=flat&data=n,v&color=blue)](https://nodei.co/npm/bl/)
 
 **A Node.js Buffer list collector, reader and streamer thingy.**
-
-[![NPM](https://nodei.co/npm/bl.svg)](https://nodei.co/npm/bl/)
 
 **bl** is a storage object for collections of Node Buffers, exposing them with the main Buffer readable API. Also works as a duplex stream so you can collect buffers from a stream that emits them and emit buffers to a stream that consumes them!
 
 The original buffers are kept intact and copies are only done as necessary. Any reads that require the use of a single original buffer will return a slice of that buffer only (which references the same memory as the original buffer). Reads that span buffers perform concatenation as required and return the results transparently.
 
+## Installation
+
+```bash
+npm install bl
+```
+
+## Basic Usage
+
 ```js
-const { BufferList } = require('bl')
+import { BufferList } from 'bl'
 
 const bl = new BufferList()
 bl.append(Buffer.from('abcd'))
@@ -41,47 +47,35 @@ console.log(bl.readUInt16BE(10)) // 0x0304
 console.log(bl.readUInt16LE(10)) // 0x0403
 ```
 
-Give it a callback in the constructor and use it just like **[concat-stream](https://github.com/maxogden/node-concat-stream)**:
+### Node.js Streams
+
+Collect the contents of a stream:
 
 ```js
-const { BufferListStream } = require('bl')
-const fs = require('fs')
+import { BufferListStream } from 'bl'
+import { pipeline } from 'node:stream/promises'
+import { Readable } from 'node:stream'
 
-fs.createReadStream('README.md')
-  .pipe(BufferListStream((err, data) => { // note 'new' isn't strictly required
-    // `data` is a complete Buffer object containing the full data
-    console.log(data.toString())
-  }))
+const response = await fetch('https://raw.githubusercontent.com/rvagg/bl/master/README.md')
+const bl = new BufferListStream()
+await pipeline(Readable.fromWeb(response.body), bl)
+console.log(bl.toString())
 ```
 
-Note that when you use the *callback* method like this, the resulting `data` parameter is a concatenation of all `Buffer` objects in the list. If you want to avoid the overhead of this concatenation (in cases of extreme performance consciousness), then avoid the *callback* method and just listen to `'end'` instead, like a standard Stream.
-
-Or to fetch a URL using [hyperquest](https://github.com/substack/hyperquest) (should work with [request](http://github.com/mikeal/request) and even plain Node http too!):
+Or use it as a readable stream to pipe to an output:
 
 ```js
-const hyperquest = require('hyperquest')
-const { BufferListStream } = require('bl')
+import BufferListStream from 'bl'
+import { pipeline } from 'node:stream/promises'
+import fs from 'node:fs'
 
-const url = 'https://raw.github.com/rvagg/bl/master/README.md'
-
-hyperquest(url).pipe(BufferListStream((err, data) => {
-  console.log(data.toString())
-}))
-```
-
-Or, use it as a readable stream to recompose a list of Buffers to an output source:
-
-```js
-const { BufferListStream } = require('bl')
-const fs = require('fs')
-
-var bl = new BufferListStream()
+const bl = new BufferListStream()
 bl.append(Buffer.from('abcd'))
 bl.append(Buffer.from('efg'))
 bl.append(Buffer.from('hi'))
 bl.append(Buffer.from('j'))
 
-bl.pipe(fs.createWriteStream('gibberish.txt'))
+await pipeline(bl, fs.createWriteStream('gibberish.txt'))
 ```
 
 ## API
@@ -90,7 +84,7 @@ bl.pipe(fs.createWriteStream('gibberish.txt'))
   * <a href="#isBufferList"><code><b>BufferList.isBufferList(obj)</b></code></a>
   * <a href="#length"><code>bl.<b>length</b></code></a>
   * <a href="#append"><code>bl.<b>append(buffer)</b></code></a>
-  * <a href="#prepend"><code>bl.<b>append(buffer)</b></code></a>
+  * <a href="#prepend"><code>bl.<b>prepend(buffer)</b></code></a>
   * <a href="#get"><code>bl.<b>get(index)</b></code></a>
   * <a href="#indexOf"><code>bl.<b>indexOf(value[, byteOffset][, encoding])</b></code></a>
   * <a href="#slice"><code>bl.<b>slice([ start[, end ] ])</b></code></a>
@@ -102,21 +96,14 @@ bl.pipe(fs.createWriteStream('gibberish.txt'))
   * <a href="#readXX"><code>bl.<b>readDoubleBE()</b></code>, <code>bl.<b>readDoubleLE()</b></code>, <code>bl.<b>readFloatBE()</b></code>, <code>bl.<b>readFloatLE()</b></code>, <code>bl.<b>readBigInt64BE()</b></code>, <code>bl.<b>readBigInt64LE()</b></code>, <code>bl.<b>readBigUInt64BE()</b></code>, <code>bl.<b>readBigUInt64LE()</b></code>, <code>bl.<b>readInt32BE()</b></code>, <code>bl.<b>readInt32LE()</b></code>, <code>bl.<b>readUInt32BE()</b></code>, <code>bl.<b>readUInt32LE()</b></code>, <code>bl.<b>readInt16BE()</b></code>, <code>bl.<b>readInt16LE()</b></code>, <code>bl.<b>readUInt16BE()</b></code>, <code>bl.<b>readUInt16LE()</b></code>, <code>bl.<b>readInt8()</b></code>, <code>bl.<b>readUInt8()</b></code></a>
   * <a href="#ctorStream"><code><b>new BufferListStream([ callback ])</b></code></a>
   * <a href="#getBuffers"><code>bl.<b>getBuffers()</b></code></a>
-  
+
 --------------------------------------------------------
 <a name="ctor"></a>
 ### new BufferList([ Buffer | Buffer array | BufferList | BufferList array | String ])
 No arguments are _required_ for the constructor, but you can initialise the list by passing in a single `Buffer` object or an array of `Buffer` objects.
 
-`new` is not strictly required, if you don't instantiate a new object, it will be done automatically for you so you can create a new instance simply with:
-
 ```js
-const { BufferList } = require('bl')
-const bl = BufferList()
-
-// equivalent to:
-
-const { BufferList } = require('bl')
+import { BufferList } from 'bl'
 const bl = new BufferList()
 ```
 
@@ -150,7 +137,6 @@ Get the length of the list in bytes. This is the sum of the lengths of all of th
 --------------------------------------------------------
 <a name="indexOf"></a>
 ### bl.indexOf(value[, byteOffset][, encoding])
-`get()` will return the byte at the specified index.
 `indexOf()` method returns the first index at which a given element can be found in the BufferList, or -1 if it is not present.
 
 --------------------------------------------------------
@@ -175,10 +161,12 @@ No copies will be performed. All buffers in the result share memory with the ori
 --------------------------------------------------------
 <a name="duplicate"></a>
 ### bl.duplicate()
-`duplicate()` performs a **shallow-copy** of the list. The internal Buffers remains the same, so if you change the underlying Buffers, the change will be reflected in both the original and the duplicate. This method is needed if you want to call `consume()` or `pipe()` and still keep the original list.Example:
+`duplicate()` performs a **shallow-copy** of the list. The internal Buffers remains the same, so if you change the underlying Buffers, the change will be reflected in both the original and the duplicate. This method is needed if you want to call `consume()` or `pipe()` and still keep the original list. Example:
 
 ```js
-var bl = new BufferListStream()
+import BufferListStream from 'bl'
+
+const bl = new BufferListStream()
 
 bl.append('hello')
 bl.append(' world')
@@ -192,7 +180,7 @@ console.log(bl.toString())
 --------------------------------------------------------
 <a name="consume"></a>
 ### bl.consume(bytes)
-`consume()` will shift bytes *off the start of the list*. The number of bytes consumed don't need to line up with the sizes of the internal Buffers&mdash;initial offsets will be calculated accordingly in order to give you a consistent view of the data.
+`consume()` will shift bytes *off the start of the list*. The number of bytes consumed don't need to line up with the sizes of the internal Buffers - initial offsets will be calculated accordingly in order to give you a consistent view of the data.
 
 --------------------------------------------------------
 <a name="toString"></a>
@@ -214,26 +202,14 @@ See the <b><code>[Buffer](http://nodejs.org/docs/latest/api/buffer.html)</code><
 
 The constructor takes an optional callback, if supplied, the callback will be called with an error argument followed by a reference to the **bl** instance, when `bl.end()` is called (i.e. from a piped stream). This is a convenient method of collecting the entire contents of a stream, particularly when the stream is *chunky*, such as a network stream.
 
-Normally, no arguments are required for the constructor, but you can initialise the list by passing in a single `Buffer` object or an array of `Buffer` object.
+Normally, no arguments are required for the constructor, but you can initialise the list by passing in a single `Buffer` object or an array of `Buffer` objects.
 
-`new` is not strictly required, if you don't instantiate a new object, it will be done automatically for you so you can create a new instance simply with:
-
-```js
-const { BufferListStream } = require('bl')
-const bl = BufferListStream()
-
-// equivalent to:
-
-const { BufferListStream } = require('bl')
-const bl = new BufferListStream()
-```
-
-N.B. For backwards compatibility reasons, `BufferListStream` is the **default** export when you `require('bl')`:
+N.B. For backwards compatibility reasons, `BufferListStream` is the **default** export when you `import from 'bl'`:
 
 ```js
-const { BufferListStream } = require('bl')
+import { BufferListStream } from 'bl'
 // equivalent to:
-const BufferListStream = require('bl')
+import BufferListStream from 'bl'
 ```
 
 --------------------------------------------------------
@@ -241,6 +217,16 @@ const BufferListStream = require('bl')
 ### bl.getBuffers()
 
 `getBuffers()` returns the internal list of buffers.
+
+
+## Migrating from v6
+
+v7 is a modernisation release:
+
+  * **ESM-only**: CommonJS `require('bl')` is no longer supported. Use `import` instead.
+  * **`new` is required**: `BufferListStream()` and `BufferList()` can no longer be called without `new`.
+  * **Zero runtime dependencies**: `readable-stream`, `buffer`, and `inherits` have been removed. `BufferListStream` now uses Node's built-in `node:stream` Duplex directly.
+  * **Node.js >= 20**: Browser bundling is no longer a supported use case. If you need buffer accumulation in the browser, consider working with `Uint8Array` directly.
 
 
 ## Contributors
@@ -252,8 +238,8 @@ const BufferListStream = require('bl')
  * [Jarett Cruger](https://github.com/jcrugzz)
 
 <a name="license"></a>
-## License &amp; copyright
+## License & copyright
 
-Copyright (c) 2013-2019 bl contributors (listed above).
+Copyright (c) 2013-2026 bl contributors (listed above).
 
 bl is licensed under the MIT license. All rights not explicitly granted in the MIT license are reserved. See the included LICENSE.md file for more details.
