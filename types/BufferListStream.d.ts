@@ -11,7 +11,7 @@ export class BufferListStream extends Duplex {
      * @param {((err: Error | null, buffer?: Buffer) => void) | BufferListAcceptedTypes} [callback]
      */
     constructor(callback?: ((err: Error | null, buffer?: Buffer) => void) | BufferListAcceptedTypes);
-    _callback: any;
+    _callback: ((err: Error | null, buffer?: Buffer) => void) | undefined;
     /** @type {Buffer[]} */
     _bufs: Buffer[];
     /** @type {number} */
@@ -46,8 +46,9 @@ export class BufferListStream extends Duplex {
 }
 export default BufferListStream;
 export { BufferList };
-export const isBufferList: any;
-export type BufferListAcceptedTypes = any;
+/** @type {(b: any) => boolean} */
+export const isBufferList: (b: any) => boolean;
+export type BufferListAcceptedTypes = import("./BufferList.js").BufferListAcceptedTypes;
 import { Duplex } from 'node:stream';
 import { BufferList } from './BufferList.js';
 //# sourceMappingURL=BufferListStream.d.ts.map

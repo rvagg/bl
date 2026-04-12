@@ -93,10 +93,10 @@ export class BufferList {
     indexOf(search: string | number | Buffer | BufferList | Uint8Array, offset?: number | string, encoding?: BufferEncoding): number;
     /**
      * @param {number} offset
-     * @param {Buffer} search
+     * @param {Buffer | Uint8Array} search
      * @returns {boolean}
      */
-    _match(offset: number, search: Buffer): boolean;
+    _match(offset: number, search: Buffer | Uint8Array): boolean;
     /**
      * @param {any} b
      * @returns {b is BufferList}

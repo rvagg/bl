@@ -21,7 +21,7 @@ export class BufferListStream extends Duplex {
       const piper = (err) => {
         if (this._callback) {
           this._callback(err)
-          this._callback = null
+          this._callback = undefined
         }
       }
 
@@ -81,7 +81,7 @@ export class BufferListStream extends Duplex {
 
     if (this._callback) {
       this._callback(null, /** @type {any} */ (this).slice())
-      this._callback = null
+      this._callback = undefined
     }
 
     return this
@@ -130,4 +130,5 @@ for (const key of Object.getOwnPropertyNames(BufferList.prototype)) {
 
 export default BufferListStream
 export { BufferList }
+/** @type {(b: any) => boolean} */
 export const isBufferList = BufferList.isBufferList

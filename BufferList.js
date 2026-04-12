@@ -423,7 +423,7 @@ export class BufferList {
 
   /**
    * @param {number} offset
-   * @param {Buffer} search
+   * @param {Buffer | Uint8Array} search
    * @returns {boolean}
    */
   _match (offset, search) {
