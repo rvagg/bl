@@ -1,13 +1,17 @@
 // @ts-check
-'use strict'
+import tape from 'tape'
+import * as crypto from 'node:crypto'
+import * as fs from 'node:fs'
+import * as path from 'node:path'
+import * as os from 'node:os'
+import { fileURLToPath } from 'node:url'
+import BufferListStream from '../BufferListStream.js'
+import { Buffer } from 'node:buffer'
+import './indexOf.js'
+import './isBufferList.js'
+import './convert.js'
 
-const tape = require('tape')
-const crypto = require('crypto')
-const fs = require('fs')
-const path = require('path')
-const os = require('os')
-const BufferListStream = require('../')
-const { Buffer } = require('buffer')
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 /**
  * This typedef allows us to add _bufs to the API without declaring it publicly on types.
@@ -37,10 +41,6 @@ if (process.browser) {
     'utf-16le'
   )
 }
-
-require('./indexOf')
-require('./isBufferList')
-require('./convert')
 
 tape('single bytes from single buffer', function (t) {
   const bl = new BufferListStream()
@@ -685,10 +685,10 @@ tape('uninitialized memory', function (t) {
 tape('instantiation with Buffer', function (t) {
   const buf = crypto.randomBytes(1024)
   const buf2 = crypto.randomBytes(1024)
-  let b = BufferListStream(buf)
+  let b = new BufferListStream(buf)
 
   t.equal(buf.toString('hex'), b.slice().toString('hex'), 'same buffer')
-  b = BufferListStream([buf, buf2])
+  b = new BufferListStream([buf, buf2])
   t.equal(b.slice().toString('hex'), Buffer.concat([buf, buf2]).toString('hex'), 'same buffer')
 
   t.end()
@@ -729,7 +729,7 @@ tape('test Number appendage', function (t) {
 
 tape('write nothing, should get empty buffer', function (t) {
   t.plan(3)
-  BufferListStream(function (err, data) {
+  new BufferListStream(function (err, data) {
     t.notOk(err, 'no error')
     t.ok(Buffer.isBuffer(data), 'got a buffer')
     t.equal(0, data.length, 'got a zero-length buffer')
@@ -743,7 +743,7 @@ tape('unicode string', function (t) {
   const inp1 = '\u2600'
   const inp2 = '\u2603'
   const exp = inp1 + ' and ' + inp2
-  const bl = BufferListStream()
+  const bl = new BufferListStream()
 
   bl.write(inp1)
   bl.write(' and ')
@@ -753,8 +753,8 @@ tape('unicode string', function (t) {
 })
 
 tape('should emit finish', function (t) {
-  const source = BufferListStream()
-  const dest = BufferListStream()
+  const source = new BufferListStream()
+  const dest = new BufferListStream()
 
   source.write('hello')
   source.pipe(dest)
@@ -768,7 +768,7 @@ tape('should emit finish', function (t) {
 tape('basic copy', function (t) {
   const buf = crypto.randomBytes(1024)
   const buf2 = Buffer.alloc(1024)
-  const b = BufferListStream(buf)
+  const b = new BufferListStream(buf)
 
   b.copy(buf2)
   t.equal(b.slice().toString('hex'), buf2.toString('hex'), 'same buffer')
@@ -779,7 +779,7 @@ tape('basic copy', function (t) {
 tape('copy after many appends', function (t) {
   const buf = crypto.randomBytes(512)
   const buf2 = Buffer.alloc(1024)
-  const b = BufferListStream(buf)
+  const b = new BufferListStream(buf)
 
   b.append(buf)
   b.copy(buf2)
@@ -791,7 +791,7 @@ tape('copy after many appends', function (t) {
 tape('copy at a precise position', function (t) {
   const buf = crypto.randomBytes(1004)
   const buf2 = Buffer.alloc(1024)
-  const b = BufferListStream(buf)
+  const b = new BufferListStream(buf)
 
   b.copy(buf2, 20)
   t.equal(b.slice().toString('hex'), buf2.slice(20).toString('hex'), 'same buffer')
@@ -802,7 +802,7 @@ tape('copy at a precise position', function (t) {
 tape('copy starting from a precise location', function (t) {
   const buf = crypto.randomBytes(10)
   const buf2 = Buffer.alloc(5)
-  const b = BufferListStream(buf)
+  const b = new BufferListStream(buf)
 
   b.copy(buf2, 0, 5)
   t.equal(b.slice(5).toString('hex'), buf2.toString('hex'), 'same buffer')
@@ -812,7 +812,7 @@ tape('copy starting from a precise location', function (t) {
 
 tape('copy in an interval', function (t) {
   const rnd = crypto.randomBytes(10)
-  const b = BufferListStream(rnd) // put the random bytes there
+  const b = new BufferListStream(rnd) // put the random bytes there
   const actual = Buffer.alloc(3)
   const expected = Buffer.alloc(3)
 
@@ -827,7 +827,7 @@ tape('copy in an interval', function (t) {
 tape('copy an interval between two buffers', function (t) {
   const buf = crypto.randomBytes(10)
   const buf2 = Buffer.alloc(10)
-  const b = BufferListStream(buf)
+  const b = new BufferListStream(buf)
 
   b.append(buf)
   b.copy(buf2, 0, 5, 15)
@@ -913,7 +913,7 @@ tape('duplicate', function (t) {
   const bl = new BufferListStream('abcdefghij\xff\x00')
   const dup = bl.duplicate()
 
-  t.equal(bl.prototype, dup.prototype)
+  t.equal(Object.getPrototypeOf(bl), Object.getPrototypeOf(dup))
   t.equal(bl.toString('hex'), dup.toString('hex'))
 })
 
@@ -1025,7 +1025,7 @@ tape('destroy with error', function (t) {
 !process.browser && tape('handle error', function (t) {
   t.plan(2)
 
-  fs.createReadStream('/does/not/exist').pipe(BufferListStream(function (err, data) {
+  fs.createReadStream('/does/not/exist').pipe(new BufferListStream(function (err, data) {
     t.ok(err instanceof Error, 'has error')
     t.notOk(data, 'no data')
   }))

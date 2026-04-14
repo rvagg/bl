@@ -7,6 +7,8 @@ updates:
     commit-message:
       prefix: 'chore'
       include: 'scope'
+    cooldown:
+      default-days: 5
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
@@ -14,3 +16,5 @@ updates:
     commit-message:
       prefix: 'chore'
       include: 'scope'
+    cooldown:
+      default-days: 5

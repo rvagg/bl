@@ -1,8 +1,6 @@
-'use strict'
-
-const tape = require('tape')
-const { BufferList, BufferListStream } = require('../')
-const { Buffer } = require('buffer')
+import tape from 'tape'
+import { BufferList, BufferListStream } from '../BufferListStream.js'
+import { Buffer } from 'node:buffer'
 
 tape('isBufferList positives', (t) => {
   t.ok(BufferList.isBufferList(new BufferList()))
