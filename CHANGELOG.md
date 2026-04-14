@@ -1,3 +1,21 @@
+## [7.0.0](https://github.com/rvagg/bl/compare/v6.1.6...v7.0.0) (2026-04-14)
+
+### ⚠ BREAKING CHANGES
+
+* CJS require() no longer supported, use ESM import.
+BufferList and BufferListStream must be called with new.
+Switches from readable-stream to node:stream and buffer to node:buffer,
+removing all runtime dependencies. Node.js >= 20 required.
+
+### Features
+
+* modernise to ESM, drop all runtime dependencies ([#169](https://github.com/rvagg/bl/issues/169)) ([fbd6e13](https://github.com/rvagg/bl/commit/fbd6e1367f0d56012ad22ac4cbc6e1737011bffc))
+
+### Trivial Changes
+
+* **deps:** bump actions/setup-node from 6.1.0 to 6.2.0 ([#164](https://github.com/rvagg/bl/issues/164)) ([ee438e6](https://github.com/rvagg/bl/commit/ee438e62aba6941d1b99a98d5cc29dcda709915f))
+* **deps:** bump actions/setup-node from 6.2.0 to 6.3.0 ([#166](https://github.com/rvagg/bl/issues/166)) ([265c92a](https://github.com/rvagg/bl/commit/265c92a11cf4e04845f6c739e652374c2c10dc5a))
+
 ## [6.1.6](https://github.com/rvagg/bl/compare/v6.1.5...v6.1.6) (2025-12-04)
 
 ### Trivial Changes
