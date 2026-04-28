@@ -1,3 +1,13 @@
+## [7.0.1](https://github.com/rvagg/bl/compare/v7.0.0...v7.0.1) (2026-04-28)
+
+### Bug Fixes
+
+* properly exclude tsconfig.tsbuildinfo ([34a382b](https://github.com/rvagg/bl/commit/34a382bd94e8f2a697351b294b0146b6dafe5cc6))
+
+### Trivial Changes
+
+* **deps:** bump actions/setup-node from 6.3.0 to 6.4.0 ([d06d140](https://github.com/rvagg/bl/commit/d06d140ffdf577ee5c2bee284f84fcf798517c09))
+
 ## [7.0.0](https://github.com/rvagg/bl/compare/v6.1.6...v7.0.0) (2026-04-14)
 
 ### ⚠ BREAKING CHANGES
