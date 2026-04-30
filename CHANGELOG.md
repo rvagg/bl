@@ -1,3 +1,9 @@
+## [7.0.2](https://github.com/rvagg/bl/compare/v7.0.1...v7.0.2) (2026-04-30)
+
+### Bug Fixes
+
+* **ts:** type definitions are not resolvable without proper types fields in package.json ([#170](https://github.com/rvagg/bl/issues/170)) ([22c02e6](https://github.com/rvagg/bl/commit/22c02e61dd9a4968e56ae23084687a8d0dc70a64))
+
 ## [7.0.1](https://github.com/rvagg/bl/compare/v7.0.0...v7.0.1) (2026-04-28)
 
 ### Bug Fixes
