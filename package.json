@@ -8,10 +8,11 @@
     "node": ">=20"
   },
   "main": "./BufferListStream.js",
+  "types": "./types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./BufferListStream.js",
-      "types": "./types/index.d.ts"
+      "types": "./types/index.d.ts",
+      "import": "./BufferListStream.js"
     }
   },
   "scripts": {
