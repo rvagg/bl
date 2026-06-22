@@ -1,3 +1,9 @@
+## [7.0.4](https://github.com/rvagg/bl/compare/v7.0.3...v7.0.4) (2026-06-22)
+
+### Trivial Changes
+
+* **deps:** bump actions/checkout from 6.0.2 to 7.0.0 ([#174](https://github.com/rvagg/bl/issues/174)) ([3e7e8d9](https://github.com/rvagg/bl/commit/3e7e8d9c5ca38e13e9aeb3fb75d970dd610710da))
+
 ## [7.0.3](https://github.com/rvagg/bl/compare/v7.0.2...v7.0.3) (2026-06-04)
 
 ### Trivial Changes
