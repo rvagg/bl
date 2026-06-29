@@ -1,3 +1,9 @@
+## [7.0.5](https://github.com/rvagg/bl/compare/v7.0.4...v7.0.5) (2026-06-29)
+
+### Trivial Changes
+
+* **deps-dev:** bump @types/node from 25.9.4 to 26.0.0 ([#175](https://github.com/rvagg/bl/issues/175)) ([8aac253](https://github.com/rvagg/bl/commit/8aac2539e03e0fae8b38e6bab3c3f9dfa7af433f))
+
 ## [7.0.4](https://github.com/rvagg/bl/compare/v7.0.3...v7.0.4) (2026-06-22)
 
 ### Trivial Changes
