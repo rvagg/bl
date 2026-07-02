@@ -1,3 +1,5 @@
+## [7.0.6](https://github.com/rvagg/bl/compare/v7.0.5...v7.0.6) (2026-07-02)
+
 ## [7.0.5](https://github.com/rvagg/bl/compare/v7.0.4...v7.0.5) (2026-06-29)
 
 ### Trivial Changes
