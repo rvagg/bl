@@ -16,6 +16,8 @@ jobs:
         uses: actions/setup-node@v7.0.0
         with:
           node-version: ${{ matrix.node }}
+          check-latest: true
+          cache: 'npm'
       - name: Install Dependencies
         run: npm install --no-progress
       - name: Check build is up to date
@@ -46,6 +48,8 @@ jobs:
         uses: actions/setup-node@v7.0.0
         with:
           node-version: lts/*
+          check-latest: true
+          cache: 'npm'
           registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies
         run: npm install --no-progress --no-package-lock --no-save
