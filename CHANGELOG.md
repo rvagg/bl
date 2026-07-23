@@ -1,3 +1,5 @@
+## [7.0.8](https://github.com/rvagg/bl/compare/v7.0.7...v7.0.8) (2026-07-23)
+
 ## [7.0.7](https://github.com/rvagg/bl/compare/v7.0.6...v7.0.7) (2026-07-20)
 
 ## [7.0.6](https://github.com/rvagg/bl/compare/v7.0.5...v7.0.6) (2026-07-02)
