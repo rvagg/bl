@@ -1,15 +1,12 @@
-export class BufferList {
-    /**
-     * @param {any} b
-     * @returns {boolean}
-     */
-    static isBufferList(b: any): boolean;
-    /** @param {BufferListAcceptedTypes} [buf] */
-    constructor(buf?: BufferListAcceptedTypes);
+import { Buffer } from 'node:buffer';
+export type BufferListAcceptedTypes = Buffer | BufferList | Uint8Array | Array<Buffer | BufferList | Uint8Array | string | number> | string | number;
+export declare class BufferList {
     /** @type {Buffer[]} */
     _bufs: Buffer[];
     /** @type {number} */
     length: number;
+    /** @param {BufferListAcceptedTypes} [buf] */
+    constructor(buf?: BufferListAcceptedTypes);
     /** @param {BufferListAcceptedTypes} [buf] */
     _new(buf?: BufferListAcceptedTypes): BufferList;
     /**
@@ -102,8 +99,11 @@ export class BufferList {
      * @returns {b is BufferList}
      */
     _isBufferList(b: any): b is BufferList;
+    /**
+     * @param {any} b
+     * @returns {boolean}
+     */
+    static isBufferList(b: any): boolean;
 }
 export default BufferList;
-export type BufferListAcceptedTypes = Buffer | BufferList | Uint8Array | Array<Buffer | BufferList | Uint8Array | string | number> | string | number;
-import { Buffer } from 'node:buffer';
 //# sourceMappingURL=BufferList.d.ts.map

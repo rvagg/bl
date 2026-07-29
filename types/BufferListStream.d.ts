@@ -1,21 +1,19 @@
+import { Duplex } from 'node:stream';
+import { BufferList } from './BufferList.js';
+export type BufferListAcceptedTypes = import('./BufferList.js').BufferListAcceptedTypes;
 /**
  * @typedef {import('./BufferList.js').BufferListAcceptedTypes} BufferListAcceptedTypes
  */
-export class BufferListStream extends Duplex {
-    /**
-     * @param {any} b
-     * @returns {boolean}
-     */
-    static isBufferList(b: any): boolean;
-    /**
-     * @param {((err: Error | null, buffer?: Buffer) => void) | BufferListAcceptedTypes} [callback]
-     */
-    constructor(callback?: ((err: Error | null, buffer?: Buffer) => void) | BufferListAcceptedTypes);
+export declare class BufferListStream extends Duplex {
     _callback: ((err: Error | null, buffer?: Buffer) => void) | undefined;
     /** @type {Buffer[]} */
     _bufs: Buffer[];
     /** @type {number} */
     length: number;
+    /**
+     * @param {((err: Error | null, buffer?: Buffer) => void) | BufferListAcceptedTypes} [callback]
+     */
+    constructor(callback?: ((err: Error | null, buffer?: Buffer) => void) | BufferListAcceptedTypes);
     /**
      * @param {any} buf
      * @param {string} encoding
@@ -43,12 +41,14 @@ export class BufferListStream extends Duplex {
      * @returns {b is BufferList}
      */
     _isBufferList(b: any): b is BufferList;
+    /**
+     * @param {any} b
+     * @returns {boolean}
+     */
+    static isBufferList(b: any): boolean;
 }
 export default BufferListStream;
 export { BufferList };
 /** @type {(b: any) => boolean} */
-export const isBufferList: (b: any) => boolean;
-export type BufferListAcceptedTypes = import("./BufferList.js").BufferListAcceptedTypes;
-import { Duplex } from 'node:stream';
-import { BufferList } from './BufferList.js';
+export declare const isBufferList: (b: any) => boolean;
 //# sourceMappingURL=BufferListStream.d.ts.map
