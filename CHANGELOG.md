@@ -1,3 +1,9 @@
+## [7.0.12](https://github.com/rvagg/bl/compare/v7.0.11...v7.0.12) (2026-07-30)
+
+### Trivial Changes
+
+* downgrade changelog maker, backfill missing entries ([#182](https://github.com/rvagg/bl/issues/182)) ([df8eef4](https://github.com/rvagg/bl/commit/df8eef45cfd2740a4816fdacdadabbfb17a447a7))
+
 ## [7.0.11](https://github.com/rvagg/bl/compare/v7.0.10...v7.0.11) (2026-07-29)
 
 ### Trivial Changes
