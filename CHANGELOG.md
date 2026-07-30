@@ -1,14 +1,40 @@
 ## [7.0.11](https://github.com/rvagg/bl/compare/v7.0.10...v7.0.11) (2026-07-29)
 
+### Trivial Changes
+
+* **deps-dev:** bump typescript from 6.0.3 to 7.0.2 ([9fe6336](https://github.com/rvagg/bl/commit/9fe63363dfa7f324b0ecef8a3fb4c7b13e554a15))
+* fixes for ts@7 ([9907b3e](https://github.com/rvagg/bl/commit/9907b3ed22d3f7a3db0cbe884cc4b0b505366127))
+
 ## [7.0.10](https://github.com/rvagg/bl/compare/v7.0.9...v7.0.10) (2026-07-27)
+
+### Trivial Changes
+
+* **deps-dev:** bump @semantic-release/git from 10.0.1 to 11.0.0 ([#180](https://github.com/rvagg/bl/issues/180)) ([2911c49](https://github.com/rvagg/bl/commit/2911c4992a6247042b35510759d5b14b0e7ce03a))
 
 ## [7.0.9](https://github.com/rvagg/bl/compare/v7.0.8...v7.0.9) (2026-07-27)
 
+### Trivial Changes
+
+* **deps-dev:** bump @semantic-release/changelog from 6.0.3 to 7.0.0 ([#181](https://github.com/rvagg/bl/issues/181)) ([c67bc01](https://github.com/rvagg/bl/commit/c67bc01b3d0e27c5ff0480762cb458f269594429))
+
 ## [7.0.8](https://github.com/rvagg/bl/compare/v7.0.7...v7.0.8) (2026-07-23)
+
+### Trivial Changes
+
+* **ci:** switch to hashes for versioning ([56b2e70](https://github.com/rvagg/bl/commit/56b2e709c4b83aa5fce40c4da393ed4179266ff9))
+* **deps:** bump actions/checkout from 7.0.0 to 7.0.1 ([d8dab1b](https://github.com/rvagg/bl/commit/d8dab1b1472455dbf39c3b4bfed56998f4c13948))
 
 ## [7.0.7](https://github.com/rvagg/bl/compare/v7.0.6...v7.0.7) (2026-07-20)
 
+### Trivial Changes
+
+* **deps:** bump actions/setup-node from 6.4.0 to 7.0.0 ([#178](https://github.com/rvagg/bl/issues/178)) ([41701a0](https://github.com/rvagg/bl/commit/41701a07177f23547e23b097f1fed37aecbe147c))
+
 ## [7.0.6](https://github.com/rvagg/bl/compare/v7.0.5...v7.0.6) (2026-07-02)
+
+### Trivial Changes
+
+* **deps-dev:** bump conventional-changelog-conventionalcommits ([#176](https://github.com/rvagg/bl/issues/176)) ([29f331f](https://github.com/rvagg/bl/commit/29f331f6039275ee87181ed166a237db2f57e3d0))
 
 ## [7.0.5](https://github.com/rvagg/bl/compare/v7.0.4...v7.0.5) (2026-06-29)
 
