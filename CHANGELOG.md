@@ -1,3 +1,9 @@
+## [7.0.14](https://github.com/rvagg/bl/compare/v7.0.13...v7.0.14) (2026-10-30)
+
+### Bug Fixes
+
+* do not restrict to `import` in exports map ([#189](https://github.com/rvagg/bl/issues/189)) ([ad43adb](https://github.com/rvagg/bl/commit/ad43adbea2b4320f690ddd4cfa90e5d7db01116a))
+
 ## [7.0.13](https://github.com/rvagg/bl/compare/v7.0.12...v7.0.13) (2026-10-19)
 
 ### Trivial Changes
