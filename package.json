@@ -12,7 +12,7 @@
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
-      "import": "./BufferListStream.js"
+      "default": "./BufferListStream.js"
     }
   },
   "scripts": {
