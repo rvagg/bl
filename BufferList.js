@@ -71,7 +71,7 @@ export class BufferList {
    * @returns {number | undefined}
    */
   get (index) {
-    if (index > this.length || index < 0) {
+    if (index >= this.length || index < 0) {
       return undefined
     }
 
