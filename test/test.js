@@ -1030,3 +1030,31 @@ tape('destroy with error', function (t) {
     t.notOk(data, 'no data')
   }))
 })
+
+tape('get handles empty lists', async function (t) {
+  const { BufferList } = await import('../BufferListStream.js')
+
+  for (const Type of [BufferList, BufferListStream]) {
+    const name = Type.name
+    const list = new Type()
+    const emptyGet = () => {
+      try {
+        return { value: list.get(0) }
+      } catch (error) {
+        return { error }
+      }
+    }
+
+    t.deepEqual(emptyGet(), { value: undefined }, `${name}: new empty list`)
+    list.append(Buffer.from('a'))
+    t.equal(list.get(0), 97, `${name}: first byte after append`)
+    t.equal(list.get(1), undefined, `${name}: nonempty end index`)
+    t.equal(list.get(-1), undefined, `${name}: negative index`)
+    list.consume(1)
+    t.deepEqual(emptyGet(), { value: undefined }, `${name}: fully consumed list`)
+    list.append(Buffer.from('b'))
+    t.equal(list.get(0), 98, `${name}: reuse after consumption`)
+  }
+
+  t.end()
+})
