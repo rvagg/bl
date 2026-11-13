@@ -1,3 +1,9 @@
+## [7.0.15](https://github.com/rvagg/bl/compare/v7.0.14...v7.0.15) (2026-11-13)
+
+### Bug Fixes
+
+* handle get on empty lists ([#190](https://github.com/rvagg/bl/issues/190)) ([39b2047](https://github.com/rvagg/bl/commit/39b204765312de24043106baf484a116a018c3df))
+
 ## [7.0.14](https://github.com/rvagg/bl/compare/v7.0.13...v7.0.14) (2026-10-30)
 
 ### Bug Fixes
