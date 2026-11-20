@@ -117,7 +117,7 @@ export class BufferList {
       return dst || Buffer.alloc(0)
     }
 
-    if (srcEnd <= 0) {
+    if (srcEnd <= srcStart) {
       return dst || Buffer.alloc(0)
     }
 
@@ -205,7 +205,7 @@ export class BufferList {
       end += this.length
     }
 
-    if (start === end) {
+    if (start >= end) {
       return this._new()
     }
 
