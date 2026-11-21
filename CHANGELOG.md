@@ -1,3 +1,9 @@
+## [7.0.16](https://github.com/rvagg/bl/compare/v7.0.15...v7.0.16) (2026-11-21)
+
+### Bug Fixes
+
+* handle reversed buffer ranges consistently ([#191](https://github.com/rvagg/bl/issues/191)) ([33296e7](https://github.com/rvagg/bl/commit/33296e76a67cc835e79258704cd78a5672c70ff7))
+
 ## [7.0.15](https://github.com/rvagg/bl/compare/v7.0.14...v7.0.15) (2026-11-13)
 
 ### Bug Fixes
