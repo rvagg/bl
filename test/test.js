@@ -862,6 +862,20 @@ tape('reversed ranges are empty regardless of chunk boundaries', function (t) {
   t.end()
 })
 
+tape('out of range offsets are clamped regardless of chunk boundaries', function (t) {
+  const data = Buffer.from('abcdefgh')
+  for (const chunks of [[data], [data.subarray(0, 4), data.subarray(4)], [...data].map(byte => Buffer.from([byte]))]) {
+    const bl = new BufferListStream(chunks)
+    for (const [start, end] of [[-20, 2], [-20, -10], [-20, 20], [2, 20], [10, 12], [20, -20]]) {
+      const expected = data.slice(start, end)
+      const msg = `${chunks.length} chunks [${start}, ${end}]`
+      t.deepEqual(bl.slice(start, end), expected, `slice ${msg}`)
+      t.deepEqual(bl.shallowSlice(start, end).slice(), expected, `shallowSlice ${msg}`)
+    }
+  }
+  t.end()
+})
+
 tape('shallow slice across buffer boundaries', function (t) {
   const bl = new BufferListStream(['First', 'Second', 'Third'])
 

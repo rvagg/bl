@@ -205,6 +205,9 @@ export class BufferList {
       end += this.length
     }
 
+    start = Math.max(start, 0)
+    end = Math.min(end, this.length)
+
     if (start >= end) {
       return this._new()
     }
