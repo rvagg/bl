@@ -5,7 +5,7 @@ import * as fs from 'node:fs'
 import * as path from 'node:path'
 import * as os from 'node:os'
 import { fileURLToPath } from 'node:url'
-import BufferListStream from '../BufferListStream.js'
+import BufferListStream, { BufferList } from '../BufferListStream.js'
 import { Buffer } from 'node:buffer'
 import './indexOf.js'
 import './isBufferList.js'
@@ -834,6 +834,31 @@ tape('copy an interval between two buffers', function (t) {
 
   t.equal(b.slice(5, 15).toString('hex'), buf2.toString('hex'), 'same buffer')
 
+  t.end()
+})
+
+tape('reversed ranges are empty regardless of chunk boundaries', function (t) {
+  const data = Buffer.from('abcdefgh')
+  for (const Type of [BufferList, BufferListStream]) {
+    for (const chunks of [[data], [data.subarray(0, 4), data.subarray(4)], [...data].map(byte => Buffer.from([byte]))]) {
+      const bl = new Type(chunks)
+      for (const [start, end] of [[5, 2], [5, -6], [-3, 2], [-3, -6], [2, 5], [2, 2]]) {
+        const expected = data.slice(start, end)
+        t.deepEqual(bl.slice(start, end), expected)
+        t.doesNotThrow(() => {
+          t.deepEqual(bl.shallowSlice(start, end).slice(), expected)
+        })
+        const target = Buffer.alloc(10, 120)
+        const expectedTarget = Buffer.from(target)
+        const sourceStart = start < 0 ? data.length + start : start
+        const sourceEnd = end < 0 ? data.length + end : end
+        data.copy(expectedTarget, 1, sourceStart, sourceEnd)
+        t.doesNotThrow(() => bl.copy(target, 1, sourceStart, sourceEnd))
+        t.deepEqual(target, expectedTarget)
+      }
+      t.deepEqual(bl.slice(), data, 'source remains intact')
+    }
+  }
   t.end()
 })
 
