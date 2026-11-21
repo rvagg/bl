@@ -1,3 +1,9 @@
+## [7.0.17](https://github.com/rvagg/bl/compare/v7.0.16...v7.0.17) (2026-11-21)
+
+### Bug Fixes
+
+* clamp out of range shallowSlice offsets ([#192](https://github.com/rvagg/bl/issues/192)) ([1063f22](https://github.com/rvagg/bl/commit/1063f22d6f2e5899404ac99503a2d678a781b279))
+
 ## [7.0.16](https://github.com/rvagg/bl/compare/v7.0.15...v7.0.16) (2026-11-21)
 
 ### Bug Fixes
