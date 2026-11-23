@@ -1,3 +1,9 @@
+## [7.0.18](https://github.com/rvagg/bl/compare/v7.0.17...v7.0.18) (2026-11-23)
+
+### Trivial Changes
+
+* **deps-dev:** bump semantic-release from 25.0.9 to 26.0.1 ([#193](https://github.com/rvagg/bl/issues/193)) ([ed4b542](https://github.com/rvagg/bl/commit/ed4b5422ff24f09724ed7e3b6cf6faae62c94655))
+
 ## [7.0.17](https://github.com/rvagg/bl/compare/v7.0.16...v7.0.17) (2026-11-21)
 
 ### Bug Fixes
