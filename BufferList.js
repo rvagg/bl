@@ -302,6 +302,11 @@ export class BufferList {
       return this
     }
 
+    if (buf === this || buf === this._bufs) {
+      // Keep the source stable while attaching it to the same list.
+      buf = this._bufs.slice()
+    }
+
     if (typeof buf === 'object' && 'buffer' in buf) {
       // append/prepend a view of the underlying ArrayBuffer
       const view = /** @type {Uint8Array} */ (buf)
