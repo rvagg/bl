@@ -1,3 +1,9 @@
+## [7.0.19](https://github.com/rvagg/bl/compare/v7.0.18...v7.0.19) (2026-11-25)
+
+### Bug Fixes
+
+* snapshot self-referential append and prepend inputs ([#194](https://github.com/rvagg/bl/issues/194)) ([1ee55ab](https://github.com/rvagg/bl/commit/1ee55abfd48a1cc8c5814c8d43da959efb05bcc1))
+
 ## [7.0.18](https://github.com/rvagg/bl/compare/v7.0.17...v7.0.18) (2026-11-23)
 
 ### Trivial Changes
