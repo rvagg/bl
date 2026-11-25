@@ -321,6 +321,69 @@ tape('prepend chainable (test results)', function (t) {
   t.end()
 })
 
+function attachToSelf (bl, method, useBuffers) {
+  const buffers = bl.getBuffers()
+  const maxLength = buffers.length * 2
+  const push = buffers.push
+
+  // Fail promptly if self-append starts reading the buffers it just added.
+  buffers.push = function (...items) {
+    if (this.length + items.length > maxLength) {
+      throw new Error('self-append exceeded the original number of buffers')
+    }
+    return push.apply(this, items)
+  }
+
+  try {
+    return bl[method](useBuffers ? buffers : bl)
+  } finally {
+    delete buffers.push
+  }
+}
+
+for (const method of ['append', 'prepend']) {
+  tape(`${method} handles self references`, function (t) {
+    for (const Type of [BufferList, BufferListStream]) {
+      for (const useBuffers of [false, true]) {
+        for (const consumed of [0, 1, 6]) {
+          const buffers = [Buffer.alloc(0), Buffer.from('ab'), Buffer.from('c'), Buffer.from('def')]
+          const bl = new Type(buffers)
+          bl.consume(consumed)
+          const label = `${Type.name}, ${useBuffers ? 'getBuffers()' : 'self'}, consumed ${consumed}`
+
+          let result
+          t.doesNotThrow(() => { result = attachToSelf(bl, method, useBuffers) }, `${label}: finishes attaching`)
+          t.equal(result, bl, `${label}: remains chainable`)
+          t.equal(bl.length, (6 - consumed) * 2, `${label}: doubles the remaining length`)
+          t.equal(bl.toString(), 'abcdef'.slice(consumed).repeat(2), `${label}: preserves byte order`)
+
+          buffers[3][0] = 'x'.charCodeAt(0)
+          t.equal(bl.toString(), 'abcxef'.slice(consumed).repeat(2), `${label}: shares buffer memory`)
+        }
+      }
+    }
+    t.end()
+  })
+
+  tape(`${method} handles empty self references`, function (t) {
+    for (const Type of [BufferList, BufferListStream]) {
+      for (const useBuffers of [false, true]) {
+        for (const buffers of [[], [Buffer.alloc(0)]]) {
+          const bl = new Type(buffers)
+
+          let result
+          t.doesNotThrow(() => { result = attachToSelf(bl, method, useBuffers) })
+          t.equal(result, bl)
+          t.equal(bl.length, 0)
+          t.equal(bl.toString(), '')
+          t.equal(bl.getBuffers().length, buffers.length * 2)
+        }
+      }
+    }
+    t.end()
+  })
+}
+
 tape('consuming from multiple buffers', function (t) {
   const bl = new BufferListStream()
 
